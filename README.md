@@ -9,3 +9,7 @@ Currently, this app is in very early development. For instructors, please refer 
 
     Daniel A. Crespo Vargas | daniel.crespo1@upr.edu
     
+### TODO
+
+- [x] Phase 1
+- [ ] Phase 2
