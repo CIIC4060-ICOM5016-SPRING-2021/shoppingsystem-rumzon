@@ -8,6 +8,7 @@ Currently, this app is in very early development. For instructors, please refer 
 ## Members of the Team:
 
     Daniel A. Crespo Vargas | daniel.crespo1@upr.edu
+    Ezequiel O. Rosario Sepúlveda | ezequiel.rosario@upr.edu
     
 ### TODO
 
