@@ -16,19 +16,9 @@ connection = psycopg2.connect(
 # Open a cursor to perform database operations
 cursor = connection.cursor()
 
-cursor.execute('CREATE TABLE users (u_id serial PRIMARY KEY,'
-                                 'username varchar (100) NOT NULL,'
-                                 'u_email varchar (100) NOT NULL,'
-                                 'u_password varchar (100) NOT NULL,'
-                                 'isAdmin boolean)'
-                                )
-
-connection.commit()
-
 
 @app.route('/')
 def ey():
-    cursor.execute('SELECT FROM ')
     return 'test empty'
 
 @app.route('/a')
