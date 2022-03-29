@@ -1,5 +1,5 @@
 from controller import ListController
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 import psycopg2
 
@@ -15,19 +15,48 @@ connection = psycopg2.connect(
 
 # Open a cursor to perform database operations
 cursor = connection.cursor()
+connection.commit()
 
 
 @app.route('/')
-def ey():
-    return 'test empty'
+def empty():
+    return 'Hello world'
 
-@app.route('/a')
-def a():
-    return 'test a'
+@app.route('/allusers')
+def all_users():
+    cursor.execute('SELECT * FROM users')
+    res = cursor.fetchall()
+    return jsonify(res)
 
-@app.route('/list')
-def list():
-    return ListController.getList()
+@app.route('/allitems')
+def all_items():
+    cursor.execute('SELECT * FROM items')
+    res = cursor.fetchall()
+    return jsonify(res)
+
+@app.route('/allorders')
+def all_orders():
+    cursor.execute('SELECT *, orderTotal(o_id) AS o_total FROM orders')
+    res = cursor.fetchall()
+    return jsonify(res)
+
+@app.route('/alllikes')
+def all_likes():
+    cursor.execute('SELECT * FROM likes')
+    res = cursor.fetchall()
+    return jsonify(res)
+
+@app.route('/allitemsinreciept')
+def all_items_in_order():
+    cursor.execute('SELECT *, itemTotal(item_id, o_ammount) AS i_total FROM itemsinorder')
+    res = cursor.fetchall()
+    return jsonify(res)
+
+@app.route('/allitemsincart')
+def all_items_in_cart():
+    cursor.execute('SELECT *, itemTotal(item_id, c_ammount) AS i_total FROM itemsincart')
+    res = cursor.fetchall()
+    return jsonify(res)
 
 if __name__ == '__main__':
     app.run(debug=1)
