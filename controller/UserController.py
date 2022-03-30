@@ -31,3 +31,13 @@ class UserController:
             return jsonify(self.dictionary(daoRes[0]))
         else:
             return jsonify('ID Not Found'), 405
+
+    def addNewUser(self, json):
+        username = json['username']
+        u_email = json['u_email']
+        u_password = json['u_password']
+        isAdmin = json['isAdmin']
+
+        u_id = self.dao.addNewUser(username, u_email, u_password, isAdmin)
+        json['u_id'] = u_id
+        return jsonify(json), 201
