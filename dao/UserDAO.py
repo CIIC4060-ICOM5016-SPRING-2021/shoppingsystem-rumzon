@@ -36,11 +36,12 @@ class UserDAO:
 
     def addNewUser(self, username, u_email, u_password, isAdmin):
         query = 'INSERT INTO users (username, u_email, u_password, isAdmin) ' \
-                'VALUES (%s, %s, %s, %s) RETURNING u_id;'
+                'VALUES (%s, %s, %s, %s) RETURNING u_id'
         cursor = self.connection.cursor()
         cursor.execute(query, (username, u_email, u_password, isAdmin))
         newUser = cursor.fetchone()
         u_id = newUser[0]
+        self.connection.commit()
         cursor.close()
         self.connection.close()
         return u_id

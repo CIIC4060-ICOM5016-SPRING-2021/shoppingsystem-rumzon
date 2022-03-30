@@ -25,7 +25,7 @@ def allUsers():
 def userByID(id):
     return UserController().getByID(id)
 
-@app.route('/rumzon/users/new')
+@app.route('/rumzon/users/new', methods=['POST'])
 def newUser():
     return UserController().addNewUser(request.json)
 
