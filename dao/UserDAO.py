@@ -29,6 +29,18 @@ class UserDAO:
         res = []
         for row in cursor:
             res.append(row)
+        # return cursor.fetchone()
         cursor.close()
         self.connection.close()
         return res
+
+    def addNewUser(self, username, u_email, u_password, isAdmin):
+        query = 'INSERT INTO users (username, u_email, u_password, isAdmin) ' \
+                'VALUES (%s, %s, %s, %s) RETURNING u_id;'
+        cursor = self.connection.cursor()
+        cursor.execute(query, (username, u_email, u_password, isAdmin))
+        newUser = cursor.fetchone()
+        u_id = newUser[0]
+        cursor.close()
+        self.connection.close()
+        return u_id
