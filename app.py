@@ -1,45 +1,44 @@
-from controller import ListController
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import psycopg2
 
+from controller.ItemController import ItemController
+from controller.UserController import UserController
+from controller.OrderController import OrderController
+
 app = Flask(__name__)
 CORS(app)
-
-# Establish detabase connection
-connection = psycopg2.connect(
-    host='ec2-18-235-114-62.compute-1.amazonaws.com',
-    database='de9v4rj4hthhg6',
-    user='subtdkpfoxqmiu',
-    password='660b482966304513c9478db7907c698d30fe3c81aa41efb9161884c7d6df7434')
-
-# Open a cursor to perform database operations
-cursor = connection.cursor()
-connection.commit()
-
 
 @app.route('/')
 def empty():
     return 'Hello world'
 
+#-----------------USERS---------------------------------
 @app.route('/rumzon/Users/all')
-def all_users():
-    cursor.execute('SELECT * FROM users')
-    res = cursor.fetchall()
-    return jsonify(res)
+def allUsers():
+    return UserController().getAll()
 
+@app.route('/rumzon/Users/<int:id>')
+def userByID(id):
+    return UserController().getByID(id)
+
+#-----------------ITEMS---------------------------------
 @app.route('/rumzon/Items/all')
-def all_items():
-    cursor.execute('SELECT * FROM items')
-    res = cursor.fetchall()
-    return jsonify(res)
+def allItems():
+    return ItemController().getAll()
 
+@app.route('/rumzon/Items/<int:id>')
+def itemByID(id):
+    return ItemController().getByID(id)
 
+#-----------------ORDERS---------------------------------
 @app.route('/rumzon/Orders/all')
-def all_orders():
-    cursor.execute('SELECT *, orderTotal(o_id) AS o_total FROM orders')
-    res = cursor.fetchall()
-    return jsonify(res)
+def allOrders():
+    return OrderController().getAll()
+
+@app.route('/rumzon/Orders/<int:id>')
+def orderByID(id):
+    return OrderController().getByID(id)
 
 @app.route('/rumzon/Likes/all')
 def all_likes():
