@@ -3,6 +3,9 @@ from flask_cors import CORS
 import psycopg2
 
 from controller.ItemController import ItemController
+from controller.ItemsInCartController import ItemsInCartController
+from controller.ItemsInOrderController import ItemsInOrderController
+from controller.LikesController import LikesController
 from controller.UserController import UserController
 from controller.OrderController import OrderController
 
@@ -14,58 +17,68 @@ def empty():
     return 'Hello world'
 
 #-----------------USERS---------------------------------
-@app.route('/rumzon/Users/all')
+@app.route('/rumzon/users/all')
 def allUsers():
     return UserController().getAll()
 
-@app.route('/rumzon/Users/<int:id>')
+@app.route('/rumzon/users/<int:id>')
 def userByID(id):
     return UserController().getByID(id)
 
 #-----------------ITEMS---------------------------------
-@app.route('/rumzon/Items/all')
+@app.route('/rumzon/items/all')
 def allItems():
     return ItemController().getAll()
 
-@app.route('/rumzon/Items/<int:id>')
+@app.route('/rumzon/items/<int:id>')
 def itemByID(id):
     return ItemController().getByID(id)
 
 #-----------------ORDERS---------------------------------
-@app.route('/rumzon/Orders/all')
+@app.route('/rumzon/orders/all')
 def allOrders():
     return OrderController().getAll()
 
-@app.route('/rumzon/Orders/<int:id>')
+@app.route('/rumzon/orders/<int:id>')
 def orderByID(id):
     return OrderController().getByID(id)
 
-@app.route('/rumzon/Likes/all')
-def all_likes():
-    cursor.execute('SELECT * FROM likes')
-    res = cursor.fetchall()
-    return jsonify(res)
+#-----------------Likes---------------------------------
+@app.route('/rumzon/likes/all')
+def allLikes():
+    return LikesController().getAll()
 
-@app.route('/rumzon/ItemsInOrder/all')
-def all_items_in_order():
-    cursor.execute('SELECT *, itemTotal(item_id, o_ammount) AS i_total FROM itemsinorder')
-    res = cursor.fetchall()
-    return jsonify(res)
+@app.route('/rumzon/likes/users/<int:id>')
+def UserLikesByUserID(id):
+    return LikesController().getUserLikesByUserID(id)
 
-@app.route('/rumzon/ItemsInCart/all')
-def all_items_in_cart():
-    cursor.execute('SELECT *, itemTotal(item_id, c_ammount) AS i_total FROM itemsincart')
-    res = cursor.fetchall()
-    return jsonify(res)
+@app.route('/rumzon/likes/items/<int:id>')
+def ItemLikesByItemID(id):
+    return LikesController().getItemLikesByItemID(id)
 
-@app.route('/rumzon/ItemsInCart/clear/<string:u_id>',methods = ['DELETE','GET'])
-def clear_cart_for_user(u_id):
-    if request.method == 'DELETE':
-        cursor.execute('delete from itemsincart where u_id = ' + u_id)
-        connection.commit()
-        return "deleted"
+#-----------------ItemsInCart---------------------------------
+@app.route('/rumzon/itemsincart/all')
+def allItemsInCarts():
+    return ItemsInCartController().getAll()
+
+@app.route('/rumzon/itemsincart/<int:id>',methods=['GET','DELETE'])
+def cartItemsByUserID(id):
+    if request.method == 'GET':
+        return ItemsInCartController().getUserCartbyID(id)
+    elif request.method == 'DELETE':
+        return ItemsInCartController().clearUserCartbyID(id)
     else:
-        return 'el hehe'
+        return 'Request not handled'
+
+#-----------------ItemsInOrder---------------------------------
+@app.route('/rumzon/itemsinorder/all')
+def allItemsInOrders():
+    return ItemsInOrderController().getAll()
+
+@app.route('/rumzon/itemsinorder/<int:id>')
+def OrderItemsbyOrderID(id):
+    return ItemsInOrderController().getOrderItemsbyID(id)
+
 
 if __name__ == '__main__':
     app.run(debug=1)

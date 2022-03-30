@@ -16,10 +16,13 @@ class OrderController:
 
     def getAll(self):
         daoRes = self.dao.getAll()
-        result = []
-        for row in daoRes:
-            result.append(self.dictionary(row))
-        return jsonify(result)
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Order Table Empty!... or error ocurred'), 405
 
     def getByID(self, id):
         daoRes = self.dao.getByID(id)
