@@ -34,9 +34,20 @@ def newUser():
 def allItems():
     return ItemController().getAll()
 
-@app.route('/rumzon/items/<int:id>')
+@app.route('/rumzon/items/<int:id>', methods=['GET','DELETE','PUT'])
 def itemByID(id):
-    return ItemController().getByID(id)
+    if request.method == 'GET':
+        return ItemController().getByID(id)
+    elif request.method == 'DELETE':
+        return ItemController().deleteItem(id)
+    elif request.method == 'PUT':
+        return ItemController().updateItem(id, request.json)
+    else:
+        return 'Request not handled'
+
+@app.route('/rumzon/items/new', methods=['POST'])
+def newItem():
+    return ItemController().addNewItem(request.json)
 
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
