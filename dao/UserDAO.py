@@ -30,9 +30,27 @@ class UserDAO:
         for row in cursor:
             res.append(row)
         # return cursor.fetchone()
+        # cursor.close()
+        # self.connection.close()
+        return res
+
+    def updateUser(self, id, username, u_email, u_password, isAdmin):
+        query = 'UPDATE users ' \
+                'SET username=%s, u_email=%s, u_password=%s, isAdmin=%s ' \
+                'WHERE u_id = %s'
+        cursor = self.connection.cursor()
+        cursor.execute(query, (username, u_email, u_password, isAdmin, id))
+        self.connection.commit()
         cursor.close()
         self.connection.close()
-        return res
+
+    def deleteUser(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('DELETE FROM users '
+                       'where u_id = %s' %id)
+        self.connection.commit()
+        cursor.close()
+        self.connection.close()
 
     def addNewUser(self, username, u_email, u_password, isAdmin):
         query = 'INSERT INTO users (username, u_email, u_password, isAdmin) ' \
