@@ -55,14 +55,12 @@ class OrderController:
         u_id = json['u_id']
         if daoRes:
             self.dao.updateOrder(id, o_time, u_id)
-            return jsonify(json), 201
+            return jsonify(json), 200
         else:
-            return jsonify('ID Not Found'), 405
+            return jsonify('ID Not Found'), 404
 
     def addNewOrder(self, json):
-        o_time = json['o_time']
         u_id = json['u_id']
-
-        o_id = self.dao.addNewOrder(o_time, u_id)
+        o_id = self.dao.addNewOrder(u_id)
         json['o_id'] = o_id
         return jsonify(json), 201

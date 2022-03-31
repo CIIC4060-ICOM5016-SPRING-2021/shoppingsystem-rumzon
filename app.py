@@ -101,11 +101,15 @@ def allItemsInCarts():
 @app.route('/rumzon/itemsincart/<int:id>', methods=['GET','DELETE'])
 def cartItemsByUserID(id):
     if request.method == 'GET':
-        return ItemsInCartController().getUserCartbyID(id)
+        return ItemsInCartController().getUserCartByID(id)
     elif request.method == 'DELETE':
-        return ItemsInCartController().clearUserCartbyID(id)
+        return ItemsInCartController().clearUserCartByID(id)
     else:
         return 'Request not handled'
+
+@app.route('/rumzon/itemsincart/buyall/<int:id>', methods=['GET', 'POST'])
+def buyAllItemsInCarts(id):
+    return ItemsInCartController().buyAllFromCart(id)
 
 #-----------------ItemsInOrder---------------------------------
 @app.route('/rumzon/itemsinorder/all')
@@ -114,7 +118,7 @@ def allItemsInOrders():
 
 @app.route('/rumzon/itemsinorder/<int:id>')
 def OrderItemsbyOrderID(id):
-    return ItemsInOrderController().getOrderItemsbyID(id)
+    return ItemsInOrderController().getOrderItemsByID(id)
 
 
 if __name__ == '__main__':

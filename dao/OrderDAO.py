@@ -52,17 +52,18 @@ class OrderDAO:
         query = 'UPDATE orders SET o_time=%s, u_id=%s WHERE o_id = %s'
         cursor = self.connection.cursor()
         cursor.execute(query, (o_time, u_id, o_id))
+        rowCount = cursor.rowcount
         self.connection.commit()
         cursor.close()
         self.connection.close()
+        return rowCount != 0
 
-    def addNewOrder(self, o_time, u_id):
-        query = 'INSERT INTO orders (o_time, u_id) VALUES (%s, %s) RETURNING o_id'
+    def addNewOrder(self, u_id):
+        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING o_id'
         cursor = self.connection.cursor()
-        cursor.execute(query, (o_time, u_id))
-        newOrder = cursor.fetchone()
-        o_id = newOrder[0]
+        cursor.execute(query, [u_id])
+        o_id = cursor.fetchone()[0]
         self.connection.commit()
-        cursor.close()
-        self.connection.close()
+        # cursor.close()
+        # self.connection.close()
         return o_id
