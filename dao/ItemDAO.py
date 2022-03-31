@@ -29,8 +29,8 @@ class ItemDAO:
         res = []
         for row in cursor:
             res.append(row)
-        cursor.close()
-        self.connection.close()
+        # cursor.close()
+        # self.connection.close()
         return res
 
     def addNewItem(self, i_name, i_category, i_stock, i_price):
