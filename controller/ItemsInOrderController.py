@@ -24,8 +24,8 @@ class ItemsInOrderController:
         else:
             return jsonify('Items in Orders Table Empty!... or error ocurred'), 405
 
-    def getOrderItemsbyID(self, id):
-        daoRes = self.dao.getOrderItemsbyID(id)
+    def getOrderItemsByID(self, id):
+        daoRes = self.dao.getOrderItemsByID(id)
         if daoRes:
             result = []
             for row in daoRes:

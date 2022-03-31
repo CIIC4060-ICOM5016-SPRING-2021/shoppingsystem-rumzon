@@ -22,7 +22,7 @@ class ItemsInOrderDAO:
         self.connection.close()
         return res
 
-    def getOrderItemsbyID(self, id):
+    def getOrderItemsByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('SELECT *, itemTotal(item_id, o_ammount) AS i_total FROM itemsinorder '
                        'where o_id = %s' %id)
