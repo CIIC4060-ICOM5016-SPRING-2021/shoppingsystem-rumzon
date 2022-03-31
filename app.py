@@ -21,9 +21,16 @@ def empty():
 def allUsers():
     return UserController().getAll()
 
-@app.route('/rumzon/users/<int:id>')
+@app.route('/rumzon/users/<int:id>', methods=['GET', 'DELETE', 'PUT'])
 def userByID(id):
-    return UserController().getByID(id)
+    if request.method == 'GET':
+        return UserController().getByID(id)
+    elif request.method == 'DELETE':
+        return UserController().deleteUser(id)
+    elif request.method == 'PUT':
+        return UserController().updateUser(id, request.json)
+    else:
+        return 'Request not handled'
 
 @app.route('/rumzon/users/new', methods=['POST'])
 def newUser():
@@ -76,7 +83,7 @@ def ItemLikesByItemID(id):
 def allItemsInCarts():
     return ItemsInCartController().getAll()
 
-@app.route('/rumzon/itemsincart/<int:id>',methods=['GET','DELETE'])
+@app.route('/rumzon/itemsincart/<int:id>', methods=['GET','DELETE'])
 def cartItemsByUserID(id):
     if request.method == 'GET':
         return ItemsInCartController().getUserCartbyID(id)

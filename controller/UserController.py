@@ -32,6 +32,26 @@ class UserController:
         else:
             return jsonify('ID Not Found'), 405
 
+    def deleteUser(self, id):
+        daoRes = self.dao.getByID(id)
+        if daoRes:
+            self.dao.deleteUser(id)
+            return jsonify(self.dictionary(daoRes[0]))
+        else:
+            return jsonify('ID Not Found'), 405
+
+    def updateUser(self, id, json):
+        daoRes = self.dao.getByID(id)
+        username = json['username']
+        u_email = json['u_email']
+        u_password = json['u_password']
+        isAdmin = json['isAdmin']
+        if daoRes:
+            self.dao.updateUser(id, username, u_email, u_password, isAdmin)
+            return jsonify(json), 201
+        else:
+            return jsonify('ID Not Found'), 405
+
     def addNewUser(self, json):
         username = json['username']
         u_email = json['u_email']
