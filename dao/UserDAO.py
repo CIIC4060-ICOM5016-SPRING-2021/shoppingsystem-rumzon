@@ -29,6 +29,7 @@ class UserDAO:
         res = []
         for row in cursor:
             res.append(row)
+
         # return cursor.fetchone()
         # cursor.close()
         # self.connection.close()
@@ -49,6 +50,7 @@ class UserDAO:
         cursor.execute('DELETE FROM users '
                        'where u_id = %s' %id)
         self.connection.commit()
+
         cursor.close()
         self.connection.close()
 
