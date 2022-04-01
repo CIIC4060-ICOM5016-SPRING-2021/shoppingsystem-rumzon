@@ -33,6 +33,16 @@ class ItemsInCartDAO:
         # self.connection.close()
         return res
 
+    def getUserCartTotalByID(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT u_id, carttotal(u_id) from users where u_id = %s' %id)
+        res = []
+        for row in cursor:
+            res.append(row)
+        # cursor.close()
+        # self.connection.close()
+        return res
+
     def clearUserCartByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('DELETE FROM itemsincart WHERE u_id = %s' %id)
@@ -41,7 +51,7 @@ class ItemsInCartDAO:
         self.connection.close()
 
     def buyItemFromCart(self, item_id, o_id, o_ammount):
-        query = 'INSERT INTO itemsinorder (item_id, o_id, o_ammount)' \
+        query = 'INSERT INTO itemsinorder (item_id, o_id, o_ammount) ' \
                     'VALUES (%s, %s, %s);'
         cursor = self.connection.cursor()
         cursor.execute(query, (item_id, o_id, o_ammount))

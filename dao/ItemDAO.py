@@ -35,19 +35,23 @@ class ItemDAO:
 
     def addNewItem(self, i_name, i_category, i_stock, i_price):
         query = 'INSERT INTO items (i_name, i_category, i_stock, i_price) ' \
-                'VALUES (%s, %s, %s, %s) RETURNING item_id;'
+                'VALUES (%s, %s, %s, %s) RETURNING *;'
         cursor = self.connection.cursor()
         cursor.execute(query, (i_name, i_category, i_stock, i_price))
-        newItem = cursor.fetchone()
-        item_id = newItem[0]
+        res = []
+        for row in cursor:
+            res.append(row)
         self.connection.commit()
         cursor.close()
         self.connection.close()
-        return item_id
+        return res
 
     def deleteItemByID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('DELETE FROM items WHERE item_id = %s' %id)
+        cursor.execute('DELETE FROM itemsinorder where item_id = %s' % id)
+        cursor.execute('DELETE FROM itemsincart where item_id = %s' % id)
+        cursor.execute('DELETE FROM likes where item_id = %s' % id)
+        cursor.execute('DELETE FROM items where item_id = %s' % id)
         self.connection.commit()
         cursor.close()
         self.connection.close()

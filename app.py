@@ -107,6 +107,10 @@ def cartItemsByUserID(id):
     else:
         return 'Request not handled'
 
+@app.route('/rumzon/itemsincart/<int:id>/total')
+def getUserCartTotal(id):
+    return ItemsInCartController().getUserCartTotalByID(id)
+
 @app.route('/rumzon/itemsincart/buyall/<int:id>', methods=['GET', 'POST'])
 def buyAllItemsInCarts(id):
     return ItemsInCartController().buyAllFromCart(id)

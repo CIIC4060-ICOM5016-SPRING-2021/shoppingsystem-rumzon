@@ -36,6 +36,19 @@ class ItemsInCartController:
         else:
             return jsonify("User #%d's cart is empty, or ID Not Found" %id), 405
 
+    def getUserCartTotalByID(self, id):
+        daoRes = self.dao.getUserCartTotalByID(id)
+        if daoRes:
+            dic = {}
+            for row in daoRes:
+                if row[1] is None:
+                    return jsonify("User #%s Cart Empty" % row[0]), 200
+                dic['u_id'] = row[0]
+                dic['c_total'] = row[1]
+            return jsonify(dic), 200
+        else:
+            return jsonify("ID Not Found" %id), 405
+
     def clearUserCartByID(self, id):
         self.dao.clearUserCartByID(id)
         return jsonify("User #%s's cart cleared." %id)
