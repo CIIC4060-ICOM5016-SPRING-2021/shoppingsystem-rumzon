@@ -49,6 +49,46 @@ class ItemsInCartController:
         else:
             return jsonify("ID Not Found" %id), 405
 
+    def addToCart(self, json):
+        item_id = json['item_id']
+        u_id = json['u_id']
+        c_amount = json['c_amount']
+
+        daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
+        if daoRes:
+            res = []
+            for row in daoRes:
+                res.append(self.dictionary(row))
+            return jsonify(res)
+        else:
+            return jsonify('Error adding to cart'), 400
+
+    def updateFromCart(self, json):
+        item_id = json['item_id']
+        u_id = json['u_id']
+        c_amount = json['c_amount']
+
+        daoRes = self.dao.updateFromCart(item_id, u_id, c_amount)
+        if daoRes:
+            res = []
+            for row in daoRes:
+                res.append(self.dictionary(row))
+            return jsonify(res)
+        else:
+            return jsonify('Error updating cart'), 400
+
+    def deleteItemInCart(self, json):
+        item_id = json['item_id']
+        u_id = json['u_id']
+        daoRes = self.dao.deleteItemInCart(item_id, u_id)
+        if daoRes:
+            res = []
+            for row in daoRes:
+                res.append(self.dictionary(row))
+            return jsonify(res)
+        else:
+            return jsonify('Error deleting item in cart'), 400
+
     def clearUserCartByID(self, id):
         self.dao.clearUserCartByID(id)
         return jsonify("User #%s's cart cleared." %id)
