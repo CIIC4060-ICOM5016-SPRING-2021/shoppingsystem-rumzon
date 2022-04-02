@@ -61,7 +61,7 @@ class OrderController:
         if not userIDValid:
             return jsonify('Invalid User ID'), 400
 
-        oldjson = self.getDictByID(id)
+        oldjson = self.getDictByID(o_id)
         if oldjson:
             u_id = oldjson['u_id']
             if reqjson['u_id'] != '':
@@ -78,9 +78,8 @@ class OrderController:
             return jsonify('Invalid User ID'), 400
 
         u_id = reqjson['u_id']
-        o_id = self.dao.addNewOrder(u_id)
-        if o_id:
-            reqjson['o_id'] = o_id
-            return jsonify(reqjson), 200
+        daoRes = self.dao.addNewOrder(u_id)
+        if daoRes:
+            return jsonify(self.dictionary(daoRes[0])), 200
         else:
             return jsonify('ID Not Found'), 404

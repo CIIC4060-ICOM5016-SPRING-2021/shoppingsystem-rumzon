@@ -49,7 +49,7 @@ class OrderDAO:
         self.connection.close()
 
     def updateOrder(self, o_id, u_id):
-        query = 'UPDATE orders SET u_id=%s WHERE o_id = %s RETURNING *, orderTotal(o_id) AS o_total '
+        query = 'UPDATE orders SET u_id=%s WHERE o_id = %s RETURNING *, orderTotal(o_id) AS o_total'
         cursor = self.connection.cursor()
         cursor.execute(query, (u_id, o_id))
         res = []
@@ -61,11 +61,13 @@ class OrderDAO:
         return res
 
     def addNewOrder(self, u_id):
-        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING o_id'
+        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *, orderTotal(o_id) AS o_total'
         cursor = self.connection.cursor()
         cursor.execute(query, [u_id])
-        o_id = cursor.fetchone()[0]
+        res = []
+        for row in cursor:
+            res.append(row)
         self.connection.commit()
         cursor.close()
         self.connection.close()
-        return o_id
+        return res
