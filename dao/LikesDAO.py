@@ -73,7 +73,7 @@ class LikesDAO:
 
 
     def isInRecord(self, u_id, item_id):
-        query = 'SELECT u_id, item_id FROM likes where u_id = %s and item_id = %s'
+        query = 'SELECT item_id, u_id FROM likes where u_id = %s and item_id = %s'
         cursor = self.connection.cursor()
         cursor.execute(query, [u_id, item_id])
         res = []
