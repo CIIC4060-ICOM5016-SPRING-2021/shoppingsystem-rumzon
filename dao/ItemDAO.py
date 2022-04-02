@@ -22,6 +22,56 @@ class ItemDAO:
         self.connection.close()
         return res
 
+    def getItemsFilterCategory(self, i_category):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT * FROM items WHERE i_category = '%s'" %i_category)
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getAllAscendingPrice(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT * FROM items ORDER BY i_price ASC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getAllDescendingPrice(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT * FROM items ORDER BY i_price DESC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getAllAscendingName(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT * FROM items ORDER BY i_name ASC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getAllDescendingName(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT * FROM items ORDER BY i_name DESC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
     def getByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('SELECT * FROM items '

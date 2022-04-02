@@ -114,11 +114,11 @@ def ItemLikesByItemID(id):
     return LikesController().getItemLikesByItemID(id)
 
 #-----------------ItemsInCart---------------------------------
-@app.route('/rumzon/itemsincart/all')
+@app.route('/rumzon/cart/all')
 def allItemsInCarts():
     return ItemsInCartController().getAll()
 
-@app.route('/rumzon/itemsincart/<int:id>', methods=['GET','DELETE'])
+@app.route('/rumzon/cart/<int:id>', methods=['GET','DELETE'])
 def cartItemsByUserID(id):
     if request.method == 'GET':
         return ItemsInCartController().getUserCartByID(id)
@@ -127,13 +127,34 @@ def cartItemsByUserID(id):
     else:
         return 'Request not handled'
 
-@app.route('/rumzon/itemsincart/<int:id>/total')
-def getUserCartTotal(id):
-    return ItemsInCartController().getUserCartTotalByID(id)
+@app.route('/rumzon/cart/addtocart', methods=['POST'])
+def addToCart():
+    if request.method == 'POST':
+        return ItemsInCartController().addToCart(request.json)
+    else:
+        return 'Request not handled'
 
-@app.route('/rumzon/itemsincart/buyall/<int:id>', methods=['GET', 'POST'])
-def buyAllItemsInCarts(id):
-    return ItemsInCartController().buyAllFromCart(id)
+@app.route('/rumzon/cart/update', methods=['PUT'])
+def updateFromCart():
+    if request.method == 'PUT':
+        return ItemsInCartController().updateFromCart(request.json)
+    else:
+        return 'Request not handled'
+
+@app.route('/rumzon/cart/deleteitem', methods=['DELETE'])
+def deleteItemInCart():
+    if request.method == 'DELETE':
+        return ItemsInCartController().deleteItemInCart(request.json)
+    else:
+        return 'Request not handled'
+
+@app.route('/rumzon/cart/total/<int:u_id>')
+def getUserCartTotal(u_id):
+    return ItemsInCartController().getUserCartTotalByID(u_id)
+
+@app.route('/rumzon/cart/buyall/<int:u_id>', methods=['GET', 'POST'])
+def buyAllItemsInCarts(u_id):
+    return ItemsInCartController().buyAllFromCart(u_id)
 
 #-----------------ItemsInOrder---------------------------------
 @app.route('/rumzon/itemsinorder/all')
