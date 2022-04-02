@@ -101,16 +101,25 @@ def newOrder():
     return OrderController().addNewOrder(request.json)
 
 #-----------------Likes---------------------------------
+@app.route('/rumzon/users/<int:u_id>/likes/<int:i_id>', methods=['POST','DELETE'])
+def userLikes(u_id, i_id):
+    if request.method == 'POST':
+        return LikesController().addLike(u_id, i_id)
+    elif request.method == 'DELETE':
+        return LikesController().deleteLike(u_id, i_id)
+    else:
+        return 'Request not handled'
+
 @app.route('/rumzon/likes/all')
 def allLikes():
     return LikesController().getAll()
 
 @app.route('/rumzon/likes/users/<int:id>')
-def UserLikesByUserID(id):
+def userLikesByUserID(id):
     return LikesController().getUserLikesByUserID(id)
 
 @app.route('/rumzon/likes/items/<int:id>')
-def ItemLikesByItemID(id):
+def itemLikesByItemID(id):
     return LikesController().getItemLikesByItemID(id)
 
 #-----------------ItemsInCart---------------------------------
@@ -162,7 +171,7 @@ def allItemsInOrders():
     return ItemsInOrderController().getAll()
 
 @app.route('/rumzon/itemsinorder/<int:id>')
-def OrderItemsbyOrderID(id):
+def orderItemsbyOrderID(id):
     return ItemsInOrderController().getOrderItemsByID(id)
 
 
