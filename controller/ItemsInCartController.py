@@ -94,12 +94,13 @@ class ItemsInCartController:
         return jsonify("User #%s's cart cleared." %id)
 
     def buyAllFromCart(self, u_id):
-        orderId = self.order.addNewOrder(u_id)
+        orderRes = self.order.addNewOrder(u_id)
         daoRes = self.dao.getUserCartByID(u_id)
-        if orderId and daoRes:
+        if orderRes and daoRes:
+            o_id = orderRes[0][1]
             result = []
             for row in daoRes:
-                self.dao.buyItemFromCart(row[0], orderId, row[2])
+                self.dao.buyItemFromCart(row[0], o_id, row[2])
                 result.append(self.dictionary(row))
             self.dao.clearUserCartByID(u_id)
             return jsonify(result)
