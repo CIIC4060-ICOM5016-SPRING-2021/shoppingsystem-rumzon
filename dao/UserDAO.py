@@ -48,7 +48,6 @@ class UserDAO:
         self.connection.close()
         return res
 
-
     def deleteUser(self, id):
         cursor = self.connection.cursor()
         cursor.execute('DELETE FROM itemsinorder where o_id in (select o_id from orders where u_id = %s)' % id)

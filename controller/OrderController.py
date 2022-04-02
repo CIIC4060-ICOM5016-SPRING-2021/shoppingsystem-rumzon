@@ -72,17 +72,15 @@ class OrderController:
         else:
             return jsonify('ID Not Found'), 404
 
-    def addNewOrder(self, json):
-        userIDValid = UserDAO().getByID(json['u_id'])
+    def addNewOrder(self, reqjson):
+        userIDValid = UserDAO().getByID(reqjson['u_id'])
         if not userIDValid:
             return jsonify('Invalid User ID'), 400
 
-        u_id = json['u_id']
-        daoRes = self.dao.addNewOrder(u_id)
-        if daoRes:
-            result = []
-            for row in daoRes:
-                result.append(self.dictionary(row))
-            return jsonify(result), 200
+        u_id = reqjson['u_id']
+        o_id = self.dao.addNewOrder(u_id)
+        if o_id:
+            reqjson['o_id'] = o_id
+            return jsonify(reqjson), 200
         else:
             return jsonify('ID Not Found'), 404

@@ -64,10 +64,8 @@ class OrderDAO:
         query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING o_id'
         cursor = self.connection.cursor()
         cursor.execute(query, [u_id])
-        res = []
-        for row in cursor:
-            res.append(row)
+        o_id = cursor.fetchone()[0]
         self.connection.commit()
         cursor.close()
         self.connection.close()
-        return res
+        return o_id
