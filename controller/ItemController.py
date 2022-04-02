@@ -90,18 +90,6 @@ class ItemController:
         else:
             return {}
 
-    def addNewItem(self, json):
-        i_name = json['i_name']
-        i_category = json['i_category']
-        i_stock = json['i_stock']
-        i_price = json['i_price']
-
-        daoRes = self.dao.addNewItem(i_name, i_category, i_stock, i_price)
-        if daoRes:
-            return self.dictionary(daoRes[0])
-        else:
-            return jsonify('Error creating Item'), 405
-
     def deleteItem(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
