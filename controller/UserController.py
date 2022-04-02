@@ -32,12 +32,12 @@ class UserController:
         else:
             return jsonify('ID Not Found'), 405
 
-    def getDictByID(self, id):
+    def getUserDict(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
-            return self.dictionary(daoRes[0]), 200
+            return self.dictionary(daoRes[0])
         else:
-            return {}, 400
+            return {}
 
     def deleteUser(self, id):
         daoRes = self.dao.getByID(id)
@@ -48,7 +48,7 @@ class UserController:
             return jsonify('ID Not Found'), 404
 
     def updateUser(self, id, reqjson):
-        oldjson = self.getDictByID(id)
+        oldjson = self.getUserDict(id)
 
         if oldjson:
             username = oldjson['username']
@@ -73,7 +73,6 @@ class UserController:
             return jsonify('ID Not Found'), 404
 
     def addNewUser(self, json):
-
         if json['username'] == '':
             return jsonify('Enter Username'), 418
         if json['u_email'] == '':
@@ -88,12 +87,13 @@ class UserController:
         username = json['username']
         u_email = json['u_email']
         u_password = json['u_password']
+        isAdmin = json['isAdmin']
 
         daoRes = self.dao.addNewUser(username, u_email, u_password, isAdmin)
         if daoRes:
             res = []
             for row in daoRes:
                 res.append(self.dictionary(row))
-            return jsonify(res),201
+            return jsonify(res), 201
         else:
             return jsonify('Error creating user'), 400

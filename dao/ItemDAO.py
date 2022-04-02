@@ -25,7 +25,7 @@ class ItemDAO:
     def getByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('SELECT * FROM items '
-                       'where item_id = %s' %id)
+                       'WHERE item_id = %s' %id)
         res = []
         for row in cursor:
             res.append(row)

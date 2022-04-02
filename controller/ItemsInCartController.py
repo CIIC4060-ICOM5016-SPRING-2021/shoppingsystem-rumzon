@@ -12,7 +12,7 @@ class ItemsInCartController:
         dic = {}
         dic['item_id'] = row[0]
         dic['u_id'] = row[1]
-        dic['c_ammount'] = row[2]
+        dic['c_amount'] = row[2]
         dic['i_total'] = row[3]
         return dic
 

@@ -34,9 +34,9 @@ class OrderController:
     def getDictByID(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
-            return self.dictionary(daoRes[0]), 200
+            return self.dictionary(daoRes[0])
         else:
-            return {}, 404
+            return {}
 
     def getAllByUserID(self, uid):
         daoRes = self.dao.getByUserID(uid)
@@ -73,7 +73,7 @@ class OrderController:
             return jsonify('ID Not Found'), 404
 
     def addNewOrder(self, json):
-        userIDValid = UserDAO().getByID(reqjson['u_id'])
+        userIDValid = UserDAO().getByID(json['u_id'])
         if not userIDValid:
             return jsonify('Invalid User ID'), 400
 

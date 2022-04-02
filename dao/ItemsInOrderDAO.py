@@ -14,7 +14,7 @@ class ItemsInOrderDAO:
 
     def getAll(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT *, itemTotal(item_id, o_ammount) AS i_total FROM itemsinorder')
+        cursor.execute('SELECT *, itemTotal(item_id, o_amount) AS i_total FROM itemsinorder')
         res = []
         for row in cursor:
             res.append(row)
@@ -24,7 +24,7 @@ class ItemsInOrderDAO:
 
     def getOrderItemsByID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT *, itemTotal(item_id, o_ammount) AS i_total FROM itemsinorder '
+        cursor.execute('SELECT *, itemTotal(item_id, o_amount) AS i_total FROM itemsinorder '
                        'where o_id = %s' %id)
         res = []
         for row in cursor:

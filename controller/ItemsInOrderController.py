@@ -10,7 +10,7 @@ class ItemsInOrderController:
         dic = {}
         dic['item_id'] = row[0]
         dic['o_id'] = row[1]
-        dic['o_ammount'] = row[2]
+        dic['o_amount'] = row[2]
         dic['i_total'] = row[3]
         return dic
 

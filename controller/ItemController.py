@@ -26,6 +26,56 @@ class ItemController:
         else:
             return jsonify('Item Table Empty!... or error ocurred'), 405
 
+    def getItemsFilterCategory(self, i_category):
+        daoRes = self.dao.getItemsFilterCategory(i_category)
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Item Table Empty!... or error ocurred'), 405
+
+    def getAllAscendingPrice(self):
+        daoRes = self.dao.getAllAscendingPrice()
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Item Table Empty!... or error ocurred'), 405
+
+    def getAllDescendingPrice(self):
+        daoRes = self.dao.getAllDescendingPrice()
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Item Table Empty!... or error ocurred'), 405
+
+    def getAllAscendingName(self):
+        daoRes = self.dao.getAllAscendingName()
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Item Table Empty!... or error ocurred'), 405
+
+    def getAllDescendingName(self):
+        daoRes = self.dao.getAllDescendingName()
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('Item Table Empty!... or error ocurred'), 405
+
     def getByID(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
@@ -59,6 +109,18 @@ class ItemController:
             return jsonify(self.dictionary(daoRes[0]))
         else:
             return jsonify('ID Not Found'), 405
+
+    def addNewItem(self, json):
+        i_name = json['i_name']
+        i_category = json['i_category']
+        i_stock = json['i_stock']
+        i_price = json['i_price']
+
+        daoRes = self.dao.addNewItem(i_name, i_category, i_stock, i_price)
+        if daoRes:
+            return self.dictionary(daoRes[0])
+        else:
+            return jsonify('Error creating Item'), 405
 
     def updateItem(self, id, reqjson):
 

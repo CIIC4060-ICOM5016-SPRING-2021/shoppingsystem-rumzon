@@ -56,6 +56,26 @@ def itemByID(id):
 def newItem():
     return ItemController().addNewItem(request.json)
 
+@app.route('/rumzon/items/category/<string:category_name>')
+def filterItemsByCategory(category_name):
+    return ItemController().getItemsFilterCategory(category_name)
+
+@app.route('/rumzon/items/price/asc')
+def allAscendingPrice():
+    return ItemController().getAllAscendingPrice()
+
+@app.route('/rumzon/items/price/desc')
+def allDescendingPrice():
+    return ItemController().getAllDescendingPrice()
+
+@app.route('/rumzon/items/name/asc')
+def AllAscendingName():
+    return ItemController().getAllAscendingName()
+
+@app.route('/rumzon/items/name/desc')
+def allDescendingName():
+    return ItemController().getAllDescendingName()
+
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
 def allOrders():
