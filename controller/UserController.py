@@ -54,7 +54,6 @@ class UserController:
             username = oldjson['username']
             u_email = oldjson['u_email']
             u_password = oldjson['u_password']
-            isAdmin = oldjson['isAdmin']
 
             if reqjson['username'] != '':
                 username = reqjson['username']
@@ -62,10 +61,15 @@ class UserController:
                 u_email = reqjson['u_email']
             if reqjson['u_password'] != '':
                 u_password = reqjson['u_password']
-            if reqjson['isAdmin'].lower() != 'true':
-                isAdmin = 'false'
+            if type(reqjson['isAdmin']) is str:
+                if reqjson['isAdmin'].lower() == '':
+                    isAdmin = oldjson['isAdmin']
+                elif reqjson['isAdmin'].lower() == 'true':
+                    isAdmin = 'true'
+                else:
+                    isAdmin = 'false'
             else:
-                isAdmin = 'true'
+                isAdmin = reqjson['isAdmin']
 
             daoRes = self.dao.updateUser(id, username, u_email, u_password, isAdmin)
             return jsonify(self.dictionary(daoRes[0])), 200
@@ -79,10 +83,6 @@ class UserController:
             return jsonify('Enter Email'), 418
         if json['u_password'] == '':
             return jsonify('Enter Password'), 418
-        if json['isAdmin'].lower() != 'true':
-            isAdmin = 'false'
-        else:
-            isAdmin = 'true'
 
         username = json['username']
         u_email = json['u_email']

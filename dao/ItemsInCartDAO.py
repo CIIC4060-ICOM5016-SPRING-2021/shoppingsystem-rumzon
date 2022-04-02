@@ -14,7 +14,7 @@ class ItemsInCartDAO:
 
     def getAll(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT *, itemTotal(item_id, c_ammount) AS i_total FROM itemsincart')
+        cursor.execute('SELECT *, itemTotal(item_id, c_amount) AS i_total FROM itemsincart')
         res = []
         for row in cursor:
             res.append(row)
@@ -85,11 +85,11 @@ class ItemsInCartDAO:
         cursor.close()
         self.connection.close()
 
-    def buyItemFromCart(self, item_id, o_id, o_ammount):
-        query = 'INSERT INTO itemsinorder (item_id, o_id, o_ammount) ' \
+    def buyItemFromCart(self, item_id, o_id, o_amount):
+        query = 'INSERT INTO itemsinorder (item_id, o_id, o_amount) ' \
                     'VALUES (%s, %s, %s);'
         cursor = self.connection.cursor()
-        cursor.execute(query, (item_id, o_id, o_ammount))
+        cursor.execute(query, (item_id, o_id, o_amount))
         self.connection.commit()
         # cursor.close()
         # self.connection.close()
