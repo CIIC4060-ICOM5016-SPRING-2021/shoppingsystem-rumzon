@@ -29,8 +29,6 @@ class UserDAO:
         res = []
         for row in cursor:
             res.append(row)
-        # cursor.close()
-        # self.connection.close()
         return res
 
     def updateUser(self, id, username, u_email, u_password, isAdmin):
@@ -70,4 +68,20 @@ class UserDAO:
         self.connection.commit()
         cursor.close()
         self.connection.close()
+        return res
+
+    def checkUsername(self, username):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT username FROM users where username = '%s'" % username)
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
+    def checkEmail(self, u_email):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT u_email FROM users where u_email = '%s'" % u_email)
+        res = []
+        for row in cursor:
+            res.append(row)
         return res

@@ -1,6 +1,5 @@
-from flask import Flask, jsonify, request
+from flask import Flask, request
 from flask_cors import CORS
-import psycopg2
 
 from controller.ItemController import ItemController
 from controller.ItemsInCartController import ItemsInCartController
@@ -176,4 +175,4 @@ def orderItemsbyOrderID(id):
 
 
 if __name__ == '__main__':
-    app.run(debug=1)
+    app.run(debug=True)

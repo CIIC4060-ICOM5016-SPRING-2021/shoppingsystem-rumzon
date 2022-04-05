@@ -77,12 +77,20 @@ class UserController:
             return jsonify('ID Not Found'), 404
 
     def addNewUser(self, json):
+        res = []
         if json['username'] == '':
             return jsonify('Enter Username'), 418
         if json['u_email'] == '':
             return jsonify('Enter Email'), 418
         if json['u_password'] == '':
             return jsonify('Enter Password'), 418
+
+        userInvalid = self.checkUsername(json['username'])
+        if userInvalid:
+            return ('Username already taken'), 400
+        emailInvalid = self.checkEmail(json['u_email'])
+        if emailInvalid:
+            return ('Email already taken'), 400
 
         username = json['username']
         u_email = json['u_email']
@@ -91,9 +99,24 @@ class UserController:
 
         daoRes = self.dao.addNewUser(username, u_email, u_password, isAdmin)
         if daoRes:
-            res = []
             for row in daoRes:
                 res.append(self.dictionary(row))
             return jsonify(res), 201
         else:
-            return jsonify('Error creating user'), 400
+            return jsonify('Error creating user'), 500
+
+    def checkUsername(self, username):
+        usernameRes = self.dao.checkUsername(username)
+        res = []
+        if usernameRes:
+            for row in usernameRes:
+                res.append(row)
+        return res #return already taken username or empty if valid
+
+    def checkEmail(self, email):
+        emailRes = self.dao.checkEmail(email)
+        res = []
+        if emailRes:
+            for row in emailRes:
+                res.append(row)
+        return res #return already taken email or empty if valid
