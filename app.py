@@ -172,7 +172,7 @@ def allItemsInOrders():
 
 @app.route('/rumzon/itemsinorder/<int:id>')
 def orderItemsbyOrderID(id):
-    return ItemsInOrderController().getOrderItemsByID(id)
+    return ItemsInOrderController().getOrderItemsByOrderID(id)
 
 
 if __name__ == '__main__':

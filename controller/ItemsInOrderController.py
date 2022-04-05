@@ -8,10 +8,10 @@ class ItemsInOrderController:
 
     def dictionary(self, row):
         dic = {}
-        dic['item_id'] = row[0]
-        dic['o_id'] = row[1]
-        dic['o_amount'] = row[2]
-        dic['i_total'] = row[3]
+        dic['Item ID'] = row[0]
+        dic['Order ID'] = row[1]
+        dic['Amount'] = row[2]
+        dic['Item Total'] = row[3]
         return dic
 
     def getAll(self):
@@ -24,8 +24,8 @@ class ItemsInOrderController:
         else:
             return jsonify('Items in Orders Table Empty!... or error ocurred'), 405
 
-    def getOrderItemsByID(self, id):
-        daoRes = self.dao.getOrderItemsByID(id)
+    def getOrderItemsByOrderID(self, id):
+        daoRes = self.dao.getOrderItemsByOrderID(id)
         if daoRes:
             result = []
             for row in daoRes:

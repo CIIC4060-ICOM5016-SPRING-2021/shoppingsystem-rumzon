@@ -8,10 +8,10 @@ class OrderController:
 
     def dictionary(self, row):
         dic = {}
-        dic['u_id'] = row[0]
-        dic['o_id'] = row[1]
-        dic['o_time'] = row[2]
-        dic['o_total'] = row[3]
+        dic['User ID'] = row[0]
+        dic['Order ID'] = row[1]
+        dic['Order Time'] = row[2]
+        dic['Order Total'] = row[3]
         return dic
 
     def getAll(self):

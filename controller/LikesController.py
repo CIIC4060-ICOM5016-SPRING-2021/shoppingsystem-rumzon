@@ -9,8 +9,8 @@ class LikesController:
 
     def dictionary(self, row):
         dic = {}
-        dic['item_id'] = row[0]
-        dic['u_id'] = row[1]
+        dic['Item ID'] = row[0]
+        dic['User ID'] = row[1]
         return dic
 
     def getAll(self):

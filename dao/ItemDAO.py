@@ -83,6 +83,18 @@ class ItemDAO:
         # self.connection.close()
         return res
 
+    def checkStockByID(self, id, orderAmmount):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT item_id, i_name, i_stock FROM items '
+                       'WHERE item_id = %s' %id)
+        res = []
+        for row in cursor:
+            if row[2] < orderAmmount:
+                res.append(row)
+                res.append(orderAmmount)
+        #return item if not enough stock (< orderAmmount), return empty if enough (> orderAmmount)
+        return res
+
     def addNewItem(self, i_name, i_category, i_stock, i_price):
         query = 'INSERT INTO items (i_name, i_category, i_stock, i_price) ' \
                 'VALUES (%s, %s, %s, %s) RETURNING *;'

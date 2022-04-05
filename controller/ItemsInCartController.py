@@ -1,5 +1,7 @@
 from flask import jsonify
 from dao.ItemsInCartDAO import ItemsInCartDAO
+from dao.ItemDAO import ItemDAO
+from dao.ItemsInOrderDAO import ItemsInOrderDAO
 from dao.OrderDAO import OrderDAO
 
 class ItemsInCartController:
@@ -10,10 +12,10 @@ class ItemsInCartController:
 
     def dictionary(self, row):
         dic = {}
-        dic['item_id'] = row[0]
-        dic['u_id'] = row[1]
-        dic['c_amount'] = row[2]
-        dic['i_total'] = row[3]
+        dic['Item ID'] = row[0]
+        dic['User ID'] = row[1]
+        dic['Cart Amount'] = row[2]
+        dic['Item Total'] = row[3]
         return dic
 
     def getAll(self):
@@ -43,8 +45,8 @@ class ItemsInCartController:
             for row in daoRes:
                 if row[1] is None:
                     return jsonify("User #%s Cart Empty" % row[0]), 200
-                dic['u_id'] = row[0]
-                dic['c_total'] = row[1]
+                dic['User ID'] = row[0]
+                dic['Cart Total'] = row[1]
             return jsonify(dic), 200
         else:
             return jsonify("ID Not Found" %id), 405
@@ -94,13 +96,35 @@ class ItemsInCartController:
         return jsonify("User #%s's cart cleared." %id)
 
     def buyAllFromCart(self, u_id):
-        orderRes = self.order.addNewOrder(u_id)
         daoRes = self.dao.getUserCartByID(u_id)
+        #check if enough in stock for each item in cart
+        if daoRes:
+            understockedItems = []
+            for row in daoRes:
+                stockRes = ItemDAO().checkStockByID(row[0], row[2])
+                if stockRes:
+                    print(stockRes[0][0])
+                    print(stockRes[0][1])
+                    print(stockRes[0][2])
+                    print(stockRes[1])
+                    itemDic = {}
+                    itemDic['Item ID'] = stockRes[0][0]
+                    itemDic['Item Name'] = stockRes[0][1]
+                    itemDic['Stock'] = stockRes[0][2]
+                    itemDic['Cart Ammount'] = stockRes[1]
+                    itemDic['Error'] = 'Not enough %s in stock' %itemDic['Item Name']
+                    understockedItems.append(itemDic)
+            if understockedItems:
+                return jsonify(understockedItems), 400
+
+        #make purchase if all items good in stock
+        orderRes = self.order.addNewOrder(u_id)
         if orderRes and daoRes:
+            itemsInOrderDAO = ItemsInOrderDAO()
             o_id = orderRes[0][1]
             result = []
             for row in daoRes:
-                self.dao.buyItemFromCart(row[0], o_id, row[2])
+                itemsInOrderDAO.buyItemFromCart(row[0], o_id, row[2])
                 result.append(self.dictionary(row))
             self.dao.clearUserCartByID(u_id)
             return jsonify(result)

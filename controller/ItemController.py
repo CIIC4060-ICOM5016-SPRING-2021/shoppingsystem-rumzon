@@ -9,11 +9,11 @@ class ItemController:
 
     def dictionary(self, row):
         dic = {}
-        dic['item_id'] = row[0]
-        dic['i_name'] = row[1]
-        dic['i_category'] = row[2]
-        dic['i_stock'] = row[3]
-        dic['i_price'] = row[4]
+        dic['Item ID'] = row[0]
+        dic['Item Name'] = row[1]
+        dic['Category'] = row[2]
+        dic['Stock'] = row[3]
+        dic['Price'] = row[4]
         return dic
 
     def getAll(self):
@@ -111,14 +111,13 @@ class ItemController:
             return jsonify('Error creating Item'), 405
 
     def updateItem(self, id, reqjson):
-
         oldjson = self.getDictByID(id)
 
         if oldjson:
-            i_name = oldjson['i_name']
-            i_category = oldjson['i_category']
-            i_stock = oldjson['i_stock']
-            i_price = oldjson['i_price']
+            i_name = oldjson['Item Name']
+            i_category = oldjson['Category']
+            i_stock = oldjson['Stock']
+            i_price = oldjson['Price']
 
             if reqjson['i_name'] != '':
                 i_name = reqjson['i_name']

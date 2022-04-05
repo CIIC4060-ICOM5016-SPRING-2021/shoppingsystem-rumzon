@@ -8,11 +8,11 @@ class UserController:
 
     def dictionary(self, row):
         dic = {}
-        dic['u_id'] = row[0]
-        dic['username'] = row[1]
-        dic['u_email'] = row[2]
-        dic['u_password'] = row[3]
-        dic['isAdmin'] = row[4]
+        dic['User ID'] = row[0]
+        dic['Username'] = row[1]
+        dic['Email'] = row[2]
+        dic['Password'] = row[3]
+        dic['is Admin'] = row[4]
         return dic
 
     def getAll(self):
