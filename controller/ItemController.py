@@ -4,6 +4,10 @@ from dao.ItemDAO import ItemDAO
 
 class ItemController:
 
+    category_list = ['food','clothes','electronics','furniture',
+                     'household','kitchenware','medicine','pets',
+                     'sports','supplies','toys']
+
     def __init__(self):
         self.dao = ItemDAO()
 
@@ -99,6 +103,20 @@ class ItemController:
             return jsonify('ID Not Found'), 405
 
     def addNewItem(self, json):
+
+        if json['i_name'] == '':
+            return jsonify('Enter Item Name'), 418
+        if json['i_category'] == '':
+            return jsonify('Enter Category'), 418
+        if json['i_stock'] == '' or json['i_stock'] <= 0:
+            return jsonify('Enter Valid Stock'), 418
+        if json['i_price'] == '' or json['i_price'] < 0:
+            return jsonify('Enter Valid Price'), 418
+
+        invalidItem = self.checkValidItem(json['i_name'], json['i_category'])
+        if invalidItem:
+            return jsonify(invalidItem), 400
+
         i_name = json['i_name']
         i_category = json['i_category']
         i_stock = json['i_stock']
@@ -132,3 +150,14 @@ class ItemController:
                 return jsonify(self.dictionary(daoRes[0]))
         else:
             return jsonify('ID %d not found' %id), 404
+
+    def checkValidItem(self, i_name, i_category):
+        if not self.category_list.__contains__(i_category):
+            return ('Category not valid')
+
+        invalidItem = self.dao.checkInvalidItem(i_name,i_category)
+
+        if invalidItem:
+            return ('Item already exists')
+
+        return None;

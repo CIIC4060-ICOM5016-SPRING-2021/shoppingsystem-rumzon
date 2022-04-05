@@ -87,10 +87,10 @@ class UserController:
 
         userInvalid = self.checkUsername(json['username'])
         if userInvalid:
-            return ('Username already taken'), 400
+            return jsonify('Username already taken'), 400
         emailInvalid = self.checkEmail(json['u_email'])
         if emailInvalid:
-            return ('Email already taken'), 400
+            return jsonify('Email already taken'), 400
 
         username = json['username']
         u_email = json['u_email']

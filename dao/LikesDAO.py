@@ -22,6 +22,16 @@ class LikesDAO:
         self.connection.close()
         return res
 
+    def getLikeCount(self):
+        query = 'SELECT item_id, i_name, i_category, count(u_id) AS like_count FROM likes natural inner join items ' \
+                'GROUP BY item_id, i_name, i_category ORDER BY like_count DESC;'
+        cursor = self.connection.cursor()
+        cursor.execute(query)
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
     def getUserLikesByUserID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('SELECT * FROM likes '

@@ -131,3 +131,12 @@ class ItemDAO:
         cursor.close()
         self.connection.close()
         return res
+
+    def checkInvalidItem(self, i_name, i_category):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT i_name, i_category FROM items "
+                       "WHERE i_name = '%s' AND i_category = '%s'" %(i_name, i_category))
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res

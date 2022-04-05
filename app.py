@@ -113,6 +113,10 @@ def userLikes(u_id, i_id):
 def allLikes():
     return LikesController().getAll()
 
+@app.route('/rumzon/likes/mostliked')
+def mostLikes():
+    return LikesController().getMostLikedItems()
+
 @app.route('/rumzon/likes/users/<int:id>')
 def userLikesByUserID(id):
     return LikesController().getUserLikesByUserID(id)
