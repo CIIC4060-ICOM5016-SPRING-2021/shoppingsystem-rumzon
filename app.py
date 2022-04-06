@@ -75,26 +75,6 @@ def AllAscendingName():
 def allDescendingName():
     return ItemController().getAllDescendingName()
 
-@app.route('/rumzon/items/price/max')
-def getMostExpensiveItem():
-    return ItemController().getMostExpensiveItem()
-
-@app.route('/rumzon/items/price/min')
-def getLeastExpensiveItem():
-    return ItemController().getLeastExpensiveItem()
-
-@app.route('/rumzon/items/hot/items')
-def getMostBoughtItems():
-    return ItemController().getMostBoughtItems()
-
-@app.route('/rumzon/items/hot/category')
-def getMostBoughtCategory():
-    return ItemController().getMostBoughtCategory()
-
-@app.route('/rumzon/items/hot/category/all')
-def getMostBoughtCategoryAll():
-    return ItemController().getMostBoughtCategoryAll()
-
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
 def allOrders():
@@ -132,10 +112,6 @@ def userLikes(u_id, i_id):
 @app.route('/rumzon/likes/all')
 def allLikes():
     return LikesController().getAll()
-
-@app.route('/rumzon/likes/mostliked')
-def mostLikes():
-    return LikesController().getMostLikedItems()
 
 @app.route('/rumzon/likes/users/<int:id>')
 def userLikesByUserID(id):
@@ -184,9 +160,12 @@ def deleteItemInCart():
 def getUserCartTotal(u_id):
     return ItemsInCartController().getUserCartTotalByID(u_id)
 
-@app.route('/rumzon/cart/buyall/<int:u_id>', methods=['GET', 'POST'])
+@app.route('/rumzon/cart/buyall/<int:u_id>', methods=['POST'])
 def buyAllItemsInCarts(u_id):
-    return ItemsInCartController().buyAllFromCart(u_id)
+    if request.method == 'POST':
+        return ItemsInCartController().buyAllFromCart(u_id)
+    else:
+        return 'Request not handled'
 
 #-----------------ItemsInOrder---------------------------------
 @app.route('/rumzon/itemsinorder/all')
@@ -197,6 +176,56 @@ def allItemsInOrders():
 def orderItemsbyOrderID(id):
     return ItemsInOrderController().getOrderItemsByOrderID(id)
 
+#-----------------Global Statistics---------------------------------
+@app.route('/rumzon/global/price/max')
+def getMostExpensiveItem():
+    return ItemController().getMostExpensiveItem()
+
+@app.route('/rumzon/global/price/min')
+def getLeastExpensiveItem():
+    return ItemController().getLeastExpensiveItem()
+
+@app.route('/rumzon/global/hot/items')
+def getMostBoughtItems():
+    return ItemsInOrderController().getMostBoughtItems()
+
+@app.route('/rumzon/global/hot/category')
+def getMostBoughtCategory():
+    return ItemsInOrderController().getMostBoughtCategory()
+
+@app.route('/rumzon/global/hot/category/all')
+def getCategoryPurchaseDesc():
+    return ItemsInOrderController().getCategoryPurchaseDesc()
+
+@app.route('/rumzon/global/likes')
+def mostLikes():
+    return LikesController().getMostLikedItems()
+
+#-----------------User Statistics---------------------------------
+
+@app.route('/rumzon/users/<int:u_id>/hot/items')
+def getUserMostBoughtItems(u_id):
+    return ItemsInOrderController().getUserMostBoughtItems(u_id)
+
+@app.route('/rumzon/users/<int:u_id>/hot/category')
+def getUserMostBoughtCategory(u_id):
+    return ItemsInOrderController().getUserMostBoughtCategory(u_id)
+
+@app.route('/rumzon/users/<int:u_id>/itemsinorder/max')
+def getUserMostExpensiveItemPurchase(u_id):
+    return ItemsInOrderController().getUserMostExpensiveItemPurchase(u_id)
+
+@app.route('/rumzon/users/<int:u_id>/itemsinorder/min')
+def getUserLeastExpensiveItemPurchase(u_id):
+    return ItemsInOrderController().getUserLeastExpensiveItemPurchase(u_id)
+
+@app.route('/rumzon/users/<int:u_id>/orders/max')
+def getUserMostExpensiveOrder(u_id):
+    return OrderController().getUserMostExpensiveOrder(u_id)
+
+@app.route('/rumzon/users/<int:u_id>/orders/min')
+def getUserLeastExpensiveOrder(u_id):
+    return OrderController().getUserLeastExpensiveOrder(u_id)
 
 if __name__ == '__main__':
     app.run(debug=True)

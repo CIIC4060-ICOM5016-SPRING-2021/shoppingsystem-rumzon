@@ -71,3 +71,34 @@ class OrderDAO:
         cursor.close()
         self.connection.close()
         return res
+
+
+    def getUserMostExpensiveOrder(self, u_id):
+        query = 'SELECT *, ordertotal(o_id) AS o_total FROM orders WHERE orderTotal(o_id) =' \
+                '   (SELECT max(o_total) FROM ' \
+                '       (SELECT *, orderTotal(o_id) AS o_total FROM orders WHERE u_id = %s) AS T1 ' \
+                '   WHERE u_id = %s)'
+        cursor = self.connection.cursor()
+        cursor.execute(query, (u_id, u_id))
+        res = []
+        for row in cursor:
+            res.append(row)
+        self.connection.commit()
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getUserLeastExpensiveOrder(self, u_id):
+        query = 'SELECT *, ordertotal(o_id) AS o_total FROM orders WHERE orderTotal(o_id) =' \
+                '   (SELECT min(o_total) FROM ' \
+                '       (SELECT *, orderTotal(o_id) AS o_total FROM orders WHERE u_id = %s) AS T1 ' \
+                '   WHERE u_id = %s)'
+        cursor = self.connection.cursor()
+        cursor.execute(query, (u_id, u_id))
+        res = []
+        for row in cursor:
+            res.append(row)
+        self.connection.commit()
+        cursor.close()
+        self.connection.close()
+        return res

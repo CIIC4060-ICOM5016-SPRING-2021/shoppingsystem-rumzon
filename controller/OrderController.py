@@ -83,3 +83,23 @@ class OrderController:
             return jsonify(self.dictionary(daoRes[0])), 200
         else:
             return jsonify('ID Not Found'), 404
+
+    def getUserMostExpensiveOrder(self, u_id):
+        daoRes = self.dao.getUserMostExpensiveOrder(u_id)
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
+
+    def getUserLeastExpensiveOrder(self, u_id):
+        daoRes = self.dao.getUserLeastExpensiveOrder(u_id)
+        if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+            return jsonify(result)
+        else:
+            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
