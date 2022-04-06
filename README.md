@@ -21,3 +21,6 @@
     Password: 660b482966304513c9478db7907c698d30fe3c81aa41efb9161884c7d6df7434
     URI: postgres://subtdkpfoxqmiu:660b482966304513c9478db7907c698d30fe3c81aa41efb9161884c7d6df7434@ec2-18-235-114-62.compute-1.amazonaws.com:5432/de9v4rj4hthhg6
     Heroku CLI: heroku pg:psql postgresql-metric-64579 --app rumzon-db
+
+## Postman
+    URL: https://rumzon.postman.co/workspace/198cce8c-0257-4587-bd20-9e76959aabee
