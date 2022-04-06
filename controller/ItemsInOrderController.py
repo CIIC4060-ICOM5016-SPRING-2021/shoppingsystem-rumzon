@@ -100,7 +100,7 @@ class ItemsInOrderController:
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 400
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 400
 
     def getUserMostBoughtCategory(self, u_id):
         daoRes = self.dao.getUserCategoryPurchaseCount(u_id)
@@ -117,7 +117,7 @@ class ItemsInOrderController:
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 400
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 400
 
     def getUserMostExpensiveItemPurchase(self, u_id):
         daoRes = self.dao.getUserMostExpensiveItemPurchase(u_id)
@@ -134,7 +134,7 @@ class ItemsInOrderController:
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
 
     def getUserLeastExpensiveItemPurchase(self, u_id):
         daoRes = self.dao.getUserLeastExpensiveItemPurchase(u_id)
@@ -151,4 +151,4 @@ class ItemsInOrderController:
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404

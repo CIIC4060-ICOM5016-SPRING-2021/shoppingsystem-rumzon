@@ -92,7 +92,7 @@ class OrderController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
 
     def getUserLeastExpensiveOrder(self, u_id):
         daoRes = self.dao.getUserLeastExpensiveOrder(u_id)
@@ -102,4 +102,4 @@ class OrderController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred'), 404
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
