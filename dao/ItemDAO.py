@@ -72,6 +72,30 @@ class ItemDAO:
         self.connection.close()
         return res
 
+    def getItemsPurchaseCount(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT item_id, i_name, count(*) AS purchase_count FROM itemsinorder natural inner join items '
+                       'GROUP BY item_id, i_name '
+                       'ORDER BY purchase_count DESC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getCategoryPurchaseCount(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT i_category, count(*) AS purchase_count FROM itemsinorder natural inner join items '
+                       'GROUP BY i_category '
+                       'ORDER BY purchase_count DESC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
     def getByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute('SELECT * FROM items '

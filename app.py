@@ -75,6 +75,26 @@ def AllAscendingName():
 def allDescendingName():
     return ItemController().getAllDescendingName()
 
+@app.route('/rumzon/items/price/max')
+def getMostExpensiveItem():
+    return ItemController().getMostExpensiveItem()
+
+@app.route('/rumzon/items/price/min')
+def getLeastExpensiveItem():
+    return ItemController().getLeastExpensiveItem()
+
+@app.route('/rumzon/items/hot/items')
+def getMostBoughtItems():
+    return ItemController().getMostBoughtItems()
+
+@app.route('/rumzon/items/hot/category')
+def getMostBoughtCategory():
+    return ItemController().getMostBoughtCategory()
+
+@app.route('/rumzon/items/hot/category/all')
+def getMostBoughtCategoryAll():
+    return ItemController().getMostBoughtCategoryAll()
+
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
 def allOrders():
