@@ -1,5 +1,6 @@
 from flask import jsonify
 from dao.UserDAO import UserDAO
+import re
 
 class UserController:
 
@@ -51,19 +52,28 @@ class UserController:
         oldjson = self.getUserDict(id)
 
         if oldjson:
-            username = oldjson['username']
-            u_email = oldjson['u_email']
-            u_password = oldjson['u_password']
+            username = oldjson['Username']
+            u_email = oldjson['Email']
+            u_password = oldjson['Password']
 
-            if reqjson['username'] != '':
+            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+
+            if reqjson['username'] != reqjson['username'].replace(' ', ''):
+                return jsonify('Username must not have spaces'), 400
+            if not (re.search(regex, reqjson['u_email'])) and reqjson['u_email'] != '':
+                return jsonify('Enter Valid Email'), 400
+            if not isinstance(reqjson['isAdmin'], bool) and reqjson['isAdmin'] != '':
+                return jsonify('isAdmin must be Boolean'), 400
+
+            if reqjson['username'].replace(' ', '') != '':
                 username = reqjson['username']
-            if reqjson['u_email'] != '':
+            if reqjson['u_email'].replace(' ', '') != '':
                 u_email = reqjson['u_email']
             if reqjson['u_password'] != '':
                 u_password = reqjson['u_password']
             if type(reqjson['isAdmin']) is str:
-                if reqjson['isAdmin'].lower() == '':
-                    isAdmin = oldjson['isAdmin']
+                if reqjson['isAdmin'].lower().replace(' ', '') == '':
+                    isAdmin = oldjson['is Admin']
                 elif reqjson['isAdmin'].lower() == 'true':
                     isAdmin = 'true'
                 else:
@@ -79,11 +89,19 @@ class UserController:
     def addNewUser(self, json):
         res = []
         if json['username'] == '':
-            return jsonify('Enter Username'), 418
+            return jsonify('Enter Username'), 400
         if json['u_email'] == '':
-            return jsonify('Enter Email'), 418
+            return jsonify('Enter Email'), 400
         if json['u_password'] == '':
-            return jsonify('Enter Password'), 418
+            return jsonify('Enter Password'), 400
+        if not isinstance(json['isAdmin'], bool):
+            return jsonify('isAdmin must be Boolean'), 400
+
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        if json['username'] != json['username'].replace(' ', ''):
+            return jsonify('Username must not have spaces'), 400
+        if not (re.search(regex, json['u_email'])):
+            return jsonify('Enter Valid Email'), 400
 
         userInvalid = self.checkUsername(json['username'])
         if userInvalid:
