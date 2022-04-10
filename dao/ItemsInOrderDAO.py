@@ -33,6 +33,18 @@ class ItemsInOrderDAO:
         self.connection.close()
         return res
 
+    def getItemsFromOrder(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT item_id, i_name, i_category, o_amount, i_total '
+                       'FROM itemsinorder NATURAL INNER JOIN items '
+                       'WHERE o_id = %s' %id)
+        res = []
+        for row in cursor:
+            res.append(row)
+        # cursor.close()
+        # self.connection.close()
+        return res
+
     def buyItemFromCart(self, item_id, o_id, o_amount):
         query = 'INSERT INTO itemsinorder (item_id, o_id, o_amount, i_total) ' \
                 'VALUES (%s, %s, %s, itemTotal(%s, %s)) RETURNING *'

@@ -113,7 +113,7 @@ class ItemDAO:
         cursor.execute('DELETE FROM itemsinorder where item_id = %s' % id)
         cursor.execute('DELETE FROM itemsincart where item_id = %s' % id)
         cursor.execute('DELETE FROM likes where item_id = %s' % id)
-        cursor.execute('DELETE FROM items where item_id = %s' % id)
+        cursor.execute('UPDATE ITEMS SET isActive = false WHERE item_id = %s' %id)
         self.connection.commit()
         cursor.close()
         self.connection.close()

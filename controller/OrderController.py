@@ -1,6 +1,8 @@
 from flask import jsonify
 from dao.OrderDAO import OrderDAO
 from dao.UserDAO import UserDAO
+from dao.ItemsInOrderDAO import ItemsInOrderDAO
+
 class OrderController:
 
     def __init__(self):
@@ -12,6 +14,16 @@ class OrderController:
         dic['Order ID'] = row[1]
         dic['Order Time'] = row[2]
         dic['Order Total'] = row[3]
+        dic['Items in Order'] = row[4]
+        return dic
+
+    def ItemsDict(self, row):
+        dic = {}
+        dic['Item ID'] = row[0]
+        dic['Item Name'] = row[1]
+        dic['Category'] = row[2]
+        dic['Amount'] = row[3]
+        dic['Item Total'] = row[4]
         return dic
 
     def getAll(self):
@@ -20,6 +32,9 @@ class OrderController:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
             return jsonify(result), 200
         else:
             return jsonify('Order Table Empty!... or error ocurred'), 400
@@ -27,13 +42,25 @@ class OrderController:
     def getByID(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
-            return jsonify(self.dictionary(daoRes[0])), 200
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
+            return jsonify(result), 200
         else:
             return jsonify('ID Not Found'), 404
 
     def getDictByID(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
+            result = []
+            for row in daoRes:
+                result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
             return self.dictionary(daoRes[0])
         else:
             return {}
@@ -44,6 +71,9 @@ class OrderController:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
             return jsonify(result), 200
         else:
             return jsonify('ID Not Found'), 404
@@ -52,7 +82,11 @@ class OrderController:
         daoRes = self.dao.getByID(id)
         if daoRes:
             self.dao.deleteOrder(id)
-            return jsonify(self.dictionary(daoRes[0])), 200
+            dicRes = {}
+            dicRes['User ID'] = daoRes[0][0]
+            dicRes['Order ID'] = daoRes[0][1]
+            dicRes['Order Time'] = daoRes[0][2]
+            return jsonify(dicRes), 200
         else:
             return jsonify('ID Not Found'), 405
 
@@ -90,6 +124,9 @@ class OrderController:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
             return jsonify(result)
         else:
             return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
@@ -100,6 +137,9 @@ class OrderController:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
+                itemRes = ItemsInOrderDAO().getItemsFromOrder(row[1])
+                for item in itemRes:
+                    row[4].append(self.ItemsDict(item))
             return jsonify(result)
         else:
             return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
