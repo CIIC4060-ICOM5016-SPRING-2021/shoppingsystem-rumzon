@@ -14,7 +14,7 @@ class ItemDAO:
 
     def getAll(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items')
+        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price FROM items')
         res = []
         for row in cursor:
             res.append(row)
@@ -24,7 +24,8 @@ class ItemDAO:
 
     def getItemsFilterCategory(self, i_category):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT * FROM items WHERE i_category = '%s'" %i_category)
+        cursor.execute("SELECT item_id, i_name, i_category, i_stock, i_price "
+                       "FROM items WHERE i_category = '%s'" %i_category)
         res = []
         for row in cursor:
             res.append(row)
@@ -34,7 +35,8 @@ class ItemDAO:
 
     def getAllAscendingPrice(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items ORDER BY i_price ASC')
+        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
+                       'FROM items ORDER BY i_price ASC')
         res = []
         for row in cursor:
             res.append(row)
@@ -44,7 +46,8 @@ class ItemDAO:
 
     def getAllDescendingPrice(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items ORDER BY i_price DESC')
+        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
+                       'FROM items ORDER BY i_price DESC')
         res = []
         for row in cursor:
             res.append(row)
@@ -54,7 +57,8 @@ class ItemDAO:
 
     def getAllAscendingName(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items ORDER BY i_name ASC')
+        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
+                       'FROM items ORDER BY i_name ASC')
         res = []
         for row in cursor:
             res.append(row)
@@ -64,7 +68,7 @@ class ItemDAO:
 
     def getAllDescendingName(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items ORDER BY i_name DESC')
+        cursor.execute('SELECT FROM items ORDER BY i_name DESC')
         res = []
         for row in cursor:
             res.append(row)
@@ -74,13 +78,22 @@ class ItemDAO:
 
     def getByID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM items '
-                       'WHERE item_id = %s' %id)
+        cursor.execute("SELECT item_id, i_name, i_category, i_stock, i_price FROM items "
+                       "WHERE item_id = '%s'" %id)
         res = []
         for row in cursor:
             res.append(row)
         # cursor.close()
         # self.connection.close()
+        return res
+
+    def isActive(self, item_id):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT isActive FROM items"
+                       "WHERE item_id = '%s' = %s" %item_id)
+        res = []
+        for row in cursor:
+            res.append(row)
         return res
 
     def checkStockByID(self, id, orderAmmount):
@@ -97,7 +110,7 @@ class ItemDAO:
 
     def addNewItem(self, i_name, i_category, i_stock, i_price):
         query = 'INSERT INTO items (i_name, i_category, i_stock, i_price) ' \
-                'VALUES (%s, %s, %s, %s) RETURNING *;'
+                'VALUES (%s, %s, %s, %s) RETURNING item_id, i_name, i_category, i_stock, i_price'
         cursor = self.connection.cursor()
         cursor.execute(query, (i_name, i_category, i_stock, i_price))
         res = []
@@ -110,7 +123,6 @@ class ItemDAO:
 
     def deleteItemByID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('DELETE FROM itemsinorder where item_id = %s' % id)
         cursor.execute('DELETE FROM itemsincart where item_id = %s' % id)
         cursor.execute('DELETE FROM likes where item_id = %s' % id)
         cursor.execute('UPDATE ITEMS SET isActive = false WHERE item_id = %s' %id)
@@ -121,7 +133,7 @@ class ItemDAO:
     def updateItemByID(self, item_id, i_name, i_category, i_stock, i_price):
         query = 'UPDATE items ' \
                 'SET i_name = %s, i_category = %s, i_stock = %s, i_price = %s ' \
-                'WHERE item_id = %s RETURNING *'
+                'WHERE item_id = %s RETURNING item_id, i_name, i_category, i_stock, i_price'
         cursor = self.connection.cursor()
         cursor.execute(query, (i_name, i_category, i_stock, i_price, item_id))
         res = []

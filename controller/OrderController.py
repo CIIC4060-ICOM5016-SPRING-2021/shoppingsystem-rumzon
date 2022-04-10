@@ -88,33 +88,20 @@ class OrderController:
             dicRes['Order Time'] = daoRes[0][2]
             return jsonify(dicRes), 200
         else:
-            return jsonify('ID Not Found'), 405
-
-    def updateOrder(self, o_id, reqjson):
-        userIDValid = UserDAO().getByID(reqjson['u_id'])
-        if not userIDValid:
-            return jsonify('Invalid User ID'), 400
-
-        oldjson = self.getDictByID(o_id)
-        if oldjson:
-            u_id = oldjson['u_id']
-            if reqjson['u_id'] != '':
-                u_id = reqjson['u_id']
-
-            daoRes = self.dao.updateOrder(o_id, u_id)
-            return jsonify(self.dictionary(daoRes[0])), 200
-        else:
-            return jsonify('ID Not Found'), 404
+            return jsonify('ID Not Found'), 40
 
     def addNewOrder(self, reqjson):
         userIDValid = UserDAO().getByID(reqjson['u_id'])
         if not userIDValid:
             return jsonify('Invalid User ID'), 400
-
         u_id = reqjson['u_id']
         daoRes = self.dao.addNewOrder(u_id)
         if daoRes:
-            return jsonify(self.dictionary(daoRes[0])), 200
+            dicRes = {}
+            dicRes['User ID'] = daoRes[0][0]
+            dicRes['Order ID'] = daoRes[0][1]
+            dicRes['Order Time'] = daoRes[0][2]
+            return jsonify(dicRes), 200
         else:
             return jsonify('ID Not Found'), 404
 

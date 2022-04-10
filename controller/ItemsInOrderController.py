@@ -32,7 +32,7 @@ class ItemsInOrderController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify("ID Not Found! ...or error ocurred" %id), 405
+            return jsonify("ID Not Found! ...or error ocurred"), 405
 
     def getMostBoughtItems(self):
         daoRes = self.dao.getItemsPurchaseCount()

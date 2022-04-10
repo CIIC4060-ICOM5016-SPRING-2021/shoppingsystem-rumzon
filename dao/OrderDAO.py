@@ -70,7 +70,7 @@ class OrderDAO:
         return res
 
     def addNewOrder(self, u_id):
-        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *, orderTotal(o_id) AS o_total'
+        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *'
         cursor = self.connection.cursor()
         cursor.execute(query, [u_id])
         res = []
