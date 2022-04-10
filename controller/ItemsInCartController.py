@@ -1,4 +1,6 @@
 from flask import jsonify
+
+from controller.OrderController import OrderController
 from dao.ItemsInCartDAO import ItemsInCartDAO
 from dao.ItemDAO import ItemDAO
 from dao.ItemsInOrderDAO import ItemsInOrderDAO
@@ -26,7 +28,7 @@ class ItemsInCartController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify('Cart Table Empty!... or error ocurred'), 405
+            return jsonify('Cart Table Empty!... or error ocurred'), 404
 
     def getUserCartByID(self, id):
         daoRes = self.dao.getUserCartByID(id)
@@ -36,7 +38,7 @@ class ItemsInCartController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify("User #%d's cart is empty, or ID Not Found" %id), 405
+            return jsonify("User #%d's cart is empty, or ID Not Found" %id), 404
 
     def getUserCartTotalByID(self, id):
         daoRes = self.dao.getUserCartTotalByID(id)
@@ -103,10 +105,6 @@ class ItemsInCartController:
             for row in daoRes:
                 stockRes = ItemDAO().checkStockByID(row[0], row[2])
                 if stockRes:
-                    print(stockRes[0][0])
-                    print(stockRes[0][1])
-                    print(stockRes[0][2])
-                    print(stockRes[1])
                     itemDic = {}
                     itemDic['Item ID'] = stockRes[0][0]
                     itemDic['Item Name'] = stockRes[0][1]
@@ -127,6 +125,6 @@ class ItemsInCartController:
                 itemsInOrderDAO.buyItemFromCart(row[0], o_id, row[2])
                 result.append(self.dictionary(row))
             self.dao.clearUserCartByID(u_id)
-            return jsonify(result)
+            return jsonify(OrderController().getByID(o_id))
         else:
             return jsonify("User #%d's cart is empty, or ID Not Found" % u_id), 405

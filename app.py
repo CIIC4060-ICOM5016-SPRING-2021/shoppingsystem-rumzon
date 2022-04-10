@@ -59,7 +59,7 @@ def newItem():
 def filterItemsByCategory(category_name):
     return ItemController().getItemsFilterCategory(category_name)
 
-@app.route('/rumzon/items/ordered')
+@app.route('/rumzon/items/sort')
 def organizeItems():
     return ItemController().getItemsOrganized(request.json)
 

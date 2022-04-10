@@ -20,6 +20,10 @@ class ItemController:
         dic['Price'] = row[4]
         return dic
 
+    def isActive(self, item_id):
+        return True
+        return False
+
     def getAll(self):
         daoRes = self.dao.getAll()
         if daoRes:

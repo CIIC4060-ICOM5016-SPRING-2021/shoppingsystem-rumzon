@@ -12,12 +12,18 @@ class OrderDAO:
             port=pgconfig['port']
         )
 
+    def orderTuple(self, u_id, o_id, o_time, o_total):
+        items = []
+        orderDetails = (u_id, o_id, o_time, o_total, items)
+        return orderDetails
+
     def getAll(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT *, orderTotal(o_id) AS o_total FROM orders')
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         cursor.close()
         self.connection.close()
         return res
@@ -28,7 +34,8 @@ class OrderDAO:
                        'where o_id = %s' %id)
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         return res
 
     def getByUserID(self, uid):
@@ -37,7 +44,8 @@ class OrderDAO:
                        'where u_id = %s' %uid)
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         return res
 
     def deleteOrder(self, id):
@@ -54,14 +62,15 @@ class OrderDAO:
         cursor.execute(query, (u_id, o_id))
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         self.connection.commit()
         cursor.close()
         self.connection.close()
         return res
 
     def addNewOrder(self, u_id):
-        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *, orderTotal(o_id) AS o_total'
+        query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *'
         cursor = self.connection.cursor()
         cursor.execute(query, [u_id])
         res = []
@@ -72,7 +81,6 @@ class OrderDAO:
         self.connection.close()
         return res
 
-
     def getUserMostExpensiveOrder(self, u_id):
         query = 'SELECT *, ordertotal(o_id) AS o_total FROM orders WHERE orderTotal(o_id) =' \
                 '   (SELECT max(o_total) FROM ' \
@@ -82,7 +90,8 @@ class OrderDAO:
         cursor.execute(query, (u_id, u_id))
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         self.connection.commit()
         cursor.close()
         self.connection.close()
@@ -97,7 +106,8 @@ class OrderDAO:
         cursor.execute(query, (u_id, u_id))
         res = []
         for row in cursor:
-            res.append(row)
+            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
+            res.append(orderDetails)
         self.connection.commit()
         cursor.close()
         self.connection.close()
