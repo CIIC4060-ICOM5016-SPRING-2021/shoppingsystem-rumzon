@@ -40,45 +40,24 @@ class ItemController:
         else:
             return jsonify('Item Table Empty!... or error ocurred'), 405
 
-    def getAllAscendingPrice(self):
-        daoRes = self.dao.getAllAscendingPrice()
-        if daoRes:
-            result = []
-            for row in daoRes:
-                result.append(self.dictionary(row))
-            return jsonify(result)
-        else:
-            return jsonify('Item Table Empty!... or error ocurred'), 405
+    def getItemsOrganized(self, json):
+        daoRes = []
+        if json['orderBy'] == 'price' and json['orderType'] == 'ascending':
+            daoRes = self.dao.getAllAscendingPrice()
+        elif json['orderBy'] == 'price' and json['orderType'] == 'descending':
+            daoRes = self.dao.getAllDescendingPrice()
+        elif json['orderBy'] == 'name' and json['orderType'] == 'ascending':
+            daoRes = self.dao.getAllAscendingName()
+        elif json['orderBy'] == 'name' and json['orderType'] == 'descending':
+            daoRes = self.dao.getAllDescendingName()
 
-    def getAllDescendingPrice(self):
-        daoRes = self.dao.getAllDescendingPrice()
         if daoRes:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify('Item Table Empty!... or error ocurred'), 405
-
-    def getAllAscendingName(self):
-        daoRes = self.dao.getAllAscendingName()
-        if daoRes:
-            result = []
-            for row in daoRes:
-                result.append(self.dictionary(row))
-            return jsonify(result)
-        else:
-            return jsonify('Item Table Empty!... or error ocurred'), 405
-
-    def getAllDescendingName(self):
-        daoRes = self.dao.getAllDescendingName()
-        if daoRes:
-            result = []
-            for row in daoRes:
-                result.append(self.dictionary(row))
-            return jsonify(result)
-        else:
-            return jsonify('Item Table Empty!... or error ocurred'), 405
+            return jsonify('Item Table Empty!... or error occurred'), 405
 
     def getByID(self, id):
         daoRes = self.dao.getByID(id)
@@ -172,7 +151,7 @@ class ItemController:
         invalidItem = self.dao.checkInvalidItem(i_name,i_category)
         if invalidItem:
             return 2
-        return 0;
+        return 0
 
     def getLeastExpensiveItem(self):
         daoRes = self.dao.getAllAscendingPrice()
