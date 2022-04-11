@@ -1,5 +1,7 @@
 from flask import jsonify
 import json
+
+from controller.UserController import UserController
 from dao.ItemDAO import ItemDAO
 
 class ItemController:
@@ -20,9 +22,6 @@ class ItemController:
         dic['Price'] = row[4]
         return dic
 
-    def isActive(self, item_id):
-        return True
-        return False
 
     def getAll(self):
         daoRes = self.dao.getAll()
@@ -44,15 +43,15 @@ class ItemController:
         else:
             return jsonify('Item Table Empty!... or error ocurred'), 405
 
-    def getItemsOrganized(self, json):
+    def getItemsSorted(self, json):
         daoRes = []
-        if json['orderBy'] == 'price' and json['orderType'] == 'ascending':
+        if json['sortBy'] == 'price' and json['sortType'] == 'ascending':
             daoRes = self.dao.getAllAscendingPrice()
-        elif json['orderBy'] == 'price' and json['orderType'] == 'descending':
+        elif json['sortBy'] == 'price' and json['sortType'] == 'descending':
             daoRes = self.dao.getAllDescendingPrice()
-        elif json['orderBy'] == 'name' and json['orderType'] == 'ascending':
+        elif json['sortBy'] == 'name' and json['sortType'] == 'ascending':
             daoRes = self.dao.getAllAscendingName()
-        elif json['orderBy'] == 'name' and json['orderType'] == 'descending':
+        elif json['sortBy'] == 'name' and json['sortType'] == 'descending':
             daoRes = self.dao.getAllDescendingName()
 
         if daoRes:
@@ -63,29 +62,40 @@ class ItemController:
         else:
             return jsonify('Item Table Empty!... or error occurred'), 405
 
-    def getByID(self, id):
-        daoRes = self.dao.getByID(id)
-        if daoRes:
-            return jsonify(self.dictionary(daoRes[0]))
-        else:
-            return jsonify('ID Not Found'), 405
+    def getByID(self, json):
+        daoRes = self.isActive(json['item_id'])
+        if daoRes == 1:
+            return jsonify(self.dictionary(self.dao.getByID(json['item_id'])[0])), 200
+        elif daoRes == 0:
+            return jsonify('Item %s is inactive' %json['item_id']), 404
+        elif daoRes == -1:
+            return jsonify('ID Not Found'), 404
+
 
     def getDictByID(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
             return self.dictionary(daoRes[0])
         else:
-            return {}
+            return 0
 
-    def deleteItem(self, id):
-        daoRes = self.dao.getByID(id)
+    def isActive(self, item_id):
+        daoRes = self.dao.isActive(item_id)
         if daoRes:
-            self.dao.deleteItemByID(id)
-            return jsonify(self.dictionary(daoRes[0]))
+            for row in daoRes:
+                if row[0] == True:
+                    return 1 #item is active
+                else:
+                    return 0 #item is inactive
         else:
-            return jsonify('ID Not Found'), 405
+            return -1 #item id not found or error
 
     def addNewItem(self, json):
+        isAdmin = UserController().isAdmin(json['u_id'])
+        if isAdmin == 0:
+            return jsonify('User %d does not have admin privileges' % json['u_id']), 400
+        elif isAdmin == -1:
+            return jsonify('User %d not found' % json['u_id']), 404
 
         if json['i_name'].replace(' ', '') == '':
             return jsonify('Enter Item Name'), 400
@@ -99,8 +109,10 @@ class ItemController:
             return jsonify('Enter Valid Price'), 400
 
         invalidItem = self.checkInvalidItem(json['i_name'], json['i_category'])
-        if invalidItem:
-            return jsonify(invalidItem), 400
+        if invalidItem == 1:
+            return jsonify("Category '%s' does not exist" %json['i_category']), 400
+        if invalidItem == 2:
+            return jsonify("Item '%s' already exists in category '%s'" %(json['i_name'], json['i_category'])), 400
 
         i_name = json['i_name']
         i_category = json['i_category']
@@ -111,51 +123,82 @@ class ItemController:
         if daoRes:
             return self.dictionary(daoRes[0])
         else:
-            return jsonify('Error creating Item'), 405
+            return jsonify('Error creating Item'), 500
 
-    def updateItem(self, id, reqjson):
-        if reqjson['i_name'].replace(' ', '') == '' and reqjson['i_name'] != '':
-            return jsonify('Enter Item Name'), 400
-        if not self.category_list.__contains__(reqjson['i_category']) and reqjson['i_category'] != '':
-            return ('Category not valid'), 400
-        if not isinstance(reqjson['i_stock'], int) or reqjson['i_stock'] < 0:
-            return jsonify('Enter valid stock'), 400
-        if reqjson['i_stock'] > 999999999:
-            return jsonify('Stock cannot be greater than 999,999,999'), 400
-        if (not isinstance(reqjson['i_price'], float) and not isinstance(reqjson['i_price'], int)) or reqjson['i_price'] < 0:
-            return jsonify('Enter valid price'), 400
+    def deleteItem(self, json):
+        isAdmin = UserController().isAdmin(json['u_id'])
+        if isAdmin == 0:
+            return jsonify('User %d does not have admin privileges' % json['u_id']), 400
+        elif isAdmin == -1:
+            return jsonify('User %d not found' % json['u_id']), 404
 
-        oldjson = self.getDictByID(id)
-        if oldjson:
+        isActive = self.isActive(json['item_id'])
+        if isActive == 1:
+            daoRes = self.dao.getByID(json['item_id'])
+            self.dao.deleteItemByID(json['item_id'])
+            return jsonify(self.dictionary(daoRes[0]))
+        elif isActive == 0:
+            return jsonify('Item %d is inactive' % json['item_id']), 404
+        else:
+            return jsonify('ID %d Not Found' % json['item_id']), 404
+
+    def updateItem(self, reqjson):
+        isAdmin = UserController().isAdmin(reqjson['u_id'])
+        if isAdmin == 0:
+            return jsonify('User %d does not have admin privileges' % reqjson['u_id']), 404
+        elif isAdmin == -1:
+            return jsonify('User %d not found' % reqjson['u_id']), 404
+
+        isActive = self.isActive(reqjson['item_id'])
+        if isActive == 1:
+            oldjson = self.getDictByID(reqjson['item_id'])
+            #verify new values
+            if reqjson['i_name'].replace(' ', '') == '' and reqjson['i_name'] != '':
+                return jsonify('Enter Item Name'), 400
+            if not self.category_list.__contains__(reqjson['i_category']) and reqjson['i_category'] != '':
+                return jsonify('Category "%s" does not exist' % reqjson['i_category']), 400
+            if not isinstance(reqjson['i_stock'], int) or reqjson['i_stock'] < 0:
+                return jsonify('Enter valid stock'), 400
+            if reqjson['i_stock'] > 999999999:
+                return jsonify('Stock cannot be greater than 999,999,999'), 400
+            if (not isinstance(reqjson['i_price'], float) and not isinstance(reqjson['i_price'], int)) or reqjson[
+                'i_price'] < 0:
+                return jsonify('Enter valid price'), 400
+
+            #get old values
             i_name = oldjson['Item Name']
             i_category = oldjson['Category']
             i_stock = oldjson['Stock']
             i_price = oldjson['Price']
+
+            #change old values with new values
             if reqjson['i_category'] != '':
                 i_category = reqjson['i_category']
             if reqjson['i_name'] != '' and reqjson['i_name'] != oldjson['Item Name']:
                 i_name = reqjson['i_name']
                 if self.checkInvalidItem(i_name, i_category):
-                    return ("Item already exists: %s in category %s" %(reqjson['i_name'], reqjson['i_category'])), 404
+                    return jsonify("Item '%s' already exists in category '%s'" % (i_name, i_category)), 400
             if reqjson['i_stock'] != '':
                 i_stock = reqjson['i_stock']
             if reqjson['i_price'] != '':
                 i_price = reqjson['i_price']
 
-
-            daoRes = self.dao.updateItemByID(id, i_name, i_category, i_stock, i_price)
+            daoRes = self.dao.updateItemByID(reqjson['item_id'], i_name, i_category, i_stock, i_price)
             if daoRes:
                 return jsonify(self.dictionary(daoRes[0])), 200
+        elif isActive == 0:
+            return jsonify('Item %d is inactive' % reqjson['item_id']), 404
         else:
-            return jsonify('ID %d not found' %id), 404
+            return jsonify('ID %d not found' % reqjson['item_id']), 404
+
 
     def checkInvalidItem(self, i_name, i_category):
         if not self.category_list.__contains__(i_category):
-            return 1
+            return 1 # category does not exist
         invalidItem = self.dao.checkInvalidItem(i_name,i_category)
         if invalidItem:
-            return 2
-        return 0
+            return 2 # name and category combo already exist
+        return 0 # item valid
 
     def getLeastExpensiveItem(self):
         daoRes = self.dao.getAllAscendingPrice()

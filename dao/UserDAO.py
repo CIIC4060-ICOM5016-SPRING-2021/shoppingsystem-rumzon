@@ -31,6 +31,15 @@ class UserDAO:
             res.append(row)
         return res
 
+    def isAdmin(self, u_id):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT isAdmin FROM users "
+                       "WHERE u_id = %s" % u_id)
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
     def updateUser(self, id, username, u_email, u_password, isAdmin):
         query = 'UPDATE users ' \
                 'SET username=%s, u_email=%s, u_password=%s, isAdmin=%s ' \
@@ -72,7 +81,7 @@ class UserDAO:
 
     def checkUsername(self, username):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT username FROM users where username = '%s'" % username)
+        cursor.execute("SELECT username FROM users WHERE username = '%s'" % username)
         res = []
         for row in cursor:
             res.append(row)
@@ -80,7 +89,25 @@ class UserDAO:
 
     def checkEmail(self, u_email):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT u_email FROM users where u_email = '%s'" % u_email)
+        cursor.execute("SELECT u_email FROM users WHERE u_email = '%s'" % u_email)
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
+    def loginUsername(self, username, u_password):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT u_id FROM users "
+                       "WHERE username = '%s' and u_password = '%s'" % (username, u_password))
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
+    def loginEmail(self, u_email, u_password):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT u_id FROM users "
+                       "WHERE u_email = '%s' and u_password = '%s'" % (u_email, u_password))
         res = []
         for row in cursor:
             res.append(row)

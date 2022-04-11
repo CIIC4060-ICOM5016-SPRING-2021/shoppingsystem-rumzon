@@ -40,6 +40,18 @@ class UserController:
         else:
             return {}
 
+    def isAdmin(self,id):
+        daoRes = self.dao.isAdmin(id)
+        if daoRes:
+            for row in daoRes:
+                print(row[0])
+                if row[0] == True:
+                    return 1  # user is admin
+                else:
+                    return 0  # user is not admin
+        else:
+            return -1  # user id not found or error
+
     def deleteUser(self, id):
         daoRes = self.dao.getByID(id)
         if daoRes:
@@ -56,11 +68,11 @@ class UserController:
             u_email = oldjson['Email']
             u_password = oldjson['Password']
 
-            regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+            emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
             if reqjson['username'] != reqjson['username'].replace(' ', ''):
                 return jsonify('Username must not have spaces'), 400
-            if not (re.search(regex, reqjson['u_email'])) and reqjson['u_email'] != '':
+            if not (re.search(emailRegex, reqjson['u_email'])) and reqjson['u_email'] != '':
                 return jsonify('Enter Valid Email'), 400
             if not isinstance(reqjson['isAdmin'], bool) and reqjson['isAdmin'] != '':
                 return jsonify('isAdmin must be Boolean'), 400
@@ -71,13 +83,8 @@ class UserController:
                 u_email = reqjson['u_email']
             if reqjson['u_password'] != '':
                 u_password = reqjson['u_password']
-            if type(reqjson['isAdmin']) is str:
-                if reqjson['isAdmin'].lower().replace(' ', '') == '':
+            if type(reqjson['isAdmin']) is str and reqjson['isAdmin'] == '':
                     isAdmin = oldjson['is Admin']
-                elif reqjson['isAdmin'].lower() == 'true':
-                    isAdmin = 'true'
-                else:
-                    isAdmin = 'false'
             else:
                 isAdmin = reqjson['isAdmin']
 
@@ -97,12 +104,11 @@ class UserController:
         if not isinstance(json['isAdmin'], bool):
             return jsonify('isAdmin must be Boolean'), 400
 
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         if json['username'] != json['username'].replace(' ', ''):
             return jsonify('Username must not have spaces'), 400
-        if not (re.search(regex, json['u_email'])):
+        if not (re.search(emailRegex, json['u_email'])):
             return jsonify('Enter Valid Email'), 400
-
         userInvalid = self.checkUsername(json['username'])
         if userInvalid:
             return jsonify('Username already taken'), 400
@@ -122,6 +128,26 @@ class UserController:
             return jsonify(res), 201
         else:
             return jsonify('Error creating user'), 500
+
+    def login(self, json):
+        if json['user'] == "":
+            return ("Enter Username or Email"), 400
+        if json['password'] == "":
+            return ("Enter Password"), 400
+
+        emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        if (re.search(emailRegex, json['user'])):
+            daoRes = self.dao.loginEmail(json['user'], json['password'])
+        else:
+            daoRes= self.dao.loginUsername(json['user'], json['password'])
+        if daoRes:
+            dic = {}
+            for row in daoRes:
+                dic['User ID'] = row[0]
+            return jsonify(dic), 200
+        else:
+            return ("User or Password incorrect"), 404
+
 
     def checkUsername(self, username):
         usernameRes = self.dao.checkUsername(username)

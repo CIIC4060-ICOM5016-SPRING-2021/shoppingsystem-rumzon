@@ -14,7 +14,7 @@ class ItemDAO:
 
     def getAll(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price FROM items')
+        cursor.execute('SELECT * FROM items WHERE isActive = True')
         res = []
         for row in cursor:
             res.append(row)
@@ -24,8 +24,7 @@ class ItemDAO:
 
     def getItemsFilterCategory(self, i_category):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT item_id, i_name, i_category, i_stock, i_price "
-                       "FROM items WHERE i_category = '%s'" %i_category)
+        cursor.execute("SELECT * FROM items WHERE i_category = '%s' AND isActive = True " %i_category)
         res = []
         for row in cursor:
             res.append(row)
@@ -36,7 +35,7 @@ class ItemDAO:
     def getAllAscendingPrice(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items ORDER BY i_price ASC')
+                       'FROM items WHERE isActive = True ORDER BY i_price ASC')
         res = []
         for row in cursor:
             res.append(row)
@@ -47,7 +46,7 @@ class ItemDAO:
     def getAllDescendingPrice(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items ORDER BY i_price DESC')
+                       'FROM items WHERE isActive = True ORDER BY i_price DESC')
         res = []
         for row in cursor:
             res.append(row)
@@ -58,7 +57,7 @@ class ItemDAO:
     def getAllAscendingName(self):
         cursor = self.connection.cursor()
         cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items ORDER BY i_name ASC')
+                       'FROM items WHERE isActive = True ORDER BY i_name ASC')
         res = []
         for row in cursor:
             res.append(row)
@@ -68,7 +67,9 @@ class ItemDAO:
 
     def getAllDescendingName(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT FROM items ORDER BY i_name DESC')
+        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
+                       'FROM items WHERE isActive = True '
+                       'ORDER BY i_name DESC')
         res = []
         for row in cursor:
             res.append(row)
@@ -79,7 +80,7 @@ class ItemDAO:
     def getByID(self, id):
         cursor = self.connection.cursor()
         cursor.execute("SELECT item_id, i_name, i_category, i_stock, i_price FROM items "
-                       "WHERE item_id = '%s'" %id)
+                       "WHERE item_id = '%s' AND isActive = True " %id)
         res = []
         for row in cursor:
             res.append(row)
@@ -89,8 +90,8 @@ class ItemDAO:
 
     def isActive(self, item_id):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT isActive FROM items"
-                       "WHERE item_id = '%s' = %s" %item_id)
+        cursor.execute("SELECT isActive FROM items "
+                       "WHERE item_id = %s AND isActive = True " %item_id)
         res = []
         for row in cursor:
             res.append(row)
@@ -99,7 +100,7 @@ class ItemDAO:
     def checkStockByID(self, id, orderAmmount):
         cursor = self.connection.cursor()
         cursor.execute('SELECT item_id, i_name, i_stock FROM items '
-                       'WHERE item_id = %s' %id)
+                       'WHERE item_id = %s AND isActive = True ' %id)
         res = []
         for row in cursor:
             if row[2] < orderAmmount:
@@ -147,7 +148,7 @@ class ItemDAO:
     def checkInvalidItem(self, i_name, i_category):
         cursor = self.connection.cursor()
         cursor.execute("SELECT i_name, i_category FROM items "
-                       "WHERE i_name = '%s' AND i_category = '%s'" %(i_name, i_category))
+                       "WHERE i_name = '%s' AND i_category = '%s' AND isActive = True " %(i_name, i_category))
         res = []
         for row in cursor:
             res.append(row)

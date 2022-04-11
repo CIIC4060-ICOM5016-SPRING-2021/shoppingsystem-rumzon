@@ -35,25 +35,27 @@ def userByID(id):
 def newUser():
     return UserController().addNewUser(request.json)
 
+@app.route('/rumzon/users/login', methods=['POST'])
+def login():
+    return UserController().login(request.json)
+
 #-----------------ITEMS---------------------------------
 @app.route('/rumzon/items/all')
 def allItems():
     return ItemController().getAll()
 
-@app.route('/rumzon/items/<int:id>', methods=['GET','DELETE','PUT'])
-def itemByID(id):
+@app.route('/rumzon/items', methods=['GET','DELETE','PUT', 'POST'])
+def itemFunctions():
     if request.method == 'GET':
-        return ItemController().getByID(id)
+        return ItemController().getByID(request.json)
     elif request.method == 'DELETE':
-        return ItemController().deleteItem(id)
+        return ItemController().deleteItem(request.json)
     elif request.method == 'PUT':
-        return ItemController().updateItem(id, request.json)
+        return ItemController().updateItem(request.json)
+    elif request.method == 'POST':
+        return ItemController().addNewItem(request.json)
     else:
         return 'Request not handled'
-
-@app.route('/rumzon/items/new', methods=['POST'])
-def newItem():
-    return ItemController().addNewItem(request.json)
 
 @app.route('/rumzon/items/category/<string:category_name>')
 def filterItemsByCategory(category_name):
@@ -61,7 +63,7 @@ def filterItemsByCategory(category_name):
 
 @app.route('/rumzon/items/sort')
 def organizeItems():
-    return ItemController().getItemsOrganized(request.json)
+    return ItemController().getItemsSorted(request.json)
 
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
