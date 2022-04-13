@@ -97,6 +97,27 @@ class ItemDAO:
             res.append(row)
         return res
 
+    def inactiveID(self, i_name, i_category):
+        cursor = self.connection.cursor()
+        cursor.execute("SELECT item_id FROM items "
+                       "WHERE i_name = '%s' AND i_category = '%s' "
+                       "AND isActive = False " %(i_name, i_category))
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
+    def reactivateItem(self,  item_id, i_price, i_stock):
+        cursor = self.connection.cursor()
+        cursor.execute("UPDATE ITEMS SET isActive = true, "
+                       "i_price = '%s', i_stock = '%s' "
+                       "WHERE item_id = %s "
+                       "RETURNING item_id, i_name, i_category, i_stock, i_price" %(i_price, i_stock, item_id))
+        res = []
+        for row in cursor:
+            res.append(row)
+        return res
+
     def checkStockByID(self, id, orderAmmount):
         cursor = self.connection.cursor()
         cursor.execute('SELECT item_id, i_name, i_stock FROM items '

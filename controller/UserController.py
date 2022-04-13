@@ -44,7 +44,6 @@ class UserController:
         daoRes = self.dao.isAdmin(id)
         if daoRes:
             for row in daoRes:
-                print(row[0])
                 if row[0] == True:
                     return 1  # user is admin
                 else:

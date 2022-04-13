@@ -101,7 +101,7 @@ class ItemController:
             return jsonify('Enter Item Name'), 400
         if json['i_category'] == '':
             return jsonify('Enter Category'), 400
-        if not isinstance(json['i_stock'], int) or json['i_stock'] <= 0:
+        if not isinstance(json['i_stock'], int) or json['i_stock'] < 0:
             return jsonify('Stock must be Integer greater than 0'), 400
         if json['i_stock'] > 999999999:
             return jsonify('Stock cannot be greater than 999,999,999'), 400
@@ -111,6 +111,19 @@ class ItemController:
         invalidItem = self.checkInvalidItem(json['i_name'], json['i_category'])
         if invalidItem == 1:
             return jsonify("Category '%s' does not exist" %json['i_category']), 400
+
+        inactiveID = self.dao.inactiveID(json['i_name'], json['i_category'])
+        if inactiveID:
+            i_stock = json['i_stock']
+            i_price = json['i_price']
+            daoRes = self.dao.reactivateItem(inactiveID[0][0], i_price, i_stock)
+            if daoRes:
+                res = []
+                res.append("Item reactivated")
+                res.append(self.dictionary(daoRes[0]))
+                return jsonify(res)
+            else:
+                return jsonify('Error reactivating item: %s, %s' %(json['i_name'], json['i_category'])), 500
         if invalidItem == 2:
             return jsonify("Item '%s' already exists in category '%s'" %(json['i_name'], json['i_category'])), 400
 
@@ -118,12 +131,11 @@ class ItemController:
         i_category = json['i_category']
         i_stock = json['i_stock']
         i_price = json['i_price']
-
         daoRes = self.dao.addNewItem(i_name, i_category, i_stock, i_price)
         if daoRes:
             return self.dictionary(daoRes[0])
         else:
-            return jsonify('Error creating Item'), 500
+            return jsonify('Error creating item'), 500
 
     def deleteItem(self, json):
         isAdmin = UserController().isAdmin(json['u_id'])
