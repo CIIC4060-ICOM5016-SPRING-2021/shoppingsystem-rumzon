@@ -1,4 +1,6 @@
 from flask import jsonify
+
+from controller.UserController import UserController
 from dao.OrderDAO import OrderDAO
 from dao.UserDAO import UserDAO
 from dao.ItemsInOrderDAO import ItemsInOrderDAO
@@ -50,7 +52,7 @@ class OrderController:
                     row[4].append(self.ItemsDict(item))
             return jsonify(result), 200
         else:
-            return jsonify('ID Not Found'), 404
+            return jsonify('Order ID Not Found'), 404
 
     def getDictByID(self, id):
         daoRes = self.dao.getByID(id)
@@ -65,8 +67,12 @@ class OrderController:
         else:
             return {}
 
-    def getAllByUserID(self, uid):
-        daoRes = self.dao.getByUserID(uid)
+    def getAllByUserID(self, u_id):
+        userIDValid = UserDAO().getByID(u_id)
+        if not userIDValid:
+            return jsonify('User ID not found'), 404
+
+        daoRes = self.dao.getByUserID(u_id)
         if daoRes:
             result = []
             for row in daoRes:
@@ -76,19 +82,28 @@ class OrderController:
                     row[4].append(self.ItemsDict(item))
             return jsonify(result), 200
         else:
-            return jsonify('ID Not Found'), 404
+            return jsonify('User #%s does not have purchases!' % u_id), 404
 
-    def deleteOrder(self, id):
-        daoRes = self.dao.getByID(id)
+    def deleteOrder(self, json):
+        if not isinstance(json['admin_id'], int):
+            return jsonify("Enter valid User ID integer"), 400
+
+        isAdmin = UserController().isAdmin(json['admin_id'])
+        if isAdmin == 0:
+            return jsonify('User %d does not have admin privileges' % json['admin_id']), 403
+        elif isAdmin == -1:
+            return jsonify('User %d not found' % json['admin_id']), 404
+
+        daoRes = self.dao.getByID(json['o_id'])
         if daoRes:
-            self.dao.deleteOrder(id)
+            self.dao.deleteOrder(json['o_id'])
             dicRes = {}
             dicRes['User ID'] = daoRes[0][0]
             dicRes['Order ID'] = daoRes[0][1]
             dicRes['Order Time'] = daoRes[0][2]
             return jsonify(dicRes), 200
         else:
-            return jsonify('ID Not Found'), 40
+            return jsonify('Order ID Not Found'), 404
 
     def addNewOrder(self, reqjson):
         userIDValid = UserDAO().getByID(reqjson['u_id'])
@@ -103,7 +118,7 @@ class OrderController:
             dicRes['Order Time'] = daoRes[0][2]
             return jsonify(dicRes), 200
         else:
-            return jsonify('ID Not Found'), 404
+            return jsonify('Error creating order'), 500
 
     def getUserMostExpensiveOrder(self, u_id):
         daoRes = self.dao.getUserMostExpensiveOrder(u_id)
@@ -116,7 +131,7 @@ class OrderController:
                     row[4].append(self.ItemsDict(item))
             return jsonify(result)
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
+            return jsonify('User #%s does not have purchases!' %u_id), 404
 
     def getUserLeastExpensiveOrder(self, u_id):
         daoRes = self.dao.getUserLeastExpensiveOrder(u_id)
@@ -129,4 +144,4 @@ class OrderController:
                     row[4].append(self.ItemsDict(item))
             return jsonify(result)
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
+            return jsonify('User #%s does not have purchases!' %u_id), 404

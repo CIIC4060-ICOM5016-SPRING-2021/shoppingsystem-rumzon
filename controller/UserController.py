@@ -76,10 +76,20 @@ class UserController:
             if not isinstance(reqjson['isAdmin'], bool) and reqjson['isAdmin'] != '':
                 return jsonify('isAdmin must be Boolean'), 400
 
-            if reqjson['username'].replace(' ', '') != '':
-                username = reqjson['username']
-            if reqjson['u_email'].replace(' ', '') != '':
-                u_email = reqjson['u_email']
+            if reqjson['username'].replace(' ', '') != '' and reqjson['username'] != oldjson['Username']:
+                userInvalid = self.checkUsername(reqjson['username'])
+                if userInvalid:
+                    return jsonify('Username already taken'), 400
+                else:
+                    username = reqjson['username']
+
+            if reqjson['u_email'].replace(' ', '') != '' and reqjson['u_email'] != oldjson['Email']:
+                emailInvalid = self.checkEmail(reqjson['u_email'])
+                if emailInvalid:
+                    return jsonify('Email already taken'), 400
+                else:
+                    u_email = reqjson['u_email']
+
             if reqjson['u_password'] != '':
                 u_password = reqjson['u_password']
             if type(reqjson['isAdmin']) is str and reqjson['isAdmin'] == '':

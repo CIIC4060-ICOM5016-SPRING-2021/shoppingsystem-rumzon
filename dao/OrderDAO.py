@@ -56,19 +56,6 @@ class OrderDAO:
         cursor.close()
         self.connection.close()
 
-    def updateOrder(self, o_id, u_id):
-        query = 'UPDATE orders SET u_id=%s WHERE o_id = %s RETURNING *, orderTotal(o_id) AS o_total'
-        cursor = self.connection.cursor()
-        cursor.execute(query, (u_id, o_id))
-        res = []
-        for row in cursor:
-            orderDetails = self.orderTuple(row[0], row[1], row[2], row[3])
-            res.append(orderDetails)
-        self.connection.commit()
-        cursor.close()
-        self.connection.close()
-        return res
-
     def addNewOrder(self, u_id):
         query = 'INSERT INTO orders (u_id) VALUES (%s) RETURNING *'
         cursor = self.connection.cursor()
@@ -77,8 +64,6 @@ class OrderDAO:
         for row in cursor:
             res.append(row)
         self.connection.commit()
-        cursor.close()
-        self.connection.close()
         return res
 
     def getUserMostExpensiveOrder(self, u_id):

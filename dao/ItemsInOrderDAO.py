@@ -59,9 +59,26 @@ class ItemsInOrderDAO:
 
     def getItemsPurchaseCount(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, count(*) AS purchase_count FROM itemsinorder natural inner join items '
+        cursor.execute('SELECT item_id, i_name, purchasecount(item_id) AS purchase_count '
+                       'FROM itemsinorder natural inner join items '
                        'GROUP BY item_id, i_name '
-                       'ORDER BY purchase_count DESC')
+                       'ORDER BY purchase_count DESC '
+                       'LIMIT 20')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getActiveItemsPurchaseCount(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT item_id, i_name, purchasecount(item_id) AS purchase_count '
+                       'FROM itemsinorder natural inner join items '
+                       'WHERE isActive = True ' 
+                       'GROUP BY item_id, i_name '
+                       'ORDER BY purchase_count DESC '
+                       'LIMIT 20')
         res = []
         for row in cursor:
             res.append(row)
@@ -71,7 +88,22 @@ class ItemsInOrderDAO:
 
     def getCategoryPurchaseCount(self):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT i_category, count(*) AS purchase_count FROM itemsinorder natural inner join items '
+        cursor.execute('SELECT i_category, categorypurcount(i_category) AS purchase_count '
+                       'FROM itemsinorder natural inner join items '
+                       'GROUP BY i_category '
+                       'ORDER BY purchase_count DESC')
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getActiveCategoryPurchaseCount(self):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT i_category, activecategorypurcount(i_category) AS purchase_count '
+                       'FROM itemsinorder natural inner join items '
+                       'WHERE isActive = True '
                        'GROUP BY i_category '
                        'ORDER BY purchase_count DESC')
         res = []
@@ -83,11 +115,28 @@ class ItemsInOrderDAO:
 
     def getUserItemsPurchaseCount(self, u_id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, count(*) AS purchase_count '
+        cursor.execute('SELECT item_id, i_name, purchasecount(item_id) AS purchase_count '
                        'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
                        'WHERE u_id = %s '
                        'GROUP BY item_id, i_name '
-                       'ORDER BY purchase_count DESC' % u_id)
+                       'ORDER BY purchase_count DESC '
+                       'LIMIT 20' % u_id)
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getUserActiveItemsPurchaseCount(self, u_id):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT item_id, i_name, purchasecount(item_id) AS purchase_count '
+                       'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
+                       'WHERE u_id = %s '
+                       'AND isActive = True '
+                       'GROUP BY item_id, i_name '
+                       'ORDER BY purchase_count DESC '
+                       'LIMIT 20' % u_id)
         res = []
         for row in cursor:
             res.append(row)
@@ -97,9 +146,24 @@ class ItemsInOrderDAO:
 
     def getUserCategoryPurchaseCount(self, u_id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT i_category, count(*) AS purchase_count '
+        cursor.execute('SELECT i_category, categorypurcount(i_category) AS purchase_count '
                        'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
                        'WHERE u_id = %s '
+                       'GROUP BY i_category '
+                       'ORDER BY purchase_count DESC' % u_id)
+        res = []
+        for row in cursor:
+            res.append(row)
+        cursor.close()
+        self.connection.close()
+        return res
+
+    def getUserActiveCategoryPurchaseCount(self, u_id):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT i_category, activecategorypurcount(i_category) AS purchase_count '
+                       'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
+                       'WHERE u_id = %s '
+                       'AND isActive = True '
                        'GROUP BY i_category '
                        'ORDER BY purchase_count DESC' % u_id)
         res = []
@@ -113,7 +177,7 @@ class ItemsInOrderDAO:
         cursor = self.connection.cursor()
         cursor.execute('SELECT o_id, item_id, i_name, i_category, o_amount, i_total '
                        'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
-                       'WHERE i_total = (SELECT max(i_total) FROM itemsinorder WHERE u_id = %s) '
+                       'WHERE i_total = (SELECT max(i_total) FROM itemsinorder NATURAL INNER JOIN orders WHERE u_id = %s) '
                        'AND u_id = %s' % (u_id, u_id))
         res = []
         for row in cursor:
@@ -126,7 +190,7 @@ class ItemsInOrderDAO:
         cursor = self.connection.cursor()
         cursor.execute('SELECT o_id, item_id, i_name, i_category, o_amount, i_total '
                        'FROM itemsinorder NATURAL INNER JOIN items NATURAL INNER JOIN orders '
-                       'WHERE i_total = (SELECT min(i_total) FROM itemsinorder WHERE u_id = %s) '
+                       'WHERE i_total = (SELECT min(i_total) FROM itemsinorder NATURAL INNER JOIN orders WHERE u_id = %s) '
                        'AND u_id = %s' % (u_id, u_id))
         res = []
         for row in cursor:

@@ -34,16 +34,17 @@ class ItemsInOrderController:
         else:
             return jsonify("ID Not Found! ...or error ocurred"), 405
 
-    def getMostBoughtItems(self):
-        daoRes = self.dao.getItemsPurchaseCount()
-        maxCount = 0
+    def getMostBoughtItems(self, isActive):
+        if not isinstance(isActive, bool):
+            return ("IsActive must be boolean")
+        if isActive:
+            daoRes = self.dao.getActiveItemsPurchaseCount()
+        else:
+            daoRes = self.dao.getItemsPurchaseCount()
+
         if daoRes:
             res = []
             for row in daoRes:
-                if row[2] < maxCount:  # break loop after finding first item below max purchases
-                    break
-                maxCount = row[2]  # first item in list sets max purchases
-
                 purchaseCountDic = {}  # prepare return format
                 purchaseCountDic['Item ID'] = row[0]
                 purchaseCountDic['Name'] = row[1]
@@ -53,25 +54,15 @@ class ItemsInOrderController:
         else:
             return jsonify('No sales yet! ...or error ocurred'), 400
 
-    def getMostBoughtCategory(self):
-        daoRes = self.dao.getCategoryPurchaseCount()
-        maxCount = 0
-        if daoRes:
-            res = []
-            for row in daoRes:
-                if row[1] < maxCount:  # break loop after finding first item below max purchases
-                    break
-                maxCount = row[1]  # first item in list sets max purchases
-                purchaseCountDic = {}  # prepare return format
-                purchaseCountDic['Category'] = row[0]
-                purchaseCountDic['Purchase Count'] = row[1]
-                res.append(purchaseCountDic)  # add to list
-            return jsonify(res), 200
+    def getMostBoughtCategories(self, isActive):
+        if not isinstance(isActive, bool):
+            return ("IsActive must be boolean")
+        if isActive:
+            daoRes = self.dao.getActiveCategoryPurchaseCount()
         else:
-            return jsonify('No sales yet! ...or error ocurred'), 400
+            daoRes = self.dao.getCategoryPurchaseCount()
 
-    def getCategoryPurchaseDesc(self):
-        daoRes = self.dao.getCategoryPurchaseCount()
+
         if daoRes:
             res = []
             for row in daoRes:
@@ -83,16 +74,17 @@ class ItemsInOrderController:
         else:
             return jsonify('No sales yet! ...or error ocurred'), 400
 
-    def getUserMostBoughtItems(self, u_id):
-        daoRes = self.dao.getUserItemsPurchaseCount(u_id)
-        maxCount = 0
+    def getUserMostBoughtItems(self, u_id, isActive):
+        if not isinstance(isActive, bool):
+            return ("IsActive must be boolean")
+        if isActive:
+            daoRes = self.dao.getUserActiveItemsPurchaseCount(u_id)
+        else:
+            daoRes = self.dao.getUserItemsPurchaseCount(u_id)
+
         if daoRes:
             res = []
             for row in daoRes:
-                if row[2] < maxCount:  # break loop after finding first item below max purchases
-                    break
-                maxCount = row[2]  # first item in list sets max purchases
-
                 purchaseCountDic = {}  # prepare return format
                 purchaseCountDic['Item ID'] = row[0]
                 purchaseCountDic['Name'] = row[1]
@@ -100,24 +92,26 @@ class ItemsInOrderController:
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 400
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
 
-    def getUserMostBoughtCategory(self, u_id):
-        daoRes = self.dao.getUserCategoryPurchaseCount(u_id)
-        maxCount = 0
+    def getUserMostBoughtCategories(self, u_id, isActive):
+        if not isinstance(isActive, bool):
+            return ("IsActive must be boolean")
+        if isActive:
+            daoRes = self.dao.getUserActiveCategoryPurchaseCount(u_id)
+        else:
+            daoRes = self.dao.getUserCategoryPurchaseCount(u_id)
+
         if daoRes:
             res = []
             for row in daoRes:
-                if row[1] < maxCount:  # break loop after finding first item below max purchases
-                    break
-                maxCount = row[1]  # first item in list sets max purchases
                 purchaseCountDic = {}  # prepare return format
                 purchaseCountDic['Category'] = row[0]
                 purchaseCountDic['Purchase Count'] = row[1]
                 res.append(purchaseCountDic)  # add to list
             return jsonify(res), 200
         else:
-            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 400
+            return jsonify('User #%s does not have purchases! ...or error ocurred' %u_id), 404
 
     def getUserMostExpensiveItemPurchase(self, u_id):
         daoRes = self.dao.getUserMostExpensiveItemPurchase(u_id)

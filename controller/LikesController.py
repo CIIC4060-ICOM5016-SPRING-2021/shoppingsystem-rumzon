@@ -52,28 +52,28 @@ class LikesController:
             return 2
         return 0
 
-    def addLike(self, u_id, i_id):
-        isValid = self.isValid(u_id,i_id)
+    def addLike(self, json):
+        isValid = self.isValid(json['u_id'], json['item_id'])
         if isValid == 1:
             return jsonify('User ID not found'), 404
         if isValid == 2:
             return jsonify('Item ID not found'), 404
 
-        daoRes = self.dao.addLike(u_id, i_id)
+        daoRes = self.dao.addLike(json['u_id'], json['item_id'])
         if not daoRes:
-            return jsonify('User #%s already likes item #%s' %(u_id,i_id)), 409
+            return jsonify('User #%s already likes item #%s' %(json['u_id'], json['item_id'])), 409
         return self.dictionary(daoRes[0]), 200
 
-    def deleteLike(self, u_id, i_id):
-        isValid = self.isValid(u_id, i_id)
+    def deleteLike(self, json):
+        isValid = self.isValid(json['u_id'], json['item_id'])
         if isValid == 1:
             return jsonify('User ID not found'), 404
         if isValid == 2:
             return jsonify('Item ID not found'), 404
 
-        daoRes = self.dao.deleteLike(u_id, i_id)
+        daoRes = self.dao.deleteLike(json['u_id'], json['item_id'])
         if not daoRes:
-            return jsonify('User #%s does not like item #%s' %(u_id,i_id)), 409
+            return jsonify('User #%s does not like item #%s' %(json['u_id'],json['item_id'])), 409
         return self.dictionary(daoRes[0]), 200
 
     def getMostLikedItems(self):

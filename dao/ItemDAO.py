@@ -91,7 +91,7 @@ class ItemDAO:
     def isActive(self, item_id):
         cursor = self.connection.cursor()
         cursor.execute("SELECT isActive FROM items "
-                       "WHERE item_id = %s AND isActive = True " %item_id)
+                       "WHERE item_id = %s" %item_id)
         res = []
         for row in cursor:
             res.append(row)
