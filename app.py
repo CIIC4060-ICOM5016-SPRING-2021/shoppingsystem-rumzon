@@ -20,14 +20,14 @@ def empty():
 def allUsers():
     return UserController().getAll()
 
-@app.route('/rumzon/users/<int:id>', methods=['GET', 'DELETE', 'PUT'])
-def userByID(id):
+@app.route('/rumzon/users', methods=['GET', 'DELETE', 'PUT'])
+def userByID():
     if request.method == 'GET':
-        return UserController().getByID(id)
+        return UserController().getByID(request.json)
     elif request.method == 'DELETE':
-        return UserController().deleteUser(id)
+        return UserController().deleteUser(request.json)
     elif request.method == 'PUT':
-        return UserController().updateUser(id, request.json)
+        return UserController().updateUser(request.json)
     else:
         return 'Request not handled'
 
@@ -72,12 +72,12 @@ def allOrders():
 
 @app.route('/rumzon/orders/user')
 def orderByUserID():
-    return OrderController().getAllByUserID(request.json["u_id"])
+    return OrderController().getAllByUserID(request.json)
 
 @app.route('/rumzon/orders', methods=['GET','DELETE'])
 def orderByID():
     if request.method == 'GET':
-        return OrderController().getByID(request.json["o_id"])
+        return OrderController().getByID(request.json)
     elif request.method == 'DELETE':
         return OrderController().deleteOrder(request.json)
     else:
@@ -101,13 +101,13 @@ def userLikes():
 def allLikes():
     return LikesController().getAll()
 
-@app.route('/rumzon/likes/users/<int:id>')
-def userLikesByUserID(id):
-    return LikesController().getUserLikesByUserID(id)
+@app.route('/rumzon/likes/users')
+def userLikesByUserID():
+    return LikesController().getUserLikesByUserID(request.json)
 
-@app.route('/rumzon/likes/items/<int:id>')
-def itemLikesByItemID(id):
-    return LikesController().getItemLikesByItemID(id)
+@app.route('/rumzon/likes/items')
+def itemLikesByItemID():
+    return LikesController().getItemLikesByItemID(request.json)
 
 #-----------------ItemsInCart---------------------------------
 @app.route('/rumzon/cart/all')
@@ -150,9 +150,9 @@ def buyAllItemsInCarts():
 def allItemsInOrders():
     return ItemsInOrderController().getAll()
 
-@app.route('/rumzon/itemsinorder/<int:id>')
-def orderItemsbyOrderID(id):
-    return ItemsInOrderController().getOrderItemsByOrderID(id)
+@app.route('/rumzon/itemsinorder')
+def orderItemsbyOrderID():
+    return ItemsInOrderController().getOrderItemsByOrderID(request.json)
 
 #-----------------Global Statistics---------------------------------
 @app.route('/rumzon/global/price/max')
