@@ -34,6 +34,8 @@ class ItemController:
             return jsonify('Item Table Empty!... or error ocurred'), 405
 
     def getItemsFilterCategory(self, i_category):
+        if not self.category_list.__contains__(i_category):
+            return jsonify("Category '%s' does not exist" % i_category), 400
         daoRes = self.dao.getItemsFilterCategory(i_category)
         if daoRes:
             result = []
@@ -41,7 +43,7 @@ class ItemController:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify('Item Table Empty!... or error ocurred'), 405
+            return jsonify('Category Empty! ... or error occured'), 404
 
     def getItemsSorted(self, json):
         if json['sortBy'].lower() != 'price' and json['sortBy'].lower() != 'name':
@@ -188,13 +190,14 @@ class ItemController:
                 return jsonify('Category "%s" does not exist' % reqjson['i_category']), 400
             if reqjson['i_stock'] != '':
                 if not isinstance(reqjson['i_stock'], int) or reqjson['i_stock'] < 0:
-                    return jsonify('Enter valid stock'), 400
+                    return jsonify('Stock must be integer greater than 0'), 400
                 if reqjson['i_stock'] > 999999999:
                     return jsonify('Stock cannot be greater than 999,999,999'), 400
             if reqjson['i_price'] != '' and \
                     ((not isinstance(reqjson['i_price'], float) and not isinstance(reqjson['i_price'], int)) or \
                     reqjson['i_price'] < 0):
-                return jsonify('Enter valid price'), 400
+                return jsonify('Price must be valid float or integer '), 400
+
 
             #get old values
             i_name = oldjson['Item Name']
