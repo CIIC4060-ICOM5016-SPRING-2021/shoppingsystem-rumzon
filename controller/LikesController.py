@@ -23,25 +23,25 @@ class LikesController:
         else:
             return jsonify('Like Table Empty! ...or error ocurred'), 405
 
-    def getUserLikesByUserID(self, id):
-        daoRes = self.dao.getUserLikesByUserID(id)
+    def getUserLikesByUserID(self, json):
+        daoRes = self.dao.getUserLikesByUserID(json["u_id"])
         if daoRes:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify("User #%d has no likes, or ID Not Found" %id), 405
+            return jsonify("User #%d has no likes, or ID Not Found" %json["u_id"]), 405
 
-    def getItemLikesByItemID(self, id):
-        daoRes = self.dao.getItemLikesByItemID(id)
+    def getItemLikesByItemID(self, json):
+        daoRes = self.dao.getItemLikesByItemID(json['item_id'])
         if daoRes:
             result = []
             for row in daoRes:
                 result.append(self.dictionary(row))
             return jsonify(result)
         else:
-            return jsonify("Item #%d has no likes, or ID Not Found" %id), 405
+            return jsonify("Item #%d has no likes, or ID Not Found" %json['item_id']), 405
 
     def isValid(self, u_id, i_id):
         userIDValid = UserDAO().getByID(u_id)

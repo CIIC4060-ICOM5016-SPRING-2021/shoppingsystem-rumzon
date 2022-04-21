@@ -26,8 +26,8 @@ class UserController:
         else:
             return jsonify('User Table Empty!... or error ocurred'), 405
 
-    def getByID(self, id):
-        daoRes = self.dao.getByID(id)
+    def getByID(self, json):
+        daoRes = self.dao.getByID(json['u_id'])
         if daoRes:
             return jsonify(self.dictionary(daoRes[0])), 200
         else:
@@ -51,16 +51,16 @@ class UserController:
         else:
             return -1  # user id not found or error
 
-    def deleteUser(self, id):
-        daoRes = self.dao.getByID(id)
+    def deleteUser(self, json):
+        daoRes = self.dao.getByID(json['u_id'])
         if daoRes:
-            self.dao.deleteUser(id)
+            self.dao.deleteUser(json['u_id'])
             return jsonify(self.dictionary(daoRes[0])), 200
         else:
             return jsonify('ID Not Found'), 404
 
-    def updateUser(self, id, reqjson):
-        oldjson = self.getUserDict(id)
+    def updateUser(self, reqjson):
+        oldjson = self.getUserDict(reqjson['u_id'])
 
         if oldjson:
             username = oldjson['Username']
@@ -97,22 +97,24 @@ class UserController:
             else:
                 isAdmin = reqjson['isAdmin']
 
-            daoRes = self.dao.updateUser(id, username, u_email, u_password, isAdmin)
+            daoRes = self.dao.updateUser(reqjson['u_id'], username, u_email, u_password, isAdmin)
             return jsonify(self.dictionary(daoRes[0])), 200
         else:
             return jsonify('ID Not Found'), 404
 
     def addNewUser(self, json):
         res = []
-        if json['username'] == '':
-            return jsonify('Enter Username'), 400
-        if json['u_email'] == '':
-            return jsonify('Enter Email'), 400
-        if json['u_password'] == '':
-            return jsonify('Enter Password'), 400
-        if not isinstance(json['isAdmin'], bool):
-            return jsonify('isAdmin must be Boolean'), 400
-
+        try:
+            if json['username'] == '':
+                return jsonify('Enter Username'), 400
+            if json['u_email'] == '':
+                return jsonify('Enter Email'), 400
+            if json['u_password'] == '':
+                return jsonify('Enter Password'), 400
+            if not isinstance(json['isAdmin'], bool):
+                return jsonify('isAdmin must be Boolean'), 400
+        except:
+            return jsonify('Bad Json'), 400
         emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         if json['username'] != json['username'].replace(' ', ''):
             return jsonify('Username must not have spaces'), 400

@@ -41,8 +41,8 @@ class OrderController:
         else:
             return jsonify('Order Table Empty!... or error ocurred'), 400
 
-    def getByID(self, id):
-        daoRes = self.dao.getByID(id)
+    def getByID(self, json):
+        daoRes = self.dao.getByID(json["o_id"])
         if daoRes:
             result = []
             for row in daoRes:
@@ -67,12 +67,12 @@ class OrderController:
         else:
             return {}
 
-    def getAllByUserID(self, u_id):
-        userIDValid = UserDAO().getByID(u_id)
+    def getAllByUserID(self, json):
+        userIDValid = UserDAO().getByID(json["u_id"])
         if not userIDValid:
             return jsonify('User ID not found'), 404
 
-        daoRes = self.dao.getByUserID(u_id)
+        daoRes = self.dao.getByUserID(json["u_id"])
         if daoRes:
             result = []
             for row in daoRes:
@@ -82,7 +82,7 @@ class OrderController:
                     row[4].append(self.ItemsDict(item))
             return jsonify(result), 200
         else:
-            return jsonify('User #%s does not have purchases!' % u_id), 404
+            return jsonify('User #%s does not have purchases!' % json["u_id"]), 404
 
     def deleteOrder(self, json):
         if not isinstance(json['admin_id'], int):
