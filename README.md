@@ -12,6 +12,12 @@
 - [x] Phase 1
 - [ ] Phase 2
 
+## Item Categories
+    -Pets               -Kitchenware
+    -Household          -Medicine
+    -Food               -Sports
+    -Electronics        -Supplies
+    -Furniture          -Toys
 
 ## Database Credentials
     Host: ec2-18-235-114-62.compute-1.amazonaws.com
