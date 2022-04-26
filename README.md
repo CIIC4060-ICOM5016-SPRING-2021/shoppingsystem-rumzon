@@ -10,7 +10,7 @@
 ### TODO
 
 - [x] Phase 1
-- [ ] Phase 2
+- [x] Phase 2
 
 ## Item Categories
     -Pets               -Kitchenware
