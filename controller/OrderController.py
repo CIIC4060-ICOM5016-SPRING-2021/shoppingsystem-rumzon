@@ -41,8 +41,8 @@ class OrderController:
         else:
             return jsonify('Order Table Empty!... or error ocurred'), 400
 
-    def getByID(self, json):
-        daoRes = self.dao.getByID(json["o_id"])
+    def getByID(self, o_id):
+        daoRes = self.dao.getByID(o_id)
         if daoRes:
             result = []
             for row in daoRes:

@@ -77,7 +77,7 @@ def orderByUserID():
 @app.route('/rumzon/orders', methods=['GET','DELETE'])
 def orderByID():
     if request.method == 'GET':
-        return OrderController().getByID(request.json)
+        return OrderController().getByID(request.json['o_id'])
     elif request.method == 'DELETE':
         return OrderController().deleteOrder(request.json)
     else:
