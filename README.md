@@ -10,8 +10,15 @@
 ### TODO
 
 - [x] Phase 1
-- [ ] Phase 2
+- [x] Phase 2
+- [ ] Phase 3
 
+## Item Categories
+    -Pets               -Kitchenware
+    -Household          -Medicine
+    -Food               -Sports
+    -Electronics        -Supplies
+    -Furniture          -Toys
 
 ## Database Credentials
     Host: ec2-18-235-114-62.compute-1.amazonaws.com
@@ -23,4 +30,6 @@
     Heroku CLI: heroku pg:psql postgresql-metric-64579 --app rumzon-db
 
 ## Postman
+    Heroku Collection URL: https://www.getpostman.com/collections/3b531cb4c641d5984aa1
     URL: https://go.postman.co/workspace/Rumzon-2-Workspace~8b84ef40-2a77-4c97-8821-1412e72fa17f/collection/20084489-08e9b4ea-2d03-4d75-86f5-6f2222ee4010?action=share&creator=20084489
+    
