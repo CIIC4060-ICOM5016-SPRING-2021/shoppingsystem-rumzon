@@ -17,7 +17,7 @@ function HomePage() {
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
             >
-                <Modal.Header>Needs changing!</Modal.Header>
+                <Modal.Header>Needs manning!</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
                         This is a modal but it serves to show how buttons and functions can be implemented.
@@ -44,11 +44,11 @@ function HomePage() {
                                 label='Password'
                                 type='password'
                             />
-                            <Button content='Login' primary onClick={handleChange}/>
+                            <Button content='Log out' primary onClick={handleChange}/>
                         </Form>
                     </Grid.Column>
                     <Grid.Column verticalAlign='middle'>
-                        <Button content='Sign up' icon='signup' size='big' onClick={handleChange}/>
+                        <Button content='Sign up' icon='signup' size='small' onClick={handleChange}/>
                     </Grid.Column>
                 </Grid>
 

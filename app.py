@@ -1,12 +1,12 @@
 from flask import Flask, request
 from flask_cors import CORS
 
-from controller.ItemController import ItemController
-from controller.ItemsInCartController import ItemsInCartController
-from controller.ItemsInOrderController import ItemsInOrderController
-from controller.LikesController import LikesController
-from controller.UserController import UserController
-from controller.OrderController import OrderController
+from back_end.controller.ItemController import ItemController
+from back_end.controller.ItemsInCartController import ItemsInCartController
+from back_end.controller.ItemsInOrderController import ItemsInOrderController
+from back_end.controller.LikesController import LikesController
+from back_end.controller.UserController import UserController
+from back_end.controller.OrderController import OrderController
 
 app = Flask(__name__)
 CORS(app)
