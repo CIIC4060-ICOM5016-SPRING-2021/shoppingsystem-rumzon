@@ -26,10 +26,15 @@ class LikesController:
     def getUserLikesByUserID(self, json):
         daoRes = self.dao.getUserLikesByUserID(json["u_id"])
         if daoRes:
-            result = []
+            res = []
             for row in daoRes:
-                result.append(self.dictionary(row))
-            return jsonify(result)
+                itemDic = {}  # prepare return format
+                itemDic['Item ID'] = row[0]
+                itemDic['Name'] = row[1]
+                itemDic['Category'] = row[2]
+                itemDic['Price'] = row[3]
+                res.append(itemDic)  # add to list
+            return jsonify(res), 200
         else:
             return jsonify("User #%d has no likes, or ID Not Found" %json["u_id"]), 405
 

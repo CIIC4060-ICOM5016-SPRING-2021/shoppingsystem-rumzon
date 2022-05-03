@@ -34,7 +34,7 @@ class LikesDAO:
 
     def getUserLikesByUserID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM likes '
+        cursor.execute('SELECT item_id, i_name, i_category, i_price FROM likes natural inner join items '
                        'where u_id = %s' %id)
         res = []
         for row in cursor:
