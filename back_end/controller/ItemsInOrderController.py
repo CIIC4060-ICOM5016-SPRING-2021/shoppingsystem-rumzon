@@ -1,5 +1,5 @@
 from flask import jsonify
-from dao.ItemsInOrderDAO import ItemsInOrderDAO
+from back_end.dao.ItemsInOrderDAO import ItemsInOrderDAO
 
 class ItemsInOrderController:
 

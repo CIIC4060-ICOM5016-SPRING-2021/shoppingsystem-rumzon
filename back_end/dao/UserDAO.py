@@ -1,5 +1,5 @@
 import psycopg2
-from config.psycopgConfig import pgconfig
+from back_end.config.psycopgConfig import pgconfig
 
 
 class UserDAO:

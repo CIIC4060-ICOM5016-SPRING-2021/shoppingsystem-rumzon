@@ -20,9 +20,9 @@ def empty():
 def allUsers():
     return UserController().getAll()
 
-@app.route('/rumzon/users', methods=['GET', 'DELETE', 'PUT'])
+@app.route('/rumzon/users', methods=['POST', 'DELETE', 'PUT'])
 def userByID():
-    if request.method == 'GET':
+    if request.method == 'POST':
         return UserController().getByID(request.json)
     elif request.method == 'DELETE':
         return UserController().deleteUser(request.json)
@@ -44,24 +44,26 @@ def login():
 def allItems():
     return ItemController().getAll()
 
-@app.route('/rumzon/items', methods=['GET','DELETE','PUT', 'POST'])
+@app.route('/rumzon/items', methods=['DELETE','PUT', 'POST'])
 def itemFunctions():
-    if request.method == 'GET':
+    if request.method == 'POST':
         return ItemController().getByID(request.json)
     elif request.method == 'DELETE':
         return ItemController().deleteItem(request.json)
     elif request.method == 'PUT':
         return ItemController().updateItem(request.json)
-    elif request.method == 'POST':
-        return ItemController().addNewItem(request.json)
     else:
         return 'Request not handled'
+
+@app.route('/rumzon/items/new', methods=['POST'])
+def newItem():
+    return ItemController().addNewItem(request.json)
 
 @app.route('/rumzon/items/category/<string:category_name>')
 def filterItemsByCategory(category_name):
     return ItemController().getItemsFilterCategory(category_name)
 
-@app.route('/rumzon/items/sort')
+@app.route('/rumzon/items/sort', methods =['POST'])
 def organizeItems():
     return ItemController().getItemsSorted(request.json)
 
@@ -70,13 +72,16 @@ def organizeItems():
 def allOrders():
     return OrderController().getAll()
 
-@app.route('/rumzon/orders/user')
+@app.route('/rumzon/orders/user', methods =['POST'])
 def orderByUserID():
-    return OrderController().getAllByUserID(request.json)
+    if request.method == 'POST':
+        return OrderController().getAllByUserID(request.json)
+    else:
+        return 'Request not handled'
 
-@app.route('/rumzon/orders', methods=['GET','DELETE'])
+@app.route('/rumzon/orders', methods=['POST','DELETE'])
 def orderByID():
-    if request.method == 'GET':
+    if request.method == 'POST':
         return OrderController().getByID(request.json['o_id'])
     elif request.method == 'DELETE':
         return OrderController().deleteOrder(request.json)
@@ -101,11 +106,11 @@ def userLikes():
 def allLikes():
     return LikesController().getAll()
 
-@app.route('/rumzon/likes/users')
+@app.route('/rumzon/likes/users', methods=['POST'])
 def userLikesByUserID():
     return LikesController().getUserLikesByUserID(request.json)
 
-@app.route('/rumzon/likes/items')
+@app.route('/rumzon/likes/items', methods=['POST'])
 def itemLikesByItemID():
     return LikesController().getItemLikesByItemID(request.json)
 
@@ -114,43 +119,40 @@ def itemLikesByItemID():
 def allItemsInCarts():
     return ItemsInCartController().getAll()
 
-@app.route('/rumzon/cart', methods=['GET','DELETE','PUT','POST'])
+@app.route('/rumzon/cart', methods=['DELETE','PUT','POST'])
 def cartItemsByUserID():
-    if request.method == 'GET':
+    if request.method == 'POST':
         return ItemsInCartController().getUserCartByID(request.json)
     elif request.method == 'DELETE':
         return ItemsInCartController().deleteItemInCart(request.json)
-    if request.method == 'POST':
-        return ItemsInCartController().addToCart(request.json)
     if request.method == 'PUT':
         return ItemsInCartController().updateFromCart(request.json)
     else:
         return 'Request not handled'
 
+@app.route('/rumzon/cart/add', methods=['POST'])
+def addItemToUserCart():
+    return ItemsInCartController().addToCart(request.json)
+
 @app.route('/rumzon/cart/clear', methods=['DELETE'])
 def clearCart():
-    if request.method == 'DELETE':
-        return ItemsInCartController().clearUserCartByID(request.json)
-    else:
-        return 'Request not handled'
+    return ItemsInCartController().clearUserCartByID(request.json)
 
-@app.route('/rumzon/cart/total')
+@app.route('/rumzon/cart/total', methods=['POST'])
 def getUserCartTotal():
     return ItemsInCartController().getUserCartTotalByID(request.json)
 
 @app.route('/rumzon/cart/buy', methods=['POST'])
 def buyAllItemsInCarts():
-    if request.method == 'POST':
-        return ItemsInCartController().buyAllFromCart(request.json)
-    else:
-        return 'Request not handled'
+    return ItemsInCartController().buyAllFromCart(request.json)
+
 
 #-----------------ItemsInOrder---------------------------------
 @app.route('/rumzon/itemsinorder/all')
 def allItemsInOrders():
     return ItemsInOrderController().getAll()
 
-@app.route('/rumzon/itemsinorder')
+@app.route('/rumzon/itemsinorder', methods=['POST'])
 def orderItemsbyOrderID():
     return ItemsInOrderController().getOrderItemsByOrderID(request.json)
 
@@ -163,11 +165,11 @@ def getMostExpensiveItem():
 def getLeastExpensiveItem():
     return ItemController().getLeastExpensiveItem()
 
-@app.route('/rumzon/global/hot/items')
+@app.route('/rumzon/global/hot/items', methods=['POST'])
 def getMostBoughtItems():
     return ItemsInOrderController().getMostBoughtItems(request.json["onlyActive"])
 
-@app.route('/rumzon/global/hot/category')
+@app.route('/rumzon/global/hot/category', methods=['POST'])
 def getMostBoughtCategory():
     return ItemsInOrderController().getMostBoughtCategories(request.json["onlyActive"])
 
@@ -177,29 +179,29 @@ def mostLikes():
 
 #-----------------User Statistics---------------------------------
 
-@app.route('/rumzon/users/<int:u_id>/hot/items')
-def getUserMostBoughtItems(u_id):
-    return ItemsInOrderController().getUserMostBoughtItems(u_id, request.json["onlyActive"])
+@app.route('/rumzon/users/hot/items', methods=['POST'])
+def getUserMostBoughtItems():
+    return ItemsInOrderController().getUserMostBoughtItems(request.json["u_id"], request.json["onlyActive"])
 
-@app.route('/rumzon/users/<int:u_id>/hot/category')
-def getUserMostBoughtCategory(u_id):
-    return ItemsInOrderController().getUserMostBoughtCategories(u_id, request.json["onlyActive"])
+@app.route('/rumzon/users/hot/category', methods=['POST'])
+def getUserMostBoughtCategory():
+    return ItemsInOrderController().getUserMostBoughtCategories(request.json["u_id"], request.json["onlyActive"])
 
-@app.route('/rumzon/users/<int:u_id>/itemsinorder/max')
-def getUserMostExpensiveItemPurchase(u_id):
-    return ItemsInOrderController().getUserMostExpensiveItemPurchase(u_id)
+@app.route('/rumzon/users/itemsinorder/max', methods=['POST'])
+def getUserMostExpensiveItemPurchase():
+    return ItemsInOrderController().getUserMostExpensiveItemPurchase(request.json["u_id"])
 
-@app.route('/rumzon/users/<int:u_id>/itemsinorder/min')
-def getUserLeastExpensiveItemPurchase(u_id):
-    return ItemsInOrderController().getUserLeastExpensiveItemPurchase(u_id)
+@app.route('/rumzon/users/itemsinorder/min', methods=['POST'])
+def getUserLeastExpensiveItemPurchase():
+    return ItemsInOrderController().getUserLeastExpensiveItemPurchase(request.json["u_id"])
 
-@app.route('/rumzon/users/<int:u_id>/orders/max')
-def getUserMostExpensiveOrder(u_id):
-    return OrderController().getUserMostExpensiveOrder(u_id)
+@app.route('/rumzon/users/orders/max', methods=['POST'])
+def getUserMostExpensiveOrder():
+    return OrderController().getUserMostExpensiveOrder(request.json["u_id"])
 
-@app.route('/rumzon/users/<int:u_id>/orders/min')
-def getUserLeastExpensiveOrder(u_id):
-    return OrderController().getUserLeastExpensiveOrder(u_id)
+@app.route('/rumzon/users/orders/min', methods=['POST'])
+def getUserLeastExpensiveOrder():
+    return OrderController().getUserLeastExpensiveOrder(request.json["u_id"])
 
 if __name__ == '__main__':
     app.run(debug=True)
