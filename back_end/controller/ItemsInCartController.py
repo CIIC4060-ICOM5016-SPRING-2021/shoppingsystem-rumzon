@@ -44,7 +44,14 @@ class ItemsInCartController:
             resDic["User ID"] = totalRes[0][0]
             resDic["Cart Total"] = totalRes[0][1]
             for row in daoRes:
-                cartItems.append(self.dictionary(row))
+                itemDic = {}
+                itemDic["Item ID"] = row[0]
+                itemDic["Name"] = row[1]
+                itemDic["Category"] = row[2]
+                itemDic["Amount"] = row[3]
+                itemDic["Price"] = row[4]
+                itemDic["Item Total"] = row[5]
+                cartItems.append(itemDic)
             resDic["Cart Items"] = cartItems
             return jsonify(resDic)
         else:
