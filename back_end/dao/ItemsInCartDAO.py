@@ -88,7 +88,7 @@ class ItemsInCartDAO:
 
     def verifyItemInCart(self, item_id, u_id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM itemsincart '
+        cursor.execute('SELECT c_amount FROM itemsincart '
                        'WHERE item_id = %s '
                        'AND u_id = %s' % (item_id, u_id))
         res = []

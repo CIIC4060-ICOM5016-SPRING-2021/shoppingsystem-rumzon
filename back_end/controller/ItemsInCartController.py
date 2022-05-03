@@ -82,12 +82,13 @@ class ItemsInCartController:
             return jsonify('Item ID not found'), 404
         item_id = json['item_id']
         u_id = json['u_id']
-        itemInCart = self.verifyItemInCart(item_id, u_id)
-        if itemInCart == 1:
-            return jsonify("Item %s already in User %s cart" % (item_id, u_id)), 400
+        ammountInCart = self.verifyItemInCart(item_id, u_id)
 
         c_amount = json['c_amount']
-        daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
+        if ammountInCart[0] > 0 and (c_amount+ammountInCart[0] > 0):
+            daoRes = self.dao.updateFromCart(item_id, u_id, (c_amount+ammountInCart[0]))
+        else:
+            daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
         if daoRes:
             res = []
             for row in daoRes:
@@ -186,13 +187,14 @@ class ItemsInCartController:
     def verifyItemInCart(self, item_id, u_id):
         userIDValid = UserDAO().getByID(u_id)
         if not userIDValid:
-            return jsonify('User ID not found'), 404
+            return jsonify('User ID not found')
         itemIDValid = ItemDAO().getByID(item_id)
         if not itemIDValid:
-            return jsonify('Item ID not found'), 404
+            return jsonify('Item ID not found')
 
         daoRes = self.dao.verifyItemInCart(item_id, u_id)
+        print(daoRes[0])
         if daoRes:
-            return 1
+            return daoRes[0]
         else:
             return 0
