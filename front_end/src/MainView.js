@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard";
 import Products from "./Products";
 import Wishlist from "./Wishlist";
 import Cart from "./Cart";
+import Profile from "./Profile";
 
 class MainView extends Component {
 
@@ -24,7 +25,10 @@ class MainView extends Component {
                     </Tab.Pane>
             },
             {
-                menuItem: 'Wishlist', render: () => <Tab.Pane active={this.state.isAuth}><Wishlist /></Tab.Pane>
+                menuItem: 'Wishlist', render: () =>
+                    <Tab.Pane active={this.state.isAuth}>
+                        <Wishlist />
+                    </Tab.Pane>
             },
             {
                 menuItem: 'Cart', render: () =>
@@ -33,7 +37,10 @@ class MainView extends Component {
                     </Tab.Pane>
             },
             {
-                menuItem: 'Profile', render: () => <Tab.Pane active={this.state.isAuth}>:)</Tab.Pane>
+                menuItem: 'Profile', render: () =>
+                    <Tab.Pane active={this.state.isAuth}>
+                        <Profile />
+                    </Tab.Pane>
             },
             {
                 menuItem: 'Dashboard', render: () => <Tab.Pane active={this.state.isAuth}><Dashboard /></Tab.Pane>

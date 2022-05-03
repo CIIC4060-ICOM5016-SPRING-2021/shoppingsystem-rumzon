@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Input, Container, Divider, Button, Icon } from "semantic-ui-react";
+import { Message, Card, Input, Container, Divider, Button, Icon, Dimmer, Loader, Segment } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -37,21 +37,21 @@ class Cart extends Component{
                 </>
             }
             return <>
-                <Container>
-                    <Button color="green" animated='vertical'>
-                        <Button.Content visible>Checkout</Button.Content>
-                        <Button.Content hidden>
-                            <Icon name='shop' />
-                        </Button.Content>
-                    </Button>
-                    <Input
-                       value={this.state.cartTotal}
-                    />
-                </Container>
-                <Divider horizontal> </Divider>
-                <Card.Group>
-                    <this.CartCards info={this.state.items} />
-                </Card.Group>
+                    <Container>
+                        <Button color="green" animated='vertical'>
+                            <Button.Content visible>Checkout</Button.Content>
+                            <Button.Content hidden>
+                                <Icon name='shop' />
+                            </Button.Content>
+                        </Button>
+                        <Input
+                           value={this.state.cartTotal}
+                        />
+                    </Container>
+                    <Divider horizontal> </Divider>
+                    <Card.Group>
+                        <this.CartCards info={this.state.items} />
+                     </Card.Group>
             </>
         } else {
             return <>
