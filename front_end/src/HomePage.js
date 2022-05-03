@@ -10,7 +10,9 @@ function HomePage() {
         setOpen(true);
     }
 
-    return (<Segment><Header dividing textAlign="center" size="huge">RUMZON</Header>
+    return (
+        <Segment>
+            <Header dividing textAlign="center" size="huge">RUMZON</Header>
             <Modal
                 centered={false}
                 open={open}
@@ -44,7 +46,7 @@ function HomePage() {
                                 label='Password'
                                 type='password'
                             />
-                            <Button content='Log out' primary onClick={handleChange}/>
+                            <Button content='Log in' primary onClick={handleChange}/>
                         </Form>
                     </Grid.Column>
                     <Grid.Column verticalAlign='middle'>

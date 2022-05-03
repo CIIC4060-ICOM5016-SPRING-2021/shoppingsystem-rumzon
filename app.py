@@ -65,7 +65,10 @@ def filterItemsByCategory(category_name):
 
 @app.route('/rumzon/items/sort', methods =['POST'])
 def organizeItems():
-    return ItemController().getItemsSorted(request.json)
+    if request.method == 'POST':
+        return ItemController().getItemsSorted(request.json)
+    else:
+        return 'Request not handled'
 
 #-----------------ORDERS---------------------------------
 @app.route('/rumzon/orders/all')
