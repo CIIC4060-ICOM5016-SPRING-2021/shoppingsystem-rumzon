@@ -1,9 +1,9 @@
 from flask import jsonify
 
-from controller.UserController import UserController
-from dao.OrderDAO import OrderDAO
-from dao.UserDAO import UserDAO
-from dao.ItemsInOrderDAO import ItemsInOrderDAO
+from back_end.controller.UserController import UserController
+from back_end.dao.OrderDAO import OrderDAO
+from back_end.dao.UserDAO import UserDAO
+from back_end.dao.ItemsInOrderDAO import ItemsInOrderDAO
 
 class OrderController:
 

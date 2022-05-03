@@ -1,8 +1,8 @@
 from flask import jsonify
 import json
 
-from controller.UserController import UserController
-from dao.ItemDAO import ItemDAO
+from back_end.controller.UserController import UserController
+from back_end.dao.ItemDAO import ItemDAO
 
 class ItemController:
 

@@ -1,7 +1,7 @@
 from flask import jsonify
-from dao.LikesDAO import LikesDAO
-from dao.UserDAO import UserDAO
-from dao.ItemDAO import ItemDAO
+from back_end.dao.LikesDAO import LikesDAO
+from back_end.dao.UserDAO import UserDAO
+from back_end.dao.ItemDAO import ItemDAO
 class LikesController:
 
     def __init__(self):
