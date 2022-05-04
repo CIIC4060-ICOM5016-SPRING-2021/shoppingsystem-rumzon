@@ -1,10 +1,11 @@
 import React, {Component, useState} from 'react';
-import {Input, Card, Container, Divider, Header, Image, Tab} from "semantic-ui-react";
+import {Input, Card, Container, Modal, Header, Image, Tab} from "semantic-ui-react";
 import Dashboard from "./Dashboard";
 import Products from "./Products";
 import Wishlist from "./Wishlist";
 import Cart from "./Cart";
 import Profile from "./Profile";
+import UserStats from "./UserStats";
 
 class MainView extends Component {
 
@@ -43,7 +44,16 @@ class MainView extends Component {
                     </Tab.Pane>
             },
             {
-                menuItem: 'Dashboard', render: () => <Tab.Pane active={this.state.isAuth}><Dashboard /></Tab.Pane>
+                menuItem: 'Dashboard', render: () => 
+                    <Tab.Pane active={this.state.isAuth}>
+                        <Dashboard />
+                    </Tab.Pane>
+            },
+            {
+                menuItem: 'User Statistics', render: () => 
+                    <Tab.Pane active={this.state.isAuth}>
+                        <UserStats />
+                    </Tab.Pane>
             }
         ]
         return <>

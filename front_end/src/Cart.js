@@ -38,8 +38,8 @@ class Cart extends Component{
             }
             return <>
                     <Container>
-                        <Button color="green" animated='vertical'>
-                            <Button.Content visible>Checkout</Button.Content>
+                    <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
+                        <Button.Content visible>Checkout</Button.Content>
                             <Button.Content hidden>
                                 <Icon name='shop' />
                             </Button.Content>
@@ -82,6 +82,29 @@ class Cart extends Component{
         })
     }
 
+    buyCart = () => {
+        api.post('/cart/buy', {
+                "u_id": parseInt(localStorage.getItem("userID"))
+            }).then(res => {
+            console.log(res.data);
+            this.getUserCart();
+        }).catch(error => {
+            console.log(error.response.data);
+            console.log(error.response.status);
+        })
+    }
+
+    clearCart = () => {
+        api.delete('/cart/buy', {
+            data: {
+                "u_id": parseInt(localStorage.getItem("userID"))
+            }
+        }).then(res => {
+            console.log(res.data);
+            this.getUserCart();
+        })
+    }
+
     CartCards = (props) => {
         console.log(props)
         return props.info.map(item => {
@@ -98,7 +121,7 @@ class Cart extends Component{
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui two buttons'>
-                        <Button content='Remove From Cart' color="red" onClick={ () => {this.handleDeleteFromCart(item)} }/>
+                        <Button content='Remove From Cart' color="red" onClick={ () => {this.handleDeleteFromCart(item)}}/>
                     </div>
                 </Card.Content>
             </Card>

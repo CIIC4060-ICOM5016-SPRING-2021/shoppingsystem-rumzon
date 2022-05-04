@@ -15,6 +15,7 @@ root.render(
             <Route exact path="/login" element={<LoginPage/>} />
             <Route exact path="/" element={<MainView/>} />
             <Route exact path="/Dashboard" element={<Dashboard/>} />
+            <Route exact path="/users/stats" element={<Dashboard/>} />
         </Routes>
     </BrowserRouter>
 );
