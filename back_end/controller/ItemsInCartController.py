@@ -44,7 +44,14 @@ class ItemsInCartController:
             resDic["User ID"] = totalRes[0][0]
             resDic["Cart Total"] = totalRes[0][1]
             for row in daoRes:
-                cartItems.append(self.dictionary(row))
+                itemDic = {}
+                itemDic["Item ID"] = row[0]
+                itemDic["Name"] = row[1]
+                itemDic["Category"] = row[2]
+                itemDic["Amount"] = row[3]
+                itemDic["Price"] = row[4]
+                itemDic["Item Total"] = row[5]
+                cartItems.append(itemDic)
             resDic["Cart Items"] = cartItems
             return jsonify(resDic)
         else:
@@ -75,12 +82,13 @@ class ItemsInCartController:
             return jsonify('Item ID not found'), 404
         item_id = json['item_id']
         u_id = json['u_id']
-        itemInCart = self.verifyItemInCart(item_id, u_id)
-        if itemInCart == 1:
-            return jsonify("Item %s already in User %s cart" % (item_id, u_id)), 400
+        ammountInCart = self.verifyItemInCart(item_id, u_id)
 
         c_amount = json['c_amount']
-        daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
+        if ammountInCart != 0 and ammountInCart[0] > 0 and (c_amount+ammountInCart[0] > 0):
+            daoRes = self.dao.updateFromCart(item_id, u_id, (c_amount+ammountInCart[0]))
+        else:
+            daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
         if daoRes:
             res = []
             for row in daoRes:
@@ -150,7 +158,9 @@ class ItemsInCartController:
         if daoRes:
             understockedItems = []
             for row in daoRes:
-                stockRes = ItemDAO().checkStockByID(row[0], row[2])
+                print(row[0])
+                print(row[3])
+                stockRes = ItemDAO().checkStockByID(row[0], row[3])
                 if stockRes:
                     itemDic = {}
                     itemDic['Item ID'] = stockRes[0][0]
@@ -169,7 +179,7 @@ class ItemsInCartController:
             o_id = orderRes[0][1]
             result = []
             for row in daoRes:
-                itemsInOrderDao.buyItemFromCart(row[0], o_id, row[2])
+                itemsInOrderDao.buyItemFromCart(row[0], o_id, row[3])
                 result.append(self.dictionary(row))
             self.dao.clearUserCartByID(json['u_id'])
             return OrderController().getByID(o_id)
@@ -179,13 +189,16 @@ class ItemsInCartController:
     def verifyItemInCart(self, item_id, u_id):
         userIDValid = UserDAO().getByID(u_id)
         if not userIDValid:
-            return jsonify('User ID not found'), 404
+            return jsonify('User ID not found')
         itemIDValid = ItemDAO().getByID(item_id)
         if not itemIDValid:
-            return jsonify('Item ID not found'), 404
+            return jsonify('Item ID not found')
 
+        print(item_id)
+        print(u_id)
         daoRes = self.dao.verifyItemInCart(item_id, u_id)
+
         if daoRes:
-            return 1
+            return daoRes[0]
         else:
             return 0

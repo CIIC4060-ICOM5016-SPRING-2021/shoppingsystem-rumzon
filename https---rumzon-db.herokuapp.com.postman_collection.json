@@ -32,15 +32,12 @@
 				},
 				{
 					"name": "user by id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 3\r\n}",
+							"raw": "{\r\n    \"u_id\": 63\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -70,7 +67,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"Test\",\r\n    \"u_email\": \"test@t.co\",\r\n    \"u_password\": \"passwroie\",\r\n    \"isAdmin\": false\r\n}",
+							"raw": "{\r\n    \"username\": \"Manuel\",\r\n    \"u_email\": \"manuel.rodriguez7@upr.edu\",\r\n    \"u_password\": \"password\",\r\n    \"isAdmin\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -101,7 +98,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 3,\r\n    \"username\": \"\",\r\n    \"u_email\": \"\",\r\n    \"u_password\": \"\",\r\n    \"isAdmin\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 65,\r\n    \"username\": \"\",\r\n    \"u_email\": \"\",\r\n    \"u_password\": \"\",\r\n    \"isAdmin\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -131,7 +128,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 54\r\n}",
+							"raw": "{\r\n    \"u_id\": 65\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -422,6 +419,29 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Clothes",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://rumzon-db.herokuapp.com/rumzon/items/category/clothes",
+									"protocol": "https",
+									"host": [
+										"rumzon-db",
+										"herokuapp",
+										"com"
+									],
+									"path": [
+										"rumzon",
+										"items",
+										"category",
+										"clothes"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -449,11 +469,8 @@
 				},
 				{
 					"name": "item by id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -482,15 +499,12 @@
 				},
 				{
 					"name": "items sorted",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sortBy\": \"price\",\r\n    \"sortType\": \"ascending\"\r\n}",
+							"raw": "{\r\n    \"sortBy\": \"name\",\r\n    \"sortType\": \"descending\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -521,7 +535,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 38,\r\n    \"i_name\": \"Pet Bed\",\r\n    \"i_category\": \"pets\",\r\n    \"i_stock\": 1000,\r\n    \"i_price\": 16\r\n}",
+							"raw": "{\r\n    \"u_id\": 38,\r\n    \"i_name\": \"Product2\",\r\n    \"i_category\": \"food\",\r\n    \"i_stock\": 2,\r\n    \"i_price\": 0.01\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -529,7 +543,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/items",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/items/new",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -538,7 +552,8 @@
 							],
 							"path": [
 								"rumzon",
-								"items"
+								"items",
+								"new"
 							]
 						}
 					},
@@ -551,7 +566,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 3,\r\n    \"item_id\": 85,\r\n    \"i_category\": \"\",\r\n    \"i_name\": \"\",\r\n    \"i_price\": 30,\r\n    \"i_stock\": \"\"\r\n}",
+							"raw": "{\r\n    \"u_id\": 3,\r\n    \"item_id\": 164,\r\n    \"i_category\": \"\",\r\n    \"i_name\": \"\",\r\n    \"i_price\": 50000,\r\n    \"i_stock\": \"\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -581,7 +596,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 38,\r\n    \"item_id\": 10\r\n}",
+							"raw": "{\r\n    \"u_id\": 38,\r\n    \"item_id\": 4\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -633,11 +648,8 @@
 				},
 				{
 					"name": "order by order id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -666,15 +678,12 @@
 				},
 				{
 					"name": "orders by user id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 38\r\n}",
+							"raw": "{\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -722,11 +731,8 @@
 				},
 				{
 					"name": "items in order by order id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -754,44 +760,13 @@
 					"response": []
 				},
 				{
-					"name": "new order *obsolete",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n        \"u_id\": 44\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/orders/new",
-							"protocol": "https",
-							"host": [
-								"rumzon-db",
-								"herokuapp",
-								"com"
-							],
-							"path": [
-								"rumzon",
-								"orders",
-								"new"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "remove order",
 					"request": {
 						"method": "DELETE",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"admin_id\": 3,\r\n    \"o_id\": 61\r\n}",
+							"raw": "{\r\n    \"admin_id\": 3,\r\n    \"o_id\": 67\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -843,15 +818,12 @@
 				},
 				{
 					"name": "user cart",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -876,15 +848,12 @@
 				},
 				{
 					"name": "user cart total",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"u_id\": 38\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -915,7 +884,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -946,7 +915,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"c_amount\": 10,\r\n    \"item_id\": 3,\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"c_amount\": 1,\r\n    \"item_id\": 101,\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -954,7 +923,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/cart",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/cart/add",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -963,7 +932,8 @@
 							],
 							"path": [
 								"rumzon",
-								"cart"
+								"cart",
+								"add"
 							]
 						}
 					},
@@ -976,7 +946,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"c_amount\": 1,\r\n    \"item_id\": 3,\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"c_amount\": 2,\r\n    \"item_id\": 164,\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1006,7 +976,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"item_id\": 3,\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"item_id\": 5,\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1036,7 +1006,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 44\r\n}",
+							"raw": "{\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1089,15 +1059,12 @@
 				},
 				{
 					"name": "likes by user id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1124,10 +1091,19 @@
 				{
 					"name": "likes by item id",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"item_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/likes/items/4",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/likes/items",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1137,8 +1113,7 @@
 							"path": [
 								"rumzon",
 								"likes",
-								"items",
-								"4"
+								"items"
 							]
 						}
 					},
@@ -1151,7 +1126,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4,\r\n    \"item_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 38,\r\n    \"item_id\": 111\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1181,7 +1156,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4,\r\n    \"item_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 66,\r\n    \"item_id\": 164\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1210,12 +1185,9 @@
 			"name": "Global Statistics",
 			"item": [
 				{
-					"name": "most bought items",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "rank most bought items",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1245,12 +1217,9 @@
 					"response": []
 				},
 				{
-					"name": "most bought categories",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "rank most bought categories",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1354,15 +1323,12 @@
 			"item": [
 				{
 					"name": "user most popular items",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 5,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1370,7 +1336,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/hot/items",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/hot/items",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1380,7 +1346,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"hot",
 								"items"
 							]
@@ -1390,15 +1355,12 @@
 				},
 				{
 					"name": "user most popular categories",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 5,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1406,7 +1368,7 @@
 							}
 						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/hot/category",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/hot/category",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1416,7 +1378,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"hot",
 								"category"
 							]
@@ -1427,10 +1388,19 @@
 				{
 					"name": "user least expensive item purchase",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/itemsinorder/min",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/itemsinorder/min",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1440,7 +1410,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"itemsinorder",
 								"min"
 							]
@@ -1451,10 +1420,19 @@
 				{
 					"name": "user most expensive item purchase",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/itemsinorder/max",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/itemsinorder/max",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1464,7 +1442,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"itemsinorder",
 								"max"
 							]
@@ -1475,10 +1452,19 @@
 				{
 					"name": "user least expensive order",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/orders/min",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/orders/min",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1488,7 +1474,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"orders",
 								"min"
 							]
@@ -1499,10 +1484,19 @@
 				{
 					"name": "user most expensive order",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/38/orders/max",
+							"raw": "https://rumzon-db.herokuapp.com/rumzon/users/orders/max",
 							"protocol": "https",
 							"host": [
 								"rumzon-db",
@@ -1512,7 +1506,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"orders",
 								"max"
 							]

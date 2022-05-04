@@ -24,7 +24,8 @@ class ItemsInCartDAO:
 
     def getUserCartByID(self, id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT *, itemTotal(item_id, c_amount) AS i_total FROM itemsincart '
+        cursor.execute('SELECT item_id, i_name, i_category, c_amount, i_price, itemTotal(item_id, c_amount) AS i_total '
+                       'FROM itemsincart natural inner join items '
                        'where u_id = %s' %id)
         res = []
         for row in cursor:
@@ -87,7 +88,7 @@ class ItemsInCartDAO:
 
     def verifyItemInCart(self, item_id, u_id):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT * FROM itemsincart '
+        cursor.execute('SELECT c_amount FROM itemsincart '
                        'WHERE item_id = %s '
                        'AND u_id = %s' % (item_id, u_id))
         res = []
