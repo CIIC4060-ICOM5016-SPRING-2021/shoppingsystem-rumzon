@@ -85,7 +85,7 @@ class ItemsInCartController:
         ammountInCart = self.verifyItemInCart(item_id, u_id)
 
         c_amount = json['c_amount']
-        if ammountInCart[0] > 0 and (c_amount+ammountInCart[0] > 0):
+        if ammountInCart != 0 and ammountInCart[0] > 0 and (c_amount+ammountInCart[0] > 0):
             daoRes = self.dao.updateFromCart(item_id, u_id, (c_amount+ammountInCart[0]))
         else:
             daoRes = self.dao.addItemToCart(item_id, u_id, c_amount)
@@ -194,8 +194,10 @@ class ItemsInCartController:
         if not itemIDValid:
             return jsonify('Item ID not found')
 
+        print(item_id)
+        print(u_id)
         daoRes = self.dao.verifyItemInCart(item_id, u_id)
-        print(daoRes[0])
+
         if daoRes:
             return daoRes[0]
         else:
