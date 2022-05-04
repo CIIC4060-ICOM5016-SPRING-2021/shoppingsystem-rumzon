@@ -34,15 +34,12 @@
 				},
 				{
 					"name": "user by id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 3\r\n}",
+							"raw": "{\r\n    \"u_id\": 64\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -74,7 +71,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_email\": \"gal1@women.com\",\r\n    \"u_password\": \"password\",\r\n    \"username\": \"gal1\",\r\n    \"isAdmin\": false\r\n}",
+							"raw": "{\r\n    \"u_email\": \"pretest@test.com\",\r\n    \"u_password\": \"pord\",\r\n    \"username\": \"pretester\",\r\n    \"isAdmin\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -107,7 +104,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"lady1\",\r\n    \"u_email\": \"lady1@women.com\",\r\n    \"u_id\": 5,\r\n    \"u_password\": \"password\",\r\n    \"isAdmin\": true\r\n}",
+							"raw": "{\r\n    \"username\": \"a\",\r\n    \"u_email\": \"\",\r\n    \"u_id\": 38,\r\n    \"u_password\": \"a\",\r\n    \"isAdmin\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -171,7 +168,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\": \"omar@mail.com\",\r\n    \"password\": \"omarpass\"\r\n}",
+							"raw": "{\r\n    \"user\": \"pretester\",\r\n    \"password\": \"tester\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -228,11 +225,8 @@
 				},
 				{
 					"name": "item by id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -267,7 +261,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/items/category/electronic",
+							"raw": "http://127.0.0.1:5000/rumzon/items/category/electronics",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -280,7 +274,7 @@
 								"rumzon",
 								"items",
 								"category",
-								"electronic"
+								"electronics"
 							]
 						}
 					},
@@ -288,15 +282,12 @@
 				},
 				{
 					"name": "items sorted",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sortBy\": \"price\",\r\n    \"sortType\": \"ascending\"\r\n}",
+							"raw": "{\r\n    \"sortBy\": \"price\",\r\n    \"sortType\": \"descending\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -329,7 +320,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 38,\r\n    \"i_name\": \"Phone\",\r\n    \"i_category\": \"electronics\",\r\n    \"i_stock\": 200,\r\n    \"i_price\": 700\r\n}",
+							"raw": "{\r\n    \"u_id\": 38,\r\n    \"i_name\": \"Glasses\",\r\n    \"i_category\": \"clothes\",\r\n    \"i_stock\": 200,\r\n    \"i_price\": 20\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -337,7 +328,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/items",
+							"raw": "http://127.0.0.1:5000/rumzon/items/new",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -348,7 +339,8 @@
 							"port": "5000",
 							"path": [
 								"rumzon",
-								"items"
+								"items",
+								"new"
 							]
 						}
 					},
@@ -449,11 +441,8 @@
 				},
 				{
 					"name": "order by order id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -484,11 +473,8 @@
 				},
 				{
 					"name": "orders by user id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -544,11 +530,8 @@
 				},
 				{
 					"name": "items in order by order id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -673,15 +656,12 @@
 				},
 				{
 					"name": "cart by user id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -713,7 +693,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 3\r\n}",
+							"raw": "{\r\n    \"u_id\": 66\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -746,7 +726,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 4,\r\n    \"c_amount\": 3\r\n}",
+							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 5,\r\n    \"c_amount\": 3\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -754,7 +734,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/cart",
+							"raw": "http://127.0.0.1:5000/rumzon/cart/add",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -765,7 +745,8 @@
 							"port": "5000",
 							"path": [
 								"rumzon",
-								"cart"
+								"cart",
+								"add"
 							]
 						}
 					},
@@ -778,7 +759,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 4,\r\n    \"c_amount\": 3\r\n}",
+							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 5,\r\n    \"c_amount\": 6\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -810,7 +791,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 4,\r\n    \"c_amount\": 3\r\n}",
+							"raw": "{\r\n    \"item_id\": 69,\r\n    \"u_id\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -842,7 +823,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 5\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -925,15 +906,12 @@
 				},
 				{
 					"name": "likes by user id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 5\r\n}",
+							"raw": "{\r\n    \"u_id\": 38\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -961,11 +939,8 @@
 				},
 				{
 					"name": "likes by item id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1002,7 +977,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4,\r\n    \"item_id\": 4\r\n}",
+							"raw": "{\r\n    \"u_id\": 38,\r\n    \"item_id\": 111\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1107,11 +1082,8 @@
 			"item": [
 				{
 					"name": "most bought items",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1144,11 +1116,8 @@
 				},
 				{
 					"name": "most bought categories",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -1260,15 +1229,12 @@
 			"item": [
 				{
 					"name": "user most popular items",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 4,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1276,7 +1242,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/35/hot/items",
+							"raw": "http://127.0.0.1:5000/rumzon/users/hot/items",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1288,7 +1254,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"35",
 								"hot",
 								"items"
 							]
@@ -1298,15 +1263,12 @@
 				},
 				{
 					"name": "user most popular categories",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 35,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1314,7 +1276,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/35/hot/category",
+							"raw": "http://127.0.0.1:5000/rumzon/users/hot/category",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1326,7 +1288,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"35",
 								"hot",
 								"category"
 							]
@@ -1337,10 +1298,19 @@
 				{
 					"name": "user least expensive item purchase",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/38/itemsinorder/min",
+							"raw": "http://127.0.0.1:5000/rumzon/users/itemsinorder/min",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1352,7 +1322,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"itemsinorder",
 								"min"
 							]
@@ -1363,10 +1332,19 @@
 				{
 					"name": "user most expensive item purchase",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/35/itemsinorder/max",
+							"raw": "http://127.0.0.1:5000/rumzon/users/itemsinorder/max",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1378,7 +1356,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"35",
 								"itemsinorder",
 								"max"
 							]
@@ -1389,10 +1366,19 @@
 				{
 					"name": "user least expensive order",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/38/orders/min",
+							"raw": "http://127.0.0.1:5000/rumzon/users/orders/min",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1404,7 +1390,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"orders",
 								"min"
 							]
@@ -1415,10 +1400,19 @@
 				{
 					"name": "user most expensive order",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"u_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://127.0.0.1:5000/rumzon/users/38/orders/max",
+							"raw": "http://127.0.0.1:5000/rumzon/users/orders/max",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -1430,7 +1424,6 @@
 							"path": [
 								"rumzon",
 								"users",
-								"38",
 								"orders",
 								"max"
 							]
