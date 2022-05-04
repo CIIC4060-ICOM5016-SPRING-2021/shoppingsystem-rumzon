@@ -158,7 +158,9 @@ class ItemsInCartController:
         if daoRes:
             understockedItems = []
             for row in daoRes:
-                stockRes = ItemDAO().checkStockByID(row[0], row[2])
+                print(row[0])
+                print(row[3])
+                stockRes = ItemDAO().checkStockByID(row[0], row[3])
                 if stockRes:
                     itemDic = {}
                     itemDic['Item ID'] = stockRes[0][0]
@@ -177,7 +179,7 @@ class ItemsInCartController:
             o_id = orderRes[0][1]
             result = []
             for row in daoRes:
-                itemsInOrderDao.buyItemFromCart(row[0], o_id, row[2])
+                itemsInOrderDao.buyItemFromCart(row[0], o_id, row[3])
                 result.append(self.dictionary(row))
             self.dao.clearUserCartByID(json['u_id'])
             return OrderController().getByID(o_id)
