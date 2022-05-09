@@ -155,6 +155,8 @@ class UserController:
             dic = {}
             for row in daoRes:
                 dic['User ID'] = row[0]
+                dic['Username'] = row[1]
+                dic['IsAdmin'] = row[2]
             return jsonify(dic), 200
         else:
             return ("User or Password incorrect"), 404

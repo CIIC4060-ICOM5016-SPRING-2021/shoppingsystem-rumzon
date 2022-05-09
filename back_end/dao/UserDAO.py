@@ -97,7 +97,7 @@ class UserDAO:
 
     def loginUsername(self, username, u_password):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT u_id FROM users "
+        cursor.execute("SELECT u_id, username, isAdmin FROM users "
                        "WHERE username = '%s' and u_password = '%s'" % (username, u_password))
         res = []
         for row in cursor:
@@ -106,7 +106,7 @@ class UserDAO:
 
     def loginEmail(self, u_email, u_password):
         cursor = self.connection.cursor()
-        cursor.execute("SELECT u_id FROM users "
+        cursor.execute("SELECT u_id, username, isAdmin FROM users "
                        "WHERE u_email = '%s' and u_password = '%s'" % (u_email, u_password))
         res = []
         for row in cursor:
