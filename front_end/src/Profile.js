@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Input, Header, Divider, Button, Text } from "semantic-ui-react";
+import { Message, Card, Modal, Header, Divider, Button, Text } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -44,6 +44,9 @@ class Profile extends Component{
     render() {
         if (this.state.loggedIn) {
             return <>
+                <Modal>
+
+                </Modal>
                 <Header as='h2'>Username</Header>
                 <Header as='h4'> {this.state.username} </Header>
                 <Button content='Change Username' color="yellow" onClick={() => { }} />
