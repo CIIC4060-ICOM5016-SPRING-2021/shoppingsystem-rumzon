@@ -26,8 +26,9 @@ function LoginPage(){
         api.post('/login', { "user": user, "password": password }).then(res => {
             setEnterCredentials(false);
             setWrongLogin(false);
-            localStorage.removeItem("userID");
             localStorage.setItem("userID", res.data["User ID"]);
+            localStorage.setItem("username", res.data["Username"]);
+            localStorage.setItem("isAdmin", res.data["IsAdmin"]);
             login();
         }).catch(error => {
             if (error.response.status == 400) {
@@ -44,9 +45,16 @@ function LoginPage(){
     }
             
     return<> 
-        <Segment>
-            <Header dividing textAlign="center" size="huge">RUMZON</Header>
-            <Segment placeholder>
+        <Segment inverted>
+            <Header
+                as='h1'
+                content='RUMZON'
+                textAlign='center'
+                style={{
+                    fontSize: '3.5em',
+                    fontWeight: 'bold',
+                }}> RUMZON </Header>
+            <Segment placeholder invert>
                 <Grid columns={2} relaxed='very' stackable>
                     <Grid.Column>
                         <Form>
@@ -60,7 +68,7 @@ function LoginPage(){
                             />
                             <Form.Input
                                 icon='lock'
-                                iconPosition='left'
+                                iconPosition='left'    
                                 label='Password'
                                 type='password'
                                 value={password}

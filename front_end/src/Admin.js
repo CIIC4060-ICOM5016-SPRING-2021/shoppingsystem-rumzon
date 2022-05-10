@@ -8,7 +8,7 @@ const api = axios.create({
 })
 
 
-class Products extends Component{
+class Admin extends Component{
 
     state = {
         items: []
@@ -145,4 +145,4 @@ class Products extends Component{
     }
 }
 
-export default Products;
+export default Admin;
