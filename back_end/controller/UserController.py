@@ -64,14 +64,14 @@ class UserController:
 
         if oldjson:
             username = oldjson['Username']
-            u_email = oldjson['Email']
+            u_email = oldjson['Email'].lower()
             u_password = oldjson['Password']
 
             emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
 
             if reqjson['username'] != reqjson['username'].replace(' ', ''):
                 return jsonify('Username must not have spaces'), 400
-            if not (re.search(emailRegex, reqjson['u_email'])) and reqjson['u_email'] != '':
+            if not (re.search(emailRegex, reqjson['u_email'].lower())) and reqjson['u_email'].lower() != '':
                 return jsonify('Enter Valid Email'), 400
             if not isinstance(reqjson['isAdmin'], bool) and reqjson['isAdmin'] != '':
                 return jsonify('isAdmin must be Boolean'), 400
@@ -83,12 +83,12 @@ class UserController:
                 else:
                     username = reqjson['username']
 
-            if reqjson['u_email'].replace(' ', '') != '' and reqjson['u_email'] != oldjson['Email']:
-                emailInvalid = self.checkEmail(reqjson['u_email'])
+            if reqjson['u_email'].lower().replace(' ', '') != '' and reqjson['u_email'].lower() != oldjson['Email'].lower():
+                emailInvalid = self.checkEmail(reqjson['u_email'].lower())
                 if emailInvalid:
                     return jsonify('Email already taken'), 400
                 else:
-                    u_email = reqjson['u_email']
+                    u_email = reqjson['u_email'].lower()
 
             if reqjson['u_password'] != '':
                 u_password = reqjson['u_password']
@@ -107,7 +107,7 @@ class UserController:
         try:
             if json['username'] == '':
                 return jsonify('Enter Username'), 400
-            if json['u_email'] == '':
+            if json['u_email'].lower() == '':
                 return jsonify('Enter Email'), 400
             if json['u_password'] == '':
                 return jsonify('Enter Password'), 400
@@ -118,17 +118,17 @@ class UserController:
         emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         if json['username'] != json['username'].replace(' ', ''):
             return jsonify('Username must not have spaces'), 400
-        if not (re.search(emailRegex, json['u_email'])):
+        if not (re.search(emailRegex, json['u_email'].lower())):
             return jsonify('Enter Valid Email'), 400
         userInvalid = self.checkUsername(json['username'])
         if userInvalid:
             return jsonify('Username already taken'), 400
-        emailInvalid = self.checkEmail(json['u_email'])
+        emailInvalid = self.checkEmail(json['u_email'].lower())
         if emailInvalid:
             return jsonify('Email already taken'), 400
 
         username = json['username']
-        u_email = json['u_email']
+        u_email = json['u_email'].lower()
         u_password = json['u_password']
         isAdmin = json['isAdmin']
 
@@ -147,8 +147,8 @@ class UserController:
             return ("Enter Password"), 400
 
         emailRegex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-        if (re.search(emailRegex, json['user'])):
-            daoRes = self.dao.loginEmail(json['user'], json['password'])
+        if (re.search(emailRegex, json['user'].lower())):
+            daoRes = self.dao.loginEmail(json['user'].lower(), json['password'])
         else:
             daoRes= self.dao.loginUsername(json['user'], json['password'])
         if daoRes:
