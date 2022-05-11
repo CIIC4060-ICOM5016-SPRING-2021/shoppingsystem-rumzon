@@ -50,16 +50,19 @@ class ItemController:
             return jsonify("'Sort By' must be 'price' or 'name'"), 400
         if json['sortType'].lower() != 'descending' and json['sortType'].lower() != 'ascending':
             return jsonify("'Sort Type' must be 'ascending' or 'descending'"), 400
+        if not self.category_list.__contains__(json['category']) and json['category'] != 'all':
+            return jsonify("Category '%s' does not exist" % json['category']), 400
 
+        print(json['category'])
         daoRes = []
         if json['sortBy'].lower() == 'price' and json['sortType'].lower() == 'ascending':
-            daoRes = self.dao.getAllAscendingPrice()
+            daoRes = self.dao.getAllAscendingPrice(json['category'])
         elif json['sortBy'].lower() == 'price' and json['sortType'].lower() == 'descending':
-            daoRes = self.dao.getAllDescendingPrice()
+            daoRes = self.dao.getAllDescendingPrice(json['category'])
         elif json['sortBy'].lower() == 'name' and json['sortType'].lower() == 'ascending':
-            daoRes = self.dao.getAllAscendingName()
+            daoRes = self.dao.getAllAscendingName(json['category'])
         elif json['sortBy'].lower() == 'name' and json['sortType'].lower() == 'descending':
-            daoRes = self.dao.getAllDescendingName()
+            daoRes = self.dao.getAllDescendingName(json['category'])
 
         if daoRes:
             result = []

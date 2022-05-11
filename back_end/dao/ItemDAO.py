@@ -32,10 +32,16 @@ class ItemDAO:
         self.connection.close()
         return res
 
-    def getAllAscendingPrice(self):
+    def getAllAscendingPrice(self, category):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items WHERE isActive = True ORDER BY i_price ASC')
+        if category == 'all':
+            query = 'SELECT item_id, i_name, i_category, i_stock, i_price ' \
+                    'FROM items WHERE isActive = True ORDER BY i_price ASC'
+            cursor.execute(query)
+        else:
+            query = "SELECT item_id, i_name, i_category, i_stock, i_price FROM items " \
+                    "WHERE isActive = True and i_category = '%s' ORDER BY i_price ASC" % category
+            cursor.execute(query)
         res = []
         for row in cursor:
             res.append(row)
@@ -43,10 +49,16 @@ class ItemDAO:
         self.connection.close()
         return res
 
-    def getAllDescendingPrice(self):
+    def getAllDescendingPrice(self, category):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items WHERE isActive = True ORDER BY i_price DESC')
+        if category == 'all':
+            query = 'SELECT item_id, i_name, i_category, i_stock, i_price ' \
+                    'FROM items WHERE isActive = True ORDER BY i_price DESC'
+            cursor.execute(query)
+        else:
+            query = "SELECT item_id, i_name, i_category, i_stock, i_price FROM items " \
+                    "WHERE isActive = True and i_category = '%s' ORDER BY i_price DESC" % category
+            cursor.execute(query)
         res = []
         for row in cursor:
             res.append(row)
@@ -54,10 +66,16 @@ class ItemDAO:
         self.connection.close()
         return res
 
-    def getAllAscendingName(self):
+    def getAllAscendingName(self, category):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items WHERE isActive = True ORDER BY i_name ASC')
+        if category == 'all':
+            query = 'SELECT item_id, i_name, i_category, i_stock, i_price ' \
+                    'FROM items WHERE isActive = True ORDER BY i_name ASC'
+            cursor.execute(query)
+        else:
+            query = "SELECT item_id, i_name, i_category, i_stock, i_price FROM items " \
+                    "WHERE isActive = True and i_category = '%s' ORDER BY i_name ASC" % category
+            cursor.execute(query)
         res = []
         for row in cursor:
             res.append(row)
@@ -65,11 +83,16 @@ class ItemDAO:
         self.connection.close()
         return res
 
-    def getAllDescendingName(self):
+    def getAllDescendingName(self, category):
         cursor = self.connection.cursor()
-        cursor.execute('SELECT item_id, i_name, i_category, i_stock, i_price '
-                       'FROM items WHERE isActive = True '
-                       'ORDER BY i_name DESC')
+        if category == 'all':
+            query = 'SELECT item_id, i_name, i_category, i_stock, i_price ' \
+                    'FROM items WHERE isActive = True ORDER BY i_name DESC'
+            cursor.execute(query)
+        else:
+            query = "SELECT item_id, i_name, i_category, i_stock, i_price FROM items " \
+                    "WHERE isActive = True and i_category = '%s' ORDER BY i_name DESC" % category
+            cursor.execute(query)
         res = []
         for row in cursor:
             res.append(row)
