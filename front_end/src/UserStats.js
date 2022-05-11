@@ -102,72 +102,62 @@ class UserStats extends Component {
         </>
     }
 
-    checkIfMostExpensiveEmpty = () => {
-        if (this.state.mostExpensive.length > 0) {
-            for (let i = 0; i < this.state.mostExpensive.length; i++) {
-                return this.state.mostExpensive[i];
-            }
-        } else {
-            return "NO ITEM";
-        }
-    }
-
     DisplayMostExpensiveItem = () => {
-        return <>
-            <Statistic.Group>
-                <Statistic>
-                    <Statistic.Label>Item Name</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Item Name"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Category</Statistic.Label>
-                    <Statistic.Value>
-                        {this.checkIfMostExpensiveEmpty()["Category"]}
-                    </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Order Ammount</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Order Ammount"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Total</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Total"]}</Statistic.Value>
-                </Statistic>
-            </Statistic.Group>
-        </>
-    }
-
-    checkIfCheapestEmpty = () => {
-        if (this.state.cheapest.length > 0) {
-            for (let i = 0; i < this.state.cheapest.length; i++) {
-                return this.state.cheapest[i];
-            }
-        } else {
-            return "NO ITEM";
-        }
+        return this.state.mostExpensive.map(item => {
+            return <>
+                <div class="center">
+                    <Statistic.Group size="tiny">
+                        <Statistic>
+                            <Statistic.Label>Item Name</Statistic.Label>
+                            <Statistic.Value>{item["Item Name"]}</Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Category</Statistic.Label>
+                            <Statistic.Value>
+                                {item["Category"]}
+                            </Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Order Ammount</Statistic.Label>
+                            <Statistic.Value>{item["Order Ammount"]}</Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Total</Statistic.Label>
+                            <Statistic.Value>{item["Total"]}</Statistic.Value>
+                        </Statistic>
+                    </Statistic.Group>
+                </div> 
+                <Divider hidden/>
+            </>
+        });
     }
 
     DisplayCheapestItem = () => {
-        return <>
-            <Statistic.Group>
-                <Statistic>
-                    <Statistic.Label>Item Name</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Item Name"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Category</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Category"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Order Ammount</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Order Ammount"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Total</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Total"]}</Statistic.Value>
-                </Statistic>
-            </Statistic.Group>
-        </>
+        return this.state.cheapest.map(item => {
+            return <>
+                <div class="center">
+                    <Statistic.Group size="tiny">
+                        <Statistic>
+                            <Statistic.Label>Item Name</Statistic.Label>
+                            <Statistic.Value>{item["Item Name"]}</Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Category</Statistic.Label>
+                            <Statistic.Value>{item["Category"]}</Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Order Ammount</Statistic.Label>
+                            <Statistic.Value>{item["Order Ammount"]}</Statistic.Value>
+                        </Statistic>
+                        <Statistic>
+                            <Statistic.Label>Total</Statistic.Label>
+                            <Statistic.Value>{item["Total"]}</Statistic.Value>
+                        </Statistic>
+                    </Statistic.Group>
+                </div>
+                <Divider hidden />
+            </>
+        });
     }
 
     render() {
@@ -180,14 +170,10 @@ class UserStats extends Component {
                 <this.DisplayMostBoughtCategories />
                 <Divider />
                 <Header as='h1'>Your Most Expensive Purchase</Header>
-                <div class="center">
                     <this.DisplayMostExpensiveItem />
-                </div>
                 <Divider />
                 <Header as='h1'>Your Least Expensive Purchase</Header>
-                <div class="center">
                     <this.DisplayCheapestItem />
-                </div>
             </Container>
         } else {
                 return <>
@@ -200,7 +186,7 @@ class UserStats extends Component {
 
     }
 
-    renderActiveShape = (props: any) => {
+    renderActiveShape = (props) => {
         const RADIAN = Math.PI / 180;
         const {
             cx,
@@ -298,9 +284,9 @@ class UserStats extends Component {
                             fill="#0084d8"
                             dataKey="Purchase Count"
                             onMouseEnter={onPieEnter}
+                            label                            
                         />
                     </PieChart>
-
                 </div >
             </div >
         );
@@ -329,6 +315,7 @@ class UserStats extends Component {
                             outerRadius={296}
                             fill="#067"
                             dataKey="Purchase Count"
+                            label
                             onMouseEnter={onPieEnter}
                         />
                     </PieChart>

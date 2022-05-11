@@ -56,7 +56,7 @@ function MainView() {
         }
     ]
 
-    if (localStorage.getItem("isAdmin") == 'true') {
+    if (localStorage.getItem("isAdmin") === 'true') {
         console.log("Not Admin");
         panes.push({
             menuItem: 'Admin', render: () =>
@@ -79,7 +79,7 @@ function MainView() {
                             style={{
                                 fontSize: '3.5em',
                                 fontWeight: 'bold',
-                            }}> <Image circular size='medium' src='/man.png' /> RUMZON
+                            }}> <Image rounded style={{width: '85px'}} src='/rumzon-logo.jpeg' /> RUMZON
                         </Header>
                     </Segment>
                 </Menu.Item>
