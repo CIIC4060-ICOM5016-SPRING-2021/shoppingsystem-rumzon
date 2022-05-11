@@ -107,8 +107,8 @@ class Admin extends Component{
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui two buttons'>
-                        <Button content='Add to Cart' color="green" onClick={() => { this.handleAddToCart(item) }} />
-                        <Button content='Add to Wishlist' color="blue" onClick={() => { this.handleAddToWishlist(item) }} />
+                        <Button content='Modify Product' color="blue" onClick={() => { console.log("PPPUPU") }} />
+                        <Button content='Delete Product' color="red" onClick={() => { SVGFEMorphologyElement() }} />
                     </div>
                 </Card.Content>
             </Card>
