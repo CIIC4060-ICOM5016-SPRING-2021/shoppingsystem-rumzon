@@ -1,36 +1,31 @@
 import React, { Component, useState, useCallback } from 'react';
-import { Container, Message, Header, Statistic, Divider } from "semantic-ui-react";
-import { PieChart, Pie, Sector } from "recharts";
+import { Container, Card, Image, Header, Statistic, Divider } from "semantic-ui-react";
+import { Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis, PieChart, Pie, Sector } from "recharts";
 import axios from 'axios';
-import "./styles.css";
+import "./index.css";
 
 const api = axios.create({
-    baseURL: 'https://rumzon-db.herokuapp.com/rumzon/users/'
+    baseURL: 'https://rumzon-db.herokuapp.com/rumzon/global/'
 })
 
-class UserStats extends Component {
+class GlobalStats extends Component {
     state = {
         mostBoughtItems: [],
         mostBoughtCategories: [],
         mostExpensive: [],
-        cheapest: [],
-        loggedIn: false,
+        cheapest: []
     }
 
     constructor() {
         super();
-        if (localStorage.getItem("userID") != null) {
-            this.getMostBoughtItems();
-            this.getMostBoughtCategories();
-            this.getMostExpensiveItem();
-            this.getCheapestItem();
-            this.state.loggedIn = true;
-        }
+        this.getMostBoughtItems();
+        this.getMostBoughtCategories();
+        this.getMostExpensiveItem();
+        this.getCheapestItem();
     }
 
     getMostBoughtItems = () => {
         api.post('/hot/items', {
-            "u_id": parseInt(localStorage.getItem("userID")),
             "onlyActive": true
         }).then(res => {
             console.log(res.data);
@@ -45,7 +40,6 @@ class UserStats extends Component {
 
     getMostBoughtCategories = () => {
         api.post('/hot/category', {
-            "u_id": parseInt(localStorage.getItem("userID")),
             "onlyActive": true
         }).then(res => {
             console.log(res.data);
@@ -59,10 +53,7 @@ class UserStats extends Component {
     }
 
     getMostExpensiveItem = () => {
-        api.post('/itemsinorder/max', {
-            "u_id": parseInt(localStorage.getItem("userID")),
-            "onlyActive": true
-        }).then(res => {
+        api.get('/price/max').then(res => {
             console.log(res.data);
             this.setState({
                 mostExpensive: res.data
@@ -74,10 +65,8 @@ class UserStats extends Component {
     }
 
     getCheapestItem = () => {
-        api.post('/itemsinorder/min', {
-            "u_id": parseInt(localStorage.getItem("userID")),
-            "onlyActive": true
-        }).then(res => {
+        api.get('/price/min').then(res => {
+            console.log("cheapest item");
             console.log(res.data);
             this.setState({
                 cheapest: res.data
@@ -113,27 +102,25 @@ class UserStats extends Component {
     }
 
     DisplayMostExpensiveItem = () => {
+        let mostExpensiveItem = this.checkIfMostExpensiveEmpty()
+
         return <>
-            <Statistic.Group>
-                <Statistic>
-                    <Statistic.Label>Item Name</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Item Name"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Category</Statistic.Label>
-                    <Statistic.Value>
-                        {this.checkIfMostExpensiveEmpty()["Category"]}
-                    </Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Order Ammount</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Order Ammount"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Total</Statistic.Label>
-                    <Statistic.Value>{this.checkIfMostExpensiveEmpty()["Total"]}</Statistic.Value>
-                </Statistic>
-            </Statistic.Group>
+            <div class="center">
+                <Statistic.Group>
+                    <Statistic>
+                        <Statistic.Label>Item Name</Statistic.Label>
+                        <Statistic.Value>{mostExpensiveItem["Item Name"]}</Statistic.Value>
+                    </Statistic>
+                    <Statistic>
+                        <Statistic.Label>Category</Statistic.Label>
+                        <Statistic.Value>{mostExpensiveItem["Category"]}</Statistic.Value>
+                    </Statistic>
+                    <Statistic>
+                        <Statistic.Label>Price</Statistic.Label>
+                        <Statistic.Value>{mostExpensiveItem["Price"]}</Statistic.Value>
+                    </Statistic>
+                </Statistic.Group>
+            </div>
         </>
     }
 
@@ -148,56 +135,45 @@ class UserStats extends Component {
     }
 
     DisplayCheapestItem = () => {
+        let cheapestItem = this.checkIfCheapestEmpty()
+
         return <>
-            <Statistic.Group>
-                <Statistic>
-                    <Statistic.Label>Item Name</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Item Name"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Category</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Category"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Order Ammount</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Order Ammount"]}</Statistic.Value>
-                </Statistic>
-                <Statistic>
-                    <Statistic.Label>Total</Statistic.Label>
-                    <Statistic.Value>{this.checkIfCheapestEmpty()["Total"]}</Statistic.Value>
-                </Statistic>
-            </Statistic.Group>
+            <div class="center">
+                <Statistic.Group>
+                    <Statistic>
+                        <Statistic.Label>Item Name</Statistic.Label>
+                        <Statistic.Value>{cheapestItem["Item Name"]}</Statistic.Value>
+                    </Statistic>
+                    <Statistic>
+                        <Statistic.Label>Category</Statistic.Label>
+                        <Statistic.Value>{cheapestItem["Category"]}</Statistic.Value>
+                    </Statistic>
+                    <Statistic>
+                        <Statistic.Label>Price</Statistic.Label>
+                        <Statistic.Value>{cheapestItem["Price"]}</Statistic.Value>
+                    </Statistic>
+                </Statistic.Group>
+            </div>
         </>
     }
 
     render() {
-        if (this.state.loggedIn) {
-            return <Container textAlign="center">
-                <Header as='h1'>Your Most Bought Items</Header>
+        return <Container textAlign="center">
+            <Header as='h1'>Rumzon Most Bought Items</Header>
+            <div class="center">
                 <this.DisplayMostBoughtItems />
-                <Divider />
-                <Header as='h1'>Your Most Bought Categories</Header>
+            </div>
+            <Header as='h1'>Rumzon Most Bought Categories</Header>
+            <div class="center">
                 <this.DisplayMostBoughtCategories />
-                <Divider />
-                <Header as='h1'>Your Most Expensive Purchase</Header>
-                <div class="center">
-                    <this.DisplayMostExpensiveItem />
-                </div>
-                <Divider />
-                <Header as='h1'>Your Least Expensive Purchase</Header>
-                <div class="center">
-                    <this.DisplayCheapestItem />
-                </div>
-            </Container>
-        } else {
-                return <>
-                    <Message
-                        header='You are not logged in!'
-                        content='Please log in to view your stats.'
-                    />
-                </>
-        }
-
+            </div>
+            <Divider />
+            <Header as='h1'>Rumzon Most Expensive Item</Header>
+            <this.DisplayMostExpensiveItem />
+            <Divider />
+            <Header as='h1'>Rumzon Least Expensive Item</Header>
+            <this.DisplayCheapestItem />
+        </Container>
     }
 
     renderActiveShape = (props: any) => {
@@ -300,9 +276,8 @@ class UserStats extends Component {
                             onMouseEnter={onPieEnter}
                         />
                     </PieChart>
-
-                </div >
-            </div >
+                </div>
+            </div>
         );
     }
 
@@ -318,7 +293,7 @@ class UserStats extends Component {
         return (
             <div class="ui one column stackable center aligned page grid">
                 <div class="column wide">
-                    <PieChart width={825} height={750}>
+                    <PieChart width={850} height={750}>
                         <Pie
                             activeIndex={activeIndex}
                             activeShape={this.renderActiveShape}
@@ -338,4 +313,4 @@ class UserStats extends Component {
     }
 
 }
-export default UserStats;
+export default GlobalStats;

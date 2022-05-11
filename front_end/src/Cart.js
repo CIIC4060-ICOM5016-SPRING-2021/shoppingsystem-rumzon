@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Input, Container, Divider, Button, Icon, Dimmer, Loader, Segment } from "semantic-ui-react";
+import { Message, Card, Input, Container, Divider, Button, Icon, Table, TableCell, Header } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -37,21 +37,23 @@ class Cart extends Component{
                 </>
             }
             return <>
-                    <Container>
-                    <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
-                        <Button.Content visible>Checkout</Button.Content>
-                            <Button.Content hidden>
-                                <Icon name='shop' />
-                            </Button.Content>
-                        </Button>
-                        <Input
-                           value={this.state.cartTotal}
-                        />
-                    </Container>
-                    <Divider horizontal> </Divider>
-                    <Card.Group>
-                        <this.CartCards info={this.state.items} />
-                     </Card.Group>
+                <Container>
+                <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
+                    <Button.Content visible>Checkout</Button.Content>
+                        <Button.Content hidden>
+                            <Icon name='shop' />
+                        </Button.Content>
+                    </Button>
+                    <Input
+                        value={this.state.cartTotal}
+                    />
+                </Container>
+                <Divider horizontal> </Divider>
+                <Card.Group>
+                    <this.CartCards info={this.state.items} />
+                </Card.Group>
+                <Divider horizontal> </Divider>
+                <Button content='Clear Cart' color="red" onClick={() => { this.clearCart() }} />
             </>
         } else {
             return <>
@@ -95,7 +97,7 @@ class Cart extends Component{
     }
 
     clearCart = () => {
-        api.delete('/cart/buy', {
+        api.delete('/cart/clear', {
             data: {
                 "u_id": parseInt(localStorage.getItem("userID"))
             }
@@ -106,26 +108,33 @@ class Cart extends Component{
     }
 
     CartCards = (props) => {
-        console.log(props)
         return props.info.map(item => {
             return <Card>
                 <Card.Content>
                     <Card.Header>{item["Name"]}</Card.Header>
                     <Card.Meta>{item["Category"]}</Card.Meta>
                     <Card.Description>
-                        {item["Price"]}{" x".concat(item["Amount"])}
+                        {item["Price"]}
                     </Card.Description>
-                    <Card.Description >
-                        {item["Item Total"]}
-                    </Card.Description>
-                </Card.Content>
-                <Card.Content extra>
-                    <div className='ui two buttons'>
-                        <Button content='Remove From Cart' color="red" onClick={ () => {this.handleDeleteFromCart(item)}}/>
-                    </div>
+                    <this.AmmountButtons item={item} />
+                    <Header as="h3" textAlign="right">{item["Item Total"]}</Header>
+                    <Divider />
+                    <Button content='Remove From Cart' color="red" onClick={() => { this.handleDeleteFromCart(item) }} />
                 </Card.Content>
             </Card>
         });
+    }
+
+    AmmountButtons = (props) => {
+        console.log("ammount buttons:");
+        console.log(props);
+        return <>
+            <Table>
+                <TableCell><Button fluid icon="minus" color="grey" onClick={() => { this.handleSubstractOneFromCart(props.item) }} /></TableCell>
+                <TableCell>{" x".concat(props.item["Amount"])}</TableCell>
+                <TableCell><Button fluid icon="plus" color="grey" onClick={() => { this.handleAddToCart(props.item) }} /></TableCell>
+            </Table>
+        </>
     }
 
     handleDeleteFromCart = (item) => {
@@ -138,6 +147,53 @@ class Cart extends Component{
             console.log(res.data);
             this.getUserCart();
         })
+    }
+
+    handleAddToCart = (item) => {
+        api.post('/cart/add', {
+            "item_id": item["Item ID"],
+            "u_id": parseInt(localStorage.getItem("userID")),
+            "c_amount": 1
+        }).then(res => {
+            console.log(res.data);
+            this.getUserCart();
+        }).catch(error => {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            if (error.response.status == 400) {
+
+            }
+        })
+    }
+
+    handleSubstractOneFromCart = (item) => {
+        if ((item["Amount"] - 1) > 0) {
+            api.put('/cart', {
+                "item_id": item["Item ID"],
+                "u_id": parseInt(localStorage.getItem("userID")),
+                "c_amount": item["Amount"] - 1
+            }).then(res => {
+                console.log(res.data);
+                this.getUserCart();
+            })
+        } else {
+            this.handleDeleteFromCart(item);
+        }
+    }
+
+    handleUpdateCart = (item, newAmount) => {
+        if (newAmount > 0) {
+            api.put('/cart', {
+                "item_id": item["Item ID"],
+                "u_id": parseInt(localStorage.getItem("userID")),
+                "c_amount": newAmount
+            }).then(res => {
+                console.log(res.data);
+                this.getUserCart();
+            })
+        } else {
+            this.handleDeleteFromCart(item);
+        }
     }
 }
 
