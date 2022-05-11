@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { Message, Card, Modal, Header, Divider, Button, Text, Image, Form } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Message,  Modal, Header, Divider, Button, Form } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -246,7 +246,7 @@ class Profile extends Component {
     }
 
     changeUsername = () => {
-        if (this.state.newUser == "") {
+        if (this.state.newUser === "") {
             this.setState({ enterUsername: true, usernameTaken: false })
         } else {
             api.put('/users',
@@ -261,7 +261,7 @@ class Profile extends Component {
                     localStorage.setItem("username", res.data["Username"]);
                     window.location.reload(false);
                 }).catch(error => {
-                    if (error.response.data == "Username already taken") {
+                    if (error.response.data === "Username already taken") {
                         this.setState({ enterUsername: false, usernameTaken: true })
                     }
                     console.log(error.response.data);
@@ -271,7 +271,7 @@ class Profile extends Component {
     }
 
     changeEmail = () => {
-        if (this.state.newEmail == "") {
+        if (this.state.newEmail === "") {
             this.setState({ enterEmail: true, invalidEmail: false, emailTaken:false })
         } else {
             api.put('/users',
@@ -285,9 +285,9 @@ class Profile extends Component {
                     console.log("Changed Email");
                     window.location.reload(false);
                 }).catch(error => {
-                    if (error.response.data == "Enter Valid Email") {
+                    if (error.response.data === "Enter Valid Email") {
                         this.setState({ enterEmail: false, invalidEmail: true, emailTaken: false })
-                    } else if (error.response.data == "Email already taken") {
+                    } else if (error.response.data === "Email already taken") {
                         this.setState({ enterEmail: false, invalidEmail: false, emailTaken: true })
                     }
                     console.log(error.response.data);
@@ -297,9 +297,9 @@ class Profile extends Component {
     }
 
     changePassword = () => {
-        if (this.state.newPassword == "") {
+        if (this.state.newPassword === "") {
             this.setState({ enterPassword: true, passwordMismatch: false })
-        } else if (this.state.newPassword != this.state.confirmPassword) {
+        } else if (this.state.newPassword !== this.state.confirmPassword) {
             this.setState({ enterPassword: false, passwordMismatch: true })
         } else {
             api.put('/users',
