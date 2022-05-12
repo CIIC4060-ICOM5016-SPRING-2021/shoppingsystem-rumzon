@@ -8,7 +8,7 @@ const api = axios.create({
 })
 
 
-class Cart extends Component{
+class Cart extends Component {
 
     state = {
         items: [],
@@ -38,8 +38,8 @@ class Cart extends Component{
             }
             return <>
                 <Container>
-                <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
-                    <Button.Content visible>Checkout</Button.Content>
+                    <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
+                        <Button.Content visible>Checkout</Button.Content>
                         <Button.Content hidden>
                             <Icon name='shop' />
                         </Button.Content>
@@ -63,7 +63,6 @@ class Cart extends Component{
                 />
             </>
         }
-        
     }
 
     getUserCart = () => {
@@ -86,8 +85,8 @@ class Cart extends Component{
 
     buyCart = () => {
         api.post('/cart/buy', {
-                "u_id": parseInt(localStorage.getItem("userID"))
-            }).then(res => {
+            "u_id": parseInt(localStorage.getItem("userID"))
+        }).then(res => {
             console.log(res.data);
             this.getUserCart();
         }).catch(error => {
@@ -131,7 +130,7 @@ class Cart extends Component{
         return <>
             <Table>
                 <TableCell><Button fluid icon="minus" color="grey" onClick={() => { this.handleSubstractOneFromCart(props.item) }} /></TableCell>
-                <TableCell>{" x".concat(props.item["Amount"])}</TableCell>
+                <TableCell><Header as='h4'>{" x".concat(props.item["Amount"])}</Header></TableCell>
                 <TableCell><Button fluid icon="plus" color="grey" onClick={() => { this.handleAddToCart(props.item) }} /></TableCell>
             </Table>
         </>
