@@ -238,7 +238,7 @@ class ItemController:
         return 0 # item valid
 
     def getLeastExpensiveItem(self):
-        daoRes = self.dao.getAllAscendingPrice()
+        daoRes = self.dao.getAllAscendingPrice('all')
         cheapestPrice = -1
         if daoRes:
             res = []
@@ -254,7 +254,7 @@ class ItemController:
             return jsonify('Item Table Empty! ...or error ocurred'), 400
 
     def getMostExpensiveItem(self):
-        daoRes = self.dao.getAllDescendingPrice()
+        daoRes = self.dao.getAllDescendingPrice('all')
         cheapestPrice = -1
         if daoRes:
             res = []
