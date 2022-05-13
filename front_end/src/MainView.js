@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import UserStats from "./UserStats";
 import GlobalStats from "./GlobalStats";
 import Admin from "./Admin";
+import Orders from "./Orders";
 import "./index.css";
 
 
@@ -41,6 +42,11 @@ function MainView() {
             menuItem: 'Profile', render: () =>
                 <Tab.Pane active={isAuth}>
                     <Profile />
+                </Tab.Pane>
+        }, {
+            menuItem: 'Orders', render: () =>
+                <Tab.Pane active={isAuth}>
+                    <Orders />
                 </Tab.Pane>
         }, {
             menuItem: 'User Statistics', render: () =>

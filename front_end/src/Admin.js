@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Button, Card, Container, Icon, Menu, Divider } from "semantic-ui-react";
+import React, { Component } from 'react';
+import { Button, Card, Container, Icon, Menu, Divider, Dropdown } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -7,11 +7,26 @@ const api = axios.create({
     baseURL: 'https://rumzon-db.herokuapp.com/rumzon/'
 })
 
+const categories = [
+    { key: 0, text: 'All', value: 'all' },
+    { key: 1, text: 'Clothes', value: 'clothes' },
+    { key: 2, text: 'Electronics', value: 'electronics' },
+    { key: 3, text: 'Food', value: 'food' },
+    { key: 4, text: 'Furniture', value: 'furniture' },
+    { key: 5, text: 'Household', value: 'household' },
+    { key: 6, text: 'Kitchenware', value: 'kitchenware' },
+    { key: 7, text: 'Medicine', value: 'medicine' },
+    { key: 8, text: 'Pets', value: 'pets' },
+    { key: 9, text: 'Sports', value: 'sports' },
+    { key: 10, text: 'Supplies', value: 'supplies' },
+    { key: 11, text: 'Toys', value: 'toys' },
+]
 
 class Admin extends Component{
 
     state = {
-        items: []
+        items: [],
+        category: "all"
     }
 
     constructor() {
@@ -23,21 +38,33 @@ class Admin extends Component{
     render() {
         return <>
             <Container alignment="left">
-                <Menu secondary widths={4}>
+                <Menu secondary>
                     <Menu.Item>
-                <Button onClick={this.sortNameDescending}>
-                <Button.Content visible><Icon name='sort alphabet down' />Name Descending</Button.Content>
-                </Button>
-                </Menu.Item>
-                <Menu.Item>
-                <Button onClick={this.sortNameAscending}><Icon name='sort alphabet up' />Name Ascending</Button>
-                </Menu.Item>
-                <Menu.Item>
-                <Button onClick={this.sortPriceDescending}><Icon name='sort numeric down' />Price Descending</Button>
-                </Menu.Item>
-                <Menu.Item>
-                <Button onClick={this.sortPriceAscending}><Icon name='sort numeric up' />Price Ascending</Button>
+                        <Button onClick={() => this.sortNameDescending(this.state.category)}><Icon name='sort alphabet down' />Name Descending</Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button onClick={() => this.sortNameAscending(this.state.category)}><Icon name='sort alphabet up' />Name Ascending</Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button onClick={() => this.sortPriceDescending(this.state.category)}><Icon name='sort numeric down' />Price Descending</Button>
+                    </Menu.Item>
+                    <Menu.Item>
+                        <Button onClick={() => this.sortPriceAscending(this.state.category)}><Icon name='sort numeric up' />Price Ascending</Button>
                     </Menu.Item >
+                    <Menu.Item>
+                        <Menu compact>
+                            <Dropdown
+                                placeholder='Filter Category'
+                                icon='filter'
+                                floating
+                                labeled
+                                button
+                                className='icon'
+                                options={categories}
+                                name='category'
+                                onChange={this.handleCategoryDropdown} />
+                        </Menu>
+                    </Menu.Item>
                 </Menu>
 
                 <Divider hidden />
@@ -46,11 +73,16 @@ class Admin extends Component{
             <Card.Group>
                 <this.ProductCards info={this.state.items} />
             </Card.Group>
-            </>
+        </>
     }
 
-    sortNameDescending = () => {
-        api.post('/items/sort', { "sortBy": "name", "sortType": "descending" }).then(res => {
+    handleCategoryDropdown = (e, { name, value }) => {
+        this.sortNameAscending(value)
+        this.setState({ [name]: value })
+    }
+
+    sortNameDescending = (value) => {
+        api.post('/items/sort', { "sortBy": "name", "sortType": "descending", "category": value }).then(res => {
             console.log(res.data);
             this.setState({ items: res.data });
         }).catch(error => {
@@ -60,8 +92,8 @@ class Admin extends Component{
             console.log(error.message);
         })
     }
-    sortNameAscending = () => {
-        api.post('/items/sort', { "sortBy": "name", "sortType": "ascending" }).then(res => {
+    sortNameAscending = (value) => {
+        api.post('/items/sort', { "sortBy": "name", "sortType": "ascending", "category": value }).then(res => {
             console.log(res.data);
             this.setState({ items: res.data });
         }).catch(error => {
@@ -71,8 +103,8 @@ class Admin extends Component{
             console.log(error.message);
         })
     }
-    sortPriceDescending = () => {
-        api.post('/items/sort', { "sortBy": "price", "sortType": "descending" }).then(res => {
+    sortPriceDescending = (value) => {
+        api.post('/items/sort', { "sortBy": "price", "sortType": "descending", "category": value }).then(res => {
             console.log(res.data);
             this.setState({ items: res.data });
         }).catch(error => {
@@ -82,8 +114,8 @@ class Admin extends Component{
             console.log(error.message);
         })
     }
-    sortPriceAscending = () => {
-        api.post('/items/sort', { "sortBy": "price", "sortType": "ascending" }).then(res => {
+    sortPriceAscending = (value) => {
+        api.post('/items/sort', { "sortBy": "price", "sortType": "ascending", "category": value }).then(res => {
             console.log(res.data);
             this.setState({ items: res.data });
         }).catch(error => {
