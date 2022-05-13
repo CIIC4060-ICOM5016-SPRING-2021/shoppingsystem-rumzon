@@ -82,11 +82,12 @@ function MainView() {
                     <Segment inverted >
                         <Header
                             as='h1'
+                            textAlign='center'
                             style={{
-                                fontSize: '3.5em',
+                                fontSize: '5em',
                                 fontWeight: 'bold',
-                            }}> <Image rounded style={{width: '85px'}} src='/rumzon-logo.jpeg' /> RUMZON
-                        </Header>
+                                color: '#2ed24b'
+                            }}> <Image rounded style={{ width: '85px' }} src='/rumzon-logo.jpeg' /> UMZON </Header>
                     </Segment>
                 </Menu.Item>
 
@@ -121,13 +122,11 @@ function MainView() {
                 }}>
                     {"Hello, ".concat(localStorage.getItem("username")).concat("!")}
                 </Header>
-                <Button as='a' onClick={signOut} inverted={true}>
-                    Sign out
-                </Button>
+                <Button content='Sign out' icon='log out' color='grey' onClick={signOut} />
             </Menu.Item >
         } else {
             return <Menu.Item position='right'>
-                <Button as='a' onClick={signIn} inverted={true}>
+                <Button as='a' onClick={signIn} content='Sign out' icon='log out' color='green'>
                     Sign in
                 </Button>
             </Menu.Item>

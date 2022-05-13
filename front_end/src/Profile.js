@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Message,  Modal, Header, Divider, Button, Form } from "semantic-ui-react";
+import { Message, Modal, Header, Divider, Button, Form } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -20,13 +20,16 @@ class Profile extends Component {
         newEmail: '',
         newPassword: '',
         confirmPassword: '',
+        deleteForm: '',
         enterUsername: false,
         usernameTaken: false,
         enterEmail: false,
         emailTaken: false,
         invalidEmail: false,
         enterPassword: false,
-        passwordMismatch: false
+        passwordMismatch: false,
+        deleteUser: false,
+        deleteFormWrong: false
     }
 
     constructor() {
@@ -53,10 +56,32 @@ class Profile extends Component {
         })
     }
 
+    deleteUser = () => {
+        if (this.state.deleteForm != 'delete') {
+            this.setState({ deleteFormWrong: true })
+        } else {
+            api.delete('/users', {
+                data: {
+                    "u_id": parseInt(localStorage.getItem("userID"))
+                }
+            }).then(res => {
+                localStorage.removeItem("userID");
+                localStorage.removeItem("username");
+                localStorage.removeItem("isAdmin");
+                window.location.reload(false);
+            }).catch(error => {
+                console.log(error.response.data);
+                console.log(error.response.status);
+            })
+        }
+    }
+
     render() {
         if (this.state.loggedIn) {
             return <>
                 <this.ChangeModal />
+                <this.DeleteUserModal />
+
                 <Header as='h2'>Username</Header>
                 <Header as='h4'> {this.state.username} </Header>
                 <Button content='Change Username' color="yellow" onClick={() => this.setState({
@@ -73,6 +98,10 @@ class Profile extends Component {
                 <Button content='Change Password' color="yellow" onClick={() => this.setState({
                     modalMode: 'Password'
                 })} />
+                <Divider />
+                <Button content='Delete My Account' color="red" onClick={() => this.setState({
+                    deleteUser: true
+                })} />
             </>
         } else {
             return <>
@@ -82,6 +111,48 @@ class Profile extends Component {
                 />
             </>
         }
+    }
+
+
+    DeleteUserModal = () => {
+        return <Modal
+            open={this.state.deleteUser}
+        >
+            <Modal.Header>DELETE ACCOUNT</Modal.Header>
+            <Modal.Content>
+                <Modal.Description>
+                    <Header>Are you sure you want to delete your account?</Header>
+                </Modal.Description>
+                <Divider hidden/>
+                <Form>
+                    <Form.Input
+                        icon='delete'
+                        iconPosition='left'
+                        value={this.state.deleteForm}
+                        onChange={input => this.setState({ deleteForm: input.target.value })}
+                    />
+                </Form>
+                <Message
+                    hidden={!this.state.deleteFormWrong}
+                    color={'red'}
+                    header='Enter "delete" to confirm.'
+                />
+            </Modal.Content>
+            <Modal.Actions>
+                <Button color='black' onClick={() => this.setState({
+                    deleteUser: false
+                })}>
+                    Cancel
+                </Button>
+                <Button
+                    content="Delete my account"
+                    labelPosition='right'
+                    icon='user delete'
+                    onClick={() => this.deleteUser()}
+                    color='red'
+                />
+            </Modal.Actions>
+        </Modal>
     }
 
     ChangeModal = () => {
@@ -272,7 +343,7 @@ class Profile extends Component {
 
     changeEmail = () => {
         if (this.state.newEmail === "") {
-            this.setState({ enterEmail: true, invalidEmail: false, emailTaken:false })
+            this.setState({ enterEmail: true, invalidEmail: false, emailTaken: false })
         } else {
             api.put('/users',
                 {

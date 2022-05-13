@@ -13,11 +13,19 @@ class Orders extends Component {
         orders: [],
         loggedIn: false,
         orderId: null,
-        currOrder: []
+        currOrder: [],
+        noPurchases: false
     }
 
     render() {
         if (this.state.loggedIn) {
+            if (this.state.noPurchases) {
+                return <>
+                    <Message
+                        header='You have no purchases!'
+                    />
+                </>
+            }
             if (this.state.orderId === null) {
                 return <>
                     <Header as='h1'>Order History</Header>
@@ -55,10 +63,9 @@ class Orders extends Component {
             console.log(res.data);
             this.setState({ orders: res.data });
         }).catch(error => {
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-            console.log(error.message);
+            if (error.response.status === 404) {
+                this.setState({ noPurchases: true })
+            }
         })
     }
 

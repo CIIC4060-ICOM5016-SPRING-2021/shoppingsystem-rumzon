@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Button, Divider, Form, Grid, Header, Segment, Message } from 'semantic-ui-react';
+import { Button, Divider, Form, Grid, Header, Segment, Message, Image } from 'semantic-ui-react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -18,8 +18,12 @@ function LoginPage(){
     const [enterCredentials, setEnterCredentials] = useState(false);
     //handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
-    function login(){
+    function login() {
         navigate('/');
+    }
+    
+    function register() {
+        navigate('/register');
     }
 
     function checkLogin(){
@@ -48,15 +52,24 @@ function LoginPage(){
         <Segment inverted>
             <Header
                 as='h1'
-                content='RUMZON'
                 textAlign='center'
                 style={{
-                    fontSize: '3.5em',
+                    fontSize: '5em',
                     fontWeight: 'bold',
-                }}> RUMZON </Header>
+                    color:'#2ed24b'
+                }}> <Image rounded style={{ width: '85px' }} src='/rumzon-logo.jpeg' /> UMZON </Header>
             <Segment placeholder invert>
                 <Grid columns={2} relaxed='very' stackable>
                     <Grid.Column>
+                        <Header
+                            as='h2'
+                            content='RUMZON'
+                            textAlign='center'
+                            style={{
+                                fontSize: '2.5em',
+                                fontWeight: 'bold',
+                                paddingBottom: '1em'
+                            }}> Log In </Header>
                         <Form>
                             <Form.Input
                                 icon='user'
@@ -88,7 +101,14 @@ function LoginPage(){
                         </Form>
                     </Grid.Column>
                     <Grid.Column verticalAlign='middle'>
-                        <Button content='Sign up' icon='signup' size='small'/>
+                        <Header
+                            as='h2'
+                            content='RUMZON'
+                            textAlign='center'
+                            style={{
+                                fontWeight: 'bold',
+                            }}> Create a new account! </Header>
+                        <Button content='Sign up' icon='signup' size='small' primary onClick={() => register()} />
                     </Grid.Column>
                 </Grid>
 

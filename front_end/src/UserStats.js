@@ -15,16 +15,19 @@ class UserStats extends Component {
         mostExpensive: [],
         cheapest: [],
         loggedIn: false,
+        noPurchases: false
     }
 
     constructor() {
         super();
         if (localStorage.getItem("userID") != null) {
-            this.getMostBoughtItems();
-            this.getMostBoughtCategories();
-            this.getMostExpensiveItem();
-            this.getCheapestItem();
             this.state.loggedIn = true;
+            this.getMostBoughtItems();
+            if (!this.state.noPurchases) {
+                this.getMostBoughtCategories();
+                this.getMostExpensiveItem();
+                this.getCheapestItem();
+            }
         }
     }
 
@@ -38,8 +41,9 @@ class UserStats extends Component {
                 mostBoughtItems: res.data
             });
         }).catch(error => {
-            console.log(error.response.data);
-            console.log(error.response.status);
+            if (error.response.status === 404) {
+                this.setState({ noPurchases: true })
+            }
         })
     }
 
@@ -162,19 +166,27 @@ class UserStats extends Component {
 
     render() {
         if (this.state.loggedIn) {
-            return <Container textAlign="center">
-                <Header as='h1'>Your Most Bought Items</Header>
-                <this.DisplayMostBoughtItems />
-                <Divider />
-                <Header as='h1'>Your Most Bought Categories</Header>
-                <this.DisplayMostBoughtCategories />
-                <Divider />
-                <Header as='h1'>Your Most Expensive Purchase</Header>
+            if (this.state.noPurchases) {
+                return <>
+                    <Message
+                        header='You have no purchases!'
+                    />
+                </>
+            } else {
+                return <Container textAlign="center">
+                    <Header as='h1'>Your Most Bought Items</Header>
+                    <this.DisplayMostBoughtItems />
+                    <Divider />
+                    <Header as='h1'>Your Most Bought Categories</Header>
+                    <this.DisplayMostBoughtCategories />
+                    <Divider />
+                    <Header as='h1'>Your Most Expensive Purchase</Header>
                     <this.DisplayMostExpensiveItem />
-                <Divider />
-                <Header as='h1'>Your Least Expensive Purchase</Header>
+                    <Divider />
+                    <Header as='h1'>Your Least Expensive Purchase</Header>
                     <this.DisplayCheapestItem />
-            </Container>
+                </Container>
+            }
         } else {
                 return <>
                     <Message

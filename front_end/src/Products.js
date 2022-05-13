@@ -39,18 +39,19 @@ class Products extends Component {
         return <>
             <Container alignment="left">
                 <Menu secondary>
-                    <Menu.Item>
-                        <Button onClick={() => this.sortNameDescending(this.state.category)}><Icon name='sort alphabet down' />Name Descending</Button>
-                    </Menu.Item>
+                    
                     <Menu.Item>
                         <Button onClick={() => this.sortNameAscending(this.state.category)}><Icon name='sort alphabet up' />Name Ascending</Button>
                     </Menu.Item>
                     <Menu.Item>
-                        <Button onClick={() => this.sortPriceDescending(this.state.category)}><Icon name='sort numeric down' />Price Descending</Button>
+                        <Button onClick={() => this.sortNameDescending(this.state.category)}><Icon name='sort alphabet down' />Name Descending</Button>
                     </Menu.Item>
                     <Menu.Item>
                         <Button onClick={() => this.sortPriceAscending(this.state.category)}><Icon name='sort numeric up' />Price Ascending</Button>
                     </Menu.Item >
+                    <Menu.Item>
+                        <Button onClick={() => this.sortPriceDescending(this.state.category)}><Icon name='sort numeric down' />Price Descending</Button>
+                    </Menu.Item>
                     <Menu.Item>
                         <Menu compact>
                             <Dropdown
