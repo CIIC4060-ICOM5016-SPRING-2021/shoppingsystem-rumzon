@@ -372,6 +372,8 @@ class GlobalStats extends Component {
                     fill="#067"
                     dataKey="Purchase Count"
                     nameKey="Category"
+                    label
+                    paddingAngle = {1}
                 >
                     {this.state.mostBoughtCategories.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
