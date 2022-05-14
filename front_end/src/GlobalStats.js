@@ -1,6 +1,6 @@
 import React, { Component, useState, useCallback } from 'react';
 import { Container, Header, Statistic, Divider } from "semantic-ui-react";
-import { ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip, Pie, PieChart } from "recharts";
+import { ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip, Pie, PieChart, Cell } from "recharts";
 import axios from 'axios';
 import "./index.css";
 
@@ -8,8 +8,7 @@ const api = axios.create({
     baseURL: 'https://rumzon-db.herokuapp.com/rumzon/global/'
 })
 
-const itemsArray = []
-
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#B413EC', '#FF1493', '#32CD32', '#B03060', '#EE82EE'];
 class GlobalStats extends Component {
     state = {
         mostBoughtItems: [],
@@ -204,6 +203,7 @@ class GlobalStats extends Component {
 
     ItemsPieChart = () => {
         return (
+        <div class="center">
             <RadialBarChart
                 width={512}
                 height={512}
@@ -218,6 +218,7 @@ class GlobalStats extends Component {
                 {/* <Legend iconSize={10} width={120} height={140} /> */}
                 <Tooltip />
             </RadialBarChart>
+        </div>
         );
     }
 
@@ -357,8 +358,10 @@ class GlobalStats extends Component {
     //     );
     // }
 
+
     CoolCategoriesPieChart = () => {
         return (
+        <div class="center">
             <PieChart width={850} height={750}>
                 <Pie
                     data={this.state.mostBoughtCategories}
@@ -369,10 +372,16 @@ class GlobalStats extends Component {
                     fill="#067"
                     dataKey="Purchase Count"
                     nameKey="Category"
+                >
+                    {this.state.mostBoughtCategories.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
                 />
                 <Legend />
                 <Tooltip />
             </PieChart>
+        </div>
         );
     }
 
