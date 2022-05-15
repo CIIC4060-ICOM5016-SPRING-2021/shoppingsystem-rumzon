@@ -22,12 +22,25 @@ const categories = [
     { key: 11, text: 'Toys', value: 'toys' },
 ]
 
+const modalCategories = [
+    { key: 1, text: 'Clothes', value: 'clothes' },
+    { key: 2, text: 'Electronics', value: 'electronics' },
+    { key: 3, text: 'Food', value: 'food' },
+    { key: 4, text: 'Furniture', value: 'furniture' },
+    { key: 5, text: 'Household', value: 'household' },
+    { key: 6, text: 'Kitchenware', value: 'kitchenware' },
+    { key: 7, text: 'Medicine', value: 'medicine' },
+    { key: 8, text: 'Pets', value: 'pets' },
+    { key: 9, text: 'Sports', value: 'sports' },
+    { key: 10, text: 'Supplies', value: 'supplies' },
+    { key: 11, text: 'Toys', value: 'toys' },
+]
+
 class AdminPage extends Component {
 
     state = {
         items: [],
         category: 'all',
-        editItem: false,
         itemID: '',
         itemName: '',
         itemCategory: '',
@@ -35,7 +48,8 @@ class AdminPage extends Component {
         itemPrice: '',
         error: 0,
         deleteItem: false,
-        addItem: false
+        itemModal: false,
+        newItem: false
     }
 
     constructor() {
@@ -49,12 +63,11 @@ class AdminPage extends Component {
     render() {
         return <>
             <Container alignment="left">
-                <this.EditItemModal />
-                <this.AddItemModal />
+                <this.AddModifyItemModal />
                 <this.deleteModal />
                 <Menu secondary>
                     <Menu.Item>
-                        <Button color='blue' onClick={() => this.setState({ addItem: true })}><Icon name='add' />Add Item</Button>
+                        <Button color='blue' onClick={() => this.setState({ itemModal: true, newItem: true })}><Icon name='add' />Add Item</Button>
                     </Menu.Item>
                     <Menu.Item>
                         <Button onClick={() => this.sortNameAscending(this.state.category)}><Icon name='sort alphabet up' />Name Ascending</Button>
@@ -151,7 +164,7 @@ class AdminPage extends Component {
                         {item["Category"]}
                     </Card.Description>
                     <Card.Description>
-                        {"In Stock: ".concat(item["Stock"])}
+                        {"In Stock: " + item["Stock"]}
                     </Card.Description>
                 </Card.Content>
                 <Card.Content extra>
@@ -161,7 +174,8 @@ class AdminPage extends Component {
                             this.setState({
                                 deleteItem: true,
                                 itemID: item["Item ID"]
-                            }) }} />
+                            })
+                        }} />
                     </div>
                 </Card.Content>
             </Card>
@@ -181,7 +195,8 @@ class AdminPage extends Component {
                     itemCategory: res.data["Category"],
                     itemStock: res.data["Stock"],
                     itemPrice: res.data["Price"].substring(1),
-                    editItem: true
+                    itemModal: true,
+                    newItem: false
                 });
             }).catch(error => {
                 console.log(error.response.data);
@@ -189,11 +204,11 @@ class AdminPage extends Component {
             })
     }
 
-    EditItemModal = () => {
+    AddModifyItemModal = () => {
         return <Modal
-            open={this.state.editItem}
+            open={this.state.itemModal}
         >
-            <Modal.Header>Modify Product</Modal.Header>
+            <Modal.Header content={this.state.newItem ? "Create New Product" : "Modify Product"} />
             <Modal.Content>
                 <Form>
                     <Form.Input
@@ -202,7 +217,7 @@ class AdminPage extends Component {
                         label='Item Name'
                         placeholder='Name'
                         value={this.state.itemName}
-                        error={(this.state.error === 5 && this.state.itemName === '')}
+                        error={(this.state.error === 4 && this.state.itemName === '')}
                         onChange={input => this.setState({ itemName: input.target.value })}
                     />
                     <Form.Input
@@ -211,7 +226,7 @@ class AdminPage extends Component {
                         label='Price'
                         placeholder='Price'
                         value={this.state.itemPrice}
-                        error={(this.state.error === 5 && this.state.itemPrice === '')}
+                        error={(this.state.error === 4 && this.state.itemPrice === '')}
                         onChange={input => this.setState({ itemPrice: input.target.value })}
                     />
                     <Form.Input
@@ -220,7 +235,7 @@ class AdminPage extends Component {
                         label='Stock'
                         placeholder='Stock'
                         value={this.state.itemStock}
-                        error={(this.state.error === 5 && this.state.itemStock === '')}
+                        error={(this.state.error === 4 && this.state.itemStock === '')}
                         onChange={input => this.setState({ itemStock: input.target.value })}
                     />
                     <Header as="h4">Category</Header>
@@ -230,25 +245,28 @@ class AdminPage extends Component {
                         labeled
                         button
                         className='icon'
-                        options={categories}
-                        value={this.state.itemCategory}
+                        options={modalCategories}
                         name='category'
+                        placeholder='Choose Item Category'
+                        value={this.state.itemCategory}
+                        error={(this.state.error === 4 && this.state.itemCategory === '')}
                         onChange={this.handleCategoryEdit} />
                 </Form>
                 <Message
                     hidden={this.state.error != 1}
                     color={'red'}
-                    header='Item name and category pair already exist.'
+                    header={"'" + this.state.itemName + "'" + " in '" + this.state.itemCategory + "' already exists."}
                 />
+
                 <Message
                     hidden={this.state.error != 2}
                     color={'red'}
-                    header='Please enter a valid stock ammount.'
+                    header="Please enter a valid price. Do not use letters or symbols (including '$')."
                 />
                 <Message
                     hidden={this.state.error != 3}
                     color={'red'}
-                    header='Please enter a valid price.'
+                    header='Please enter a valid stock amount. Do not use letters or symbols.'
                 />
                 <Message
                     hidden={this.state.error != 4}
@@ -264,176 +282,123 @@ class AdminPage extends Component {
                         itemCategory: '',
                         itemStock: '',
                         itemPrice: '',
-                        editItem: false
+                        itemModal: false,
+                        error: 0
                     })}>Cancel</Button>
                 <Button
                     content="Save Changes"
                     labelPosition='right'
                     icon='checkmark'
-                    onClick={() => { this.handleModifyItem() }}
+                    onClick={() => { { this.handleModifyAddItem() } }}
                     positive
                 />
             </Modal.Actions>
         </Modal>
     }
 
-    handleCategoryEdit = (e, { name, value }) => {
+    handleCategoryEdit = (e, { value }) => {
         this.setState({ itemCategory: value })
     }
-    
-    handleModifyItem = () => {
-        api.put('/items',
-            {
-                "u_id": parseInt(localStorage.getItem("userID")),
-                "item_id": parseInt(this.state.itemID),
-                "i_category": this.state.itemCategory,
-                "i_name": this.state.itemName,
-                "i_price": parseFloat(this.state.itemPrice),
-                "i_stock": parseInt(this.state.itemStock)
-            }).then(res => {
-                console.log("Changed Item");
-                console.log(res);
-                window.location.reload(false);
-            }).catch(error => {
-                console.log(error.response.data);
-                console.log(error.response.status);
+
+    handleModifyAddItem = () => {
+        if (this.state.itemName == '' || this.state.itemCategory == '' || this.state.itemPrice == '' || this.state.itemStock == '') {
+            this.setState({
+                error: 4
             })
-    }
-
-
-    AddItemModal = () => {
-        return <Modal
-            open={this.state.addItem}
-        >
-            <Modal.Header>Create New Product</Modal.Header>
-            <Modal.Content>
-                <Form>
-                    <Form.Input
-                        icon='pencil alternate'
-                        iconPosition='left'
-                        label='Item Name'
-                        placeholder='Name'
-                        value={this.state.itemName}
-                        error={(this.state.error === 5 && this.state.itemName === '')}
-                        onChange={input => this.setState({ itemName: input.target.value })}
-                    />
-                    <Form.Input
-                        icon='dollar sign'
-                        iconPosition='left'
-                        label='Price'
-                        placeholder='Price'
-                        value={this.state.itemPrice}
-                        error={(this.state.error === 5 && this.state.itemPrice === '')}
-                        onChange={input => this.setState({ itemPrice: input.target.value })}
-                    />
-                    <Form.Input
-                        icon='boxes'
-                        iconPosition='left'
-                        label='Stock'
-                        placeholder='Stock'
-                        value={this.state.itemStock}
-                        error={(this.state.error === 5 && this.state.itemStock === '')}
-                        onChange={input => this.setState({ itemStock: input.target.value })}
-                    />
-                    <Header as="h4">Category</Header>
-                    <Dropdown
-                        icon='th'
-                        placeholder='Category'
-                        floating
-                        labeled
-                        button
-                        className='icon'
-                        options={categories}
-                        value={this.state.itemCategory}
-                        name='category'
-                        onChange={this.handleCategoryEdit} />
-                </Form>
-                <Message
-                    hidden={this.state.error != 1}
-                    color={'red'}
-                    header='Item name and category pair already exist.'
-                />
-                <Message
-                    hidden={this.state.error != 2}
-                    color={'red'}
-                    header='Please enter a valid stock ammount.'
-                />
-                <Message
-                    hidden={this.state.error != 3}
-                    color={'red'}
-                    header='Please enter a valid price.'
-                />
-                <Message
-                    hidden={this.state.error != 4}
-                    color={'red'}
-                    header='Please fill out the form.'
-                />
-            </Modal.Content>
-            <Modal.Actions>
-                <Button color='black' onClick={() =>
-                    this.setState({
-                        itemID: '',
-                        itemName: '',
-                        itemCategory: '',
-                        itemStock: '',
-                        itemPrice: '',
-                        addItem: false
-                    })}>Cancel</Button>
-                <Button
-                    content="Create New Product"
-                    labelPosition='right'
-                    icon='checkmark'
-                    onClick={() => { this.handleAddItem() }}
-                    positive
-                />
-            </Modal.Actions>
-        </Modal>
-    }
-
-    handleAddItem = () => {
-        api.post('/items/new',
-            {
-                "u_id": parseInt(localStorage.getItem("userID")),
-                "i_category": this.state.itemCategory,
-                "i_name": this.state.itemName,
-                "i_price": parseFloat(this.state.itemPrice),
-                "i_stock": parseInt(this.state.itemStock)
-            }).then(res => {
-                console.log("Changed Item");
-                console.log(res);
-                window.location.reload(false);
-            }).catch(error => {
-                console.log(error.response.data);
-                console.log(error.response.status);
+            return
+        }
+        var priceRegex = /^\d+(\.\d{1,2})?$/g;
+        if (!priceRegex.test(this.state.itemPrice)) {
+            this.setState({
+                error: 2
             })
+            return
+        }
+        var stockRegex = /^[0-9]+$/g;
+        if (!stockRegex.test(this.state.itemStock)) {
+            this.setState({
+                error: 3
+            })
+            return
+        }
+
+        if (this.state.newItem === false) {
+            api.put('/items',
+                {
+                    "u_id": parseInt(localStorage.getItem("userID")),
+                    "item_id": parseInt(this.state.itemID),
+                    "i_category": this.state.itemCategory,
+                    "i_name": this.state.itemName,
+                    "i_price": parseFloat(this.state.itemPrice),
+                    "i_stock": parseInt(this.state.itemStock)
+                }).then(res => {
+                    console.log("Changed Item");
+                    console.log(res);
+                    window.location.reload(false);
+                }).catch(error => {
+                    if (error.response.status === 418) {
+                        this.setState({ error: 1 })
+                    } else if (error.response.data === "Stock must be integer greater than 0") {
+                        this.setState({ error: 2 })
+                    } else if (error.response.data === "Price must be valid float or integer") {
+                        this.setState({ error: 3 })
+                    }
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                })
+        } else {
+            api.post('/items/new',
+                {
+                    "u_id": parseInt(localStorage.getItem("userID")),
+                    "i_category": this.state.itemCategory,
+                    "i_name": this.state.itemName,
+                    "i_price": parseFloat(this.state.itemPrice),
+                    "i_stock": parseInt(this.state.itemStock)
+                }).then(res => {
+                    console.log("Changed Item");
+                    console.log(res);
+                    window.location.reload(false);
+                }).catch(error => {
+                    if (error.response.status === 418) {
+                        this.setState({ error: 1 })
+                    } else if (error.response.data === "Stock must be integer greater than 0") {
+                        this.setState({ error: 2 })
+                    } else if (error.response.data === "Price must be valid float or integer") {
+                        this.setState({ error: 3 })
+                    }
+                    console.log(error.response.data);
+                    console.log(error.response.status);
+                })
+        }
+
     }
 
     deleteModal = () => {
         return <Modal
-        open={this.state.deleteItem}
-    >
-        <Modal.Header>DELETE ITEM</Modal.Header>
-        <Modal.Content>
-            <Modal.Description>
-                <Header>Are you sure you want to delete this item?</Header>
-            </Modal.Description>
-            <Divider hidden/>
-        </Modal.Content>
-        <Modal.Actions>
-            <Button color='black' onClick={() => this.setState({
-                deleteItem: false
-            })}>
-                Cancel
-            </Button>
-            <Button
-                content="Delete this item"
-                labelPosition='right'
-                icon='trash'
-                onClick={() => this.handleDeleteItem()}
-                color='red'
-            />
-        </Modal.Actions>
-    </Modal>
+            open={this.state.deleteItem}
+        >
+            <Modal.Header>DELETE ITEM</Modal.Header>
+            <Modal.Content>
+                <Modal.Description>
+                    <Header>Are you sure you want to delete this item?</Header>
+                </Modal.Description>
+                <Divider hidden />
+            </Modal.Content>
+            <Modal.Actions>
+                <Button color='black' onClick={() => this.setState({
+                    deleteItem: false
+                })}>
+                    Cancel
+                </Button>
+                <Button
+                    content="Delete this item"
+                    labelPosition='right'
+                    icon='trash'
+                    onClick={() => this.handleDeleteItem()}
+                    color='red'
+                />
+            </Modal.Actions>
+        </Modal>
     }
 
     handleDeleteItem = () => {

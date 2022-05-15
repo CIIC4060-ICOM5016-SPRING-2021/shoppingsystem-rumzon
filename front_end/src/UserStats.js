@@ -197,57 +197,58 @@ class UserStats extends Component {
         }
     }
 
+
     CoolItemsPieChart = () => {
         return (
-        <div class="center">
-            <PieChart width={850} height={750}>
-                <Pie
-                    data={this.state.mostBoughtItems}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={192}
-                    outerRadius={296}
-                    fill="#067"
-                    dataKey="Purchase Count"
-                    nameKey="Name"
-                    label
-                    paddingAngle = {1}
-                >
-                    {this.state.mostBoughtItems.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-                <Legend />
-                <Tooltip />
-            </PieChart>
-        </div>
+            <div class="center">
+                <PieChart width={900} height={450}>
+                    <Pie
+                        data={this.state.mostBoughtItems}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={75}
+                        outerRadius={150}
+                        fill="#067"
+                        dataKey="Purchase Count"
+                        nameKey="Name"
+                        label
+                        paddingAngle={1}
+                    >
+                        {this.state.mostBoughtItems.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                    <Legend />
+                    <Tooltip />
+                </PieChart>
+            </div>
         );
     }
 
     CoolCategoriesPieChart = () => {
         return (
-        <div class="center">
-            <PieChart width={850} height={750}>
-                <Pie
-                    data={this.state.mostBoughtCategories}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={192}
-                    outerRadius={296}
-                    fill="#067"
-                    dataKey="Purchase Count"
-                    nameKey="Category"
-                    label
-                    paddingAngle = {1}
-                >
-                    {this.state.mostBoughtCategories.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-                <Legend />
-                <Tooltip />
-            </PieChart>
-        </div>
+            <div class="center">
+                <PieChart width={950} height={450}>
+                    <Pie
+                        data={this.state.mostBoughtCategories}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={75}
+                        outerRadius={150}
+                        fill="#067"
+                        dataKey="Purchase Count"
+                        nameKey="Category"
+                        label
+                        paddingAngle={1}
+                    >
+                        {this.state.mostBoughtCategories.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                    </Pie>
+                    <Legend />
+                    <Tooltip />
+                </PieChart>
+            </div>
         );
     }
 }
