@@ -79,6 +79,7 @@ class Profile extends Component {
     render() {
         if (this.state.loggedIn) {
             return <>
+                <Header as='h1'>Your Profile</Header>
                 <this.ChangeModal />
                 <this.DeleteUserModal />
 

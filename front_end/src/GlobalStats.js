@@ -1,6 +1,6 @@
-import React, { Component, useState, useCallback } from 'react';
+import React, { Component } from 'react';
 import { Container, Header, Statistic, Divider } from "semantic-ui-react";
-import { ResponsiveContainer, RadialBarChart, RadialBar, Legend, Tooltip, Pie, PieChart, Cell } from "recharts";
+import { ResponsiveContainer, Legend, Tooltip, Pie, PieChart, Cell } from "recharts";
 import axios from 'axios';
 import "./index.css";
 
@@ -8,7 +8,9 @@ const api = axios.create({
     baseURL: 'https://rumzon-db.herokuapp.com/rumzon/global/'
 })
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#B413EC', '#FF1493', '#32CD32', '#B03060', '#EE82EE'];
+const COLORS = ['#db2828', '#e03997', '#a333c8', '#6435c9', '#2185d0', '#00b5ad', '#21ba45', '#b5cc18', '#fbbd08', '#f2711c', '#a5673f', '#a53f3f'];
+
+//const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#B413EC', '#FF1493', '#32CD32', '#B03060', '#EE82EE', '#A0A0A0', '#000000'];
 class GlobalStats extends Component {
     state = {
         mostBoughtItems: [],
@@ -16,12 +18,6 @@ class GlobalStats extends Component {
         mostExpensive: [],
         mostLiked: [],
         cheapest: []
-    }
-
-    itemState = {
-        name: '',
-        purchases: '',
-        fill: ''
     }
 
     constructor() {
@@ -97,8 +93,8 @@ class GlobalStats extends Component {
 
     DisplayMostBoughtItems = () => {
         return <ResponsiveContainer>
-            <this.ItemsPieChart />
-        </ResponsiveContainer>
+        <this.CoolItemsPieChart />
+    </ResponsiveContainer>
     }
 
     DisplayMostBoughtCategories = () => {
@@ -201,163 +197,32 @@ class GlobalStats extends Component {
         </Container>
     }
 
-    ItemsPieChart = () => {
+    CoolItemsPieChart = () => {
         return (
         <div class="center">
-            <RadialBarChart
-                width={512}
-                height={512}
-                innerRadius={100}
-                outerRadius={256}
-                data={this.state.mostBoughtItems.reverse()}
-                startAngle={180}
-                endAngle={0}
-
-            >
-                <RadialBar minAngle={180} background clockWise dataKey='Purchase Count' />
-                {/* <Legend iconSize={10} width={120} height={140} /> */}
+            <PieChart width={850} height={750}>
+                <Pie
+                    data={this.state.mostBoughtItems}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={192}
+                    outerRadius={296}
+                    fill="#067"
+                    dataKey="Purchase Count"
+                    nameKey="Name"
+                    label
+                    paddingAngle = {1}
+                >
+                    {this.state.mostBoughtItems.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Legend />
                 <Tooltip />
-            </RadialBarChart>
+            </PieChart>
         </div>
         );
     }
-
-    // renderActiveShape = (props: any) => {
-    //     const RADIAN = Math.PI / 180;
-    //     const {
-    //         cx,
-    //         cy,
-    //         midAngle,
-    //         innerRadius,
-    //         outerRadius,
-    //         startAngle,
-    //         endAngle,
-    //         fill,
-    //         payload,
-    //         percent,
-    //         value
-    //     } = props;
-    //     const sin = Math.sin(-RADIAN * midAngle);
-    //     const cos = Math.cos(-RADIAN * midAngle);
-    //     const sx = cx + (outerRadius + 10) * cos;
-    //     const sy = cy + (outerRadius + 10) * sin;
-    //     const mx = cx + (outerRadius + 30) * cos;
-    //     const my = cy + (outerRadius + 30) * sin;
-    //     const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    //     const ey = my;
-    //     const textAnchor = cos >= 0 ? "start" : "end";
-
-    //     return (
-    //         <g>
-    //             <text x={cx} y={cy} dy={8} fontSize='30px' fontWeight='bold' textAnchor="middle" fill="#000">
-    //                 {payload.Name ? payload.Name : payload.Category}
-    //             </text>
-    //             <Sector
-    //                 cx={cx}
-    //                 cy={cy}
-    //                 innerRadius={innerRadius}
-    //                 outerRadius={outerRadius}
-    //                 startAngle={startAngle}
-    //                 endAngle={endAngle}
-    //                 fill={fill}
-    //             />
-    //             <Sector
-    //                 cx={cx}
-    //                 cy={cy}
-    //                 startAngle={startAngle}
-    //                 endAngle={endAngle}
-    //                 innerRadius={outerRadius + 6}
-    //                 outerRadius={outerRadius + 10}
-    //                 fill={fill}
-    //             />
-    //             <path
-    //                 d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-    //                 stroke={fill}
-    //                 fill="none"
-    //             />
-    //             <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-    //             <text
-    //                 x={ex + (cos >= 0 ? 1 : -1) * 12}
-    //                 y={ey}
-    //                 textAnchor={textAnchor}
-    //                 fill="#333"
-    //                 fontSize='50px'
-    //             >{`${value}`}</text>
-    //             <text
-    //                 x={ex + (cos >= 0 ? 1 : -1) * 12}
-    //                 y={ey}
-    //                 dy={18}
-    //                 textAnchor={textAnchor}
-    //                 fill="#999"
-    //             >
-    //                 {`(${(percent * 100).toFixed(2)}%)`}
-    //             </text>
-    //         </g>
-    //     );
-    // };
-
-    // CoolItemsPieChart = () => {
-    //     const [activeIndex, setActiveIndex] = useState(0);
-    //     const onPieEnter = useCallback(
-    //         (_, index) => {
-    //             setActiveIndex(index);
-    //         },
-    //         [setActiveIndex]
-    //     );
-
-    //     return (
-    //         <div class="ui one column stackable center aligned page grid">
-    //             <div class="column wide">
-    //                 <PieChart width={825} height={750}>
-    //                     <Pie
-    //                         activeIndex={activeIndex}
-    //                         activeShape={this.renderActiveShape}
-    //                         data={this.state.mostBoughtItems}
-    //                         cx="50%"
-    //                         cy="50%"
-    //                         innerRadius={192}
-    //                         outerRadius={296}
-    //                         fill="#0084d8"
-    //                         dataKey="Purchase Count"
-    //                         onMouseEnter={onPieEnter}
-    //                     />
-    //                 </PieChart>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
-    // CoolCategoriesPieChart = () => {
-    //     const [activeIndex, setActiveIndex] = useState(0);
-    //     const onPieEnter = useCallback(
-    //         (_, index) => {
-    //             setActiveIndex(index);
-    //         },
-    //         [setActiveIndex]
-    //     );
-
-    //     return (
-    //         <div class="ui one column stackable center aligned page grid">
-    //             <div class="column wide">
-    //                 <PieChart width={850} height={750}>
-    //                     <Pie
-    //                         activeIndex={activeIndex}
-    //                         activeShape={this.renderActiveShape}
-    //                         data={this.state.mostBoughtCategories}
-    //                         cx="50%"
-    //                         cy="50%"
-    //                         innerRadius={192}
-    //                         outerRadius={296}
-    //                         fill="#067"
-    //                         dataKey="Purchase Count"
-    //                         onMouseEnter={onPieEnter}
-    //                     />
-    //                 </PieChart>
-    //             </div>
-    //         </div>
-    //     );
-    // }
-
 
     CoolCategoriesPieChart = () => {
         return (
@@ -379,13 +244,11 @@ class GlobalStats extends Component {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                 </Pie>
-                />
                 <Legend />
                 <Tooltip />
             </PieChart>
         </div>
         );
     }
-
 }
 export default GlobalStats;

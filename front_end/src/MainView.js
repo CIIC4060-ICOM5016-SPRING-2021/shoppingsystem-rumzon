@@ -7,7 +7,7 @@ import Cart from "./Cart";
 import Profile from "./Profile";
 import UserStats from "./UserStats";
 import GlobalStats from "./GlobalStats";
-import Admin from "./Admin";
+import AdminPage from "./AdminPage";
 import Orders from "./Orders";
 import "./index.css";
 
@@ -65,9 +65,9 @@ function MainView() {
     if (localStorage.getItem("isAdmin") === 'true') {
         console.log("Not Admin");
         panes.push({
-            menuItem: 'Admin', render: () =>
+            menuItem: 'Manage Products', render: () =>
                 <Tab.Pane active={isAuth}>
-                    <Admin />
+                    <AdminPage />
                 </Tab.Pane>
         })
     } else {

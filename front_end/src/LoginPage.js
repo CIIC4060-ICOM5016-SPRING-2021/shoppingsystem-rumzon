@@ -84,6 +84,7 @@ function LoginPage(){
                                 iconPosition='left'    
                                 label='Password'
                                 type='password'
+                                placeholder='Password'
                                 value={password}
                                 onChange={input => setPassword(input.target.value)}
                             />

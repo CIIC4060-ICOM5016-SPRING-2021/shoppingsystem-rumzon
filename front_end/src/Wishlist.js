@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Button } from "semantic-ui-react";
+import { Message, Card, Button, Header } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -27,6 +27,7 @@ class Wishlist extends Component {
 
     render() {
         if (this.state.loggedIn) {
+            
             if (this.state.emptyWishlist) {
                 return <>
                     <Message
@@ -36,6 +37,7 @@ class Wishlist extends Component {
                 </>
             }
             return <>
+                <Header as='h1'>Your Wishlist</Header>
                 <Card.Group>
                     <this.WishlistCards info={this.state.items} />
                 </Card.Group>

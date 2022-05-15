@@ -28,6 +28,7 @@ class Cart extends Component {
 
     render() {
         if (this.state.loggedIn) {
+            
             if (this.state.emptyCart) {
                 return <>
                     <Message
@@ -37,6 +38,7 @@ class Cart extends Component {
                 </>
             }
             return <>
+                <Header as='h1'>Your Cart</Header>
                 <Container>
                     <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
                         <Button.Content visible>Checkout</Button.Content>

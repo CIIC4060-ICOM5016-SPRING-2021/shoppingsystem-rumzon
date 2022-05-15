@@ -1,8 +1,10 @@
-import React, { Component, useState, useCallback } from 'react';
+import React, { Component } from 'react';
 import { Container, Message, Header, Statistic, Divider } from "semantic-ui-react";
-import { PieChart, Pie, Sector } from "recharts";
+import { ResponsiveContainer, Legend, Tooltip, Pie, PieChart, Cell } from "recharts";
 import axios from 'axios';
 import "./styles.css";
+
+const COLORS = ['#db2828', '#e03997', '#a333c8', '#6435c9', '#2185d0', '#00b5ad', '#21ba45', '#b5cc18', '#fbbd08', '#f2711c', '#a5673f'];
 
 const api = axios.create({
     baseURL: 'https://rumzon-db.herokuapp.com/rumzon/users/'
@@ -93,17 +95,15 @@ class UserStats extends Component {
     }
 
     DisplayMostBoughtItems = () => {
-        return <Container>
+        return <ResponsiveContainer>
             <this.CoolItemsPieChart />
-        </Container>
+        </ResponsiveContainer>
     }
 
     DisplayMostBoughtCategories = () => {
-        return <>
-            <Container>
+        return <ResponsiveContainer>
                 <this.CoolCategoriesPieChart />
-            </Container>
-        </>
+            </ResponsiveContainer>
     }
 
     DisplayMostExpensiveItem = () => {
@@ -195,146 +195,60 @@ class UserStats extends Component {
                     />
                 </>
         }
-
     }
 
-    renderActiveShape = (props) => {
-        const RADIAN = Math.PI / 180;
-        const {
-            cx,
-            cy,
-            midAngle,
-            innerRadius,
-            outerRadius,
-            startAngle,
-            endAngle,
-            fill,
-            payload,
-            percent,
-            value
-        } = props;
-        const sin = Math.sin(-RADIAN * midAngle);
-        const cos = Math.cos(-RADIAN * midAngle);
-        const sx = cx + (outerRadius + 10) * cos;
-        const sy = cy + (outerRadius + 10) * sin;
-        const mx = cx + (outerRadius + 30) * cos;
-        const my = cy + (outerRadius + 30) * sin;
-        const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-        const ey = my;
-        const textAnchor = cos >= 0 ? "start" : "end";
-
-        return (
-            <g>
-                <text x={cx} y={cy} dy={8} fontSize='30px' fontWeight='bold' textAnchor="middle" fill="#000">
-                    {payload.Name ? payload.Name : payload.Category}
-                </text>
-                <Sector
-                    cx={cx}
-                    cy={cy}
-                    innerRadius={innerRadius}
-                    outerRadius={outerRadius}
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    fill={fill}
-                />
-                <Sector
-                    cx={cx}
-                    cy={cy}
-                    startAngle={startAngle}
-                    endAngle={endAngle}
-                    innerRadius={outerRadius + 6}
-                    outerRadius={outerRadius + 10}
-                    fill={fill}
-                />
-                <path
-                    d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-                    stroke={fill}
-                    fill="none"
-                />
-                <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-                <text
-                    x={ex + (cos >= 0 ? 1 : -1) * 12}
-                    y={ey}
-                    textAnchor={textAnchor}
-                    fill="#333"
-                    fontSize='50px'
-                >{`${value}`}</text>
-                <text
-                    x={ex + (cos >= 0 ? 1 : -1) * 12}
-                    y={ey}
-                    dy={18}
-                    textAnchor={textAnchor}
-                    fill="#999"
-                >
-                    {`(${(percent * 100).toFixed(2)}%)`}
-                </text>
-            </g>
-        );
-    };
-
     CoolItemsPieChart = () => {
-        const [activeIndex, setActiveIndex] = useState(0);
-        const onPieEnter = useCallback(
-            (_, index) => {
-                setActiveIndex(index);
-            },
-            [setActiveIndex]
-        );
-
         return (
-            <div class="ui one column stackable center aligned page grid">
-                <div class="column wide">
-                    <PieChart width={825} height={750}>
-                        <Pie
-                            activeIndex={activeIndex}
-                            activeShape={this.renderActiveShape}
-                            data={this.state.mostBoughtItems}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={192}
-                            outerRadius={296}
-                            fill="#0084d8"
-                            dataKey="Purchase Count"
-                            onMouseEnter={onPieEnter}
-                            label                            
-                        />
-                    </PieChart>
-                </div >
-            </div >
+        <div class="center">
+            <PieChart width={850} height={750}>
+                <Pie
+                    data={this.state.mostBoughtItems}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={192}
+                    outerRadius={296}
+                    fill="#067"
+                    dataKey="Purchase Count"
+                    nameKey="Name"
+                    label
+                    paddingAngle = {1}
+                >
+                    {this.state.mostBoughtItems.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Legend />
+                <Tooltip />
+            </PieChart>
+        </div>
         );
     }
 
     CoolCategoriesPieChart = () => {
-        const [activeIndex, setActiveIndex] = useState(0);
-        const onPieEnter = useCallback(
-            (_, index) => {
-                setActiveIndex(index);
-            },
-            [setActiveIndex]
-        );
-
         return (
-            <div class="ui one column stackable center aligned page grid">
-                <div class="column wide">
-                    <PieChart width={825} height={750}>
-                        <Pie
-                            activeIndex={activeIndex}
-                            activeShape={this.renderActiveShape}
-                            data={this.state.mostBoughtCategories}
-                            cx="50%"
-                            cy="50%"
-                            innerRadius={192}
-                            outerRadius={296}
-                            fill="#067"
-                            dataKey="Purchase Count"
-                            label
-                            onMouseEnter={onPieEnter}
-                        />
-                    </PieChart>
-                </div>
-            </div>
+        <div class="center">
+            <PieChart width={850} height={750}>
+                <Pie
+                    data={this.state.mostBoughtCategories}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={192}
+                    outerRadius={296}
+                    fill="#067"
+                    dataKey="Purchase Count"
+                    nameKey="Category"
+                    label
+                    paddingAngle = {1}
+                >
+                    {this.state.mostBoughtCategories.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                </Pie>
+                <Legend />
+                <Tooltip />
+            </PieChart>
+        </div>
         );
     }
-
 }
 export default UserStats;

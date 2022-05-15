@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Container, Icon, Menu, Divider, Dropdown } from "semantic-ui-react";
+import { Button, Card, Container, Icon, Menu, Divider, Dropdown, Header } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -37,9 +37,9 @@ class Products extends Component {
 
     render() {
         return <>
+            <Header as='h1'>Rumzon Catalog</Header>
             <Container alignment="left">
                 <Menu secondary>
-                    
                     <Menu.Item>
                         <Button onClick={() => this.sortNameAscending(this.state.category)}><Icon name='sort alphabet up' />Name Ascending</Button>
                     </Menu.Item>
@@ -53,23 +53,19 @@ class Products extends Component {
                         <Button onClick={() => this.sortPriceDescending(this.state.category)}><Icon name='sort numeric down' />Price Descending</Button>
                     </Menu.Item>
                     <Menu.Item>
-                        <Menu compact>
-                            <Dropdown
-                                placeholder='Filter Category'
-                                icon='filter'
-                                floating
-                                labeled
-                                button
-                                className='icon'
-                                options={categories}
-                                name='category'
-                                onChange={this.handleCategoryDropdown} />
-                        </Menu>
+                        <Dropdown
+                            placeholder='Filter Category'
+                            icon='filter'
+                            floating
+                            labeled
+                            button
+                            className='icon'
+                            options={categories}
+                            name='category'
+                            onChange={this.handleCategoryDropdown} />
                     </Menu.Item>
                 </Menu>
-
                 <Divider hidden />
-
             </Container>
             <Card.Group>
                 <this.ProductCards info={this.state.items} />
