@@ -504,7 +504,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sortBy\": \"name\",\r\n    \"sortType\": \"descending\"\r\n}",
+							"raw": "{\r\n    \"sortBy\": \"price\",\r\n    \"sortType\": \"ascending\",\r\n    \"category\": \"all\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
