@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Segment, Header, Image, Tab, Menu, Button } from "semantic-ui-react";
+import { Segment, Header, Image, Tab, Menu, Button, Popup, Icon } from "semantic-ui-react";
 import Products from "./Products";
 import Wishlist from "./Wishlist";
 import Cart from "./Cart";
@@ -14,6 +14,8 @@ import "./index.css";
 
 function MainView() {
 
+    console.log("cart updated: ")
+    console.log(localStorage.getItem("cartUpdated"))
     const navigate = useNavigate();
     const [isAuth, setisAuth] = useState(true);
     console.log(localStorage.getItem('userID'));
@@ -35,6 +37,11 @@ function MainView() {
         {
             menuItem: 'Cart', render: () =>
                 <Tab.Pane active={isAuth}>
+                    <Popup
+                        content='Cart Updated!'
+                        position='top center'
+                        open={localStorage.getItem("cartUpdated")}
+                    />
                     <Cart />
                 </Tab.Pane>
         },
@@ -79,7 +86,7 @@ function MainView() {
         <Segment inverted >
             <Menu inverted>
                 <Menu.Item color='red'>
-                    <Segment inverted >
+                    <Segment inverted>
                         <Header
                             as='h1'
                             textAlign='center'
@@ -87,10 +94,15 @@ function MainView() {
                                 fontSize: '5em',
                                 fontWeight: 'bold',
                                 color: '#2ed24b'
-                            }}> <Image rounded style={{ width: '85px' }} src='/rumzon-logo.jpeg' /> UMZON </Header>
+                            }}> <Image rounded style={{ width: '85px' }} src='/rumzon-logo.jpeg' /> UMZON
+                        </Header>
                     </Segment>
+                    <Popup
+                        trigger={<Icon name='beer' color='yellow' size='huge' />}
+                        content='Medalla Light'
+                        position='right center'
+                    />
                 </Menu.Item>
-
                 <LoginButtons />
             </Menu>
             <Tab

@@ -7,7 +7,6 @@ const api = axios.create({
     baseURL: 'https://rumzon-db.herokuapp.com/rumzon/users/'
 })
 
-
 function LoginPage(){
 
     localStorage.removeItem("userID");
@@ -18,7 +17,7 @@ function LoginPage(){
     const [enterCredentials, setEnterCredentials] = useState(false);
     //handleChange = (e, { name, value }) => this.setState({ [name]: value })
 
-    function login() {
+    function toMain() {
         navigate('/');
     }
     
@@ -33,7 +32,8 @@ function LoginPage(){
             localStorage.setItem("userID", res.data["User ID"]);
             localStorage.setItem("username", res.data["Username"]);
             localStorage.setItem("isAdmin", res.data["IsAdmin"]);
-            login();
+            localStorage.setItem("cartUpdated", true);
+            toMain();
         }).catch(error => {
             if (error.response.status == 400) {
                 console.log("Incomplete form probably");
@@ -47,7 +47,7 @@ function LoginPage(){
             }
         })
     }
-            
+
     return<> 
         <Segment inverted>
             <Header

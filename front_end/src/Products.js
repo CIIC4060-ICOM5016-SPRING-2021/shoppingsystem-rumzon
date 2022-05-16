@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Container, Icon, Menu, Divider, Dropdown, Header } from "semantic-ui-react";
+import { Button, Card, Container, Icon, Menu, Divider, Dropdown, Header, Popup} from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -26,12 +26,14 @@ class Products extends Component {
 
     state = {
         items: [],
+        wishlist: [],
         category: 'all'
     }
 
     constructor() {
         super();
         this.sortNameAscending(this.state.category);
+        this.getUserWishlist();
     }
 
 
@@ -80,7 +82,7 @@ class Products extends Component {
 
     sortNameDescending = (value) => {
         api.post('/items/sort', { "sortBy": "name", "sortType": "descending", "category": value }).then(res => {
-            console.log(res.data);
+            
             this.setState({ items: res.data });
         }).catch(error => {
             console.log(error.response.data);
@@ -91,7 +93,7 @@ class Products extends Component {
     }
     sortNameAscending = (value) => {
         api.post('/items/sort', { "sortBy": "name", "sortType": "ascending", "category": value }).then(res => {
-            console.log(res.data);
+            
             this.setState({ items: res.data });
         }).catch(error => {
             console.log(error.response.data);
@@ -102,7 +104,7 @@ class Products extends Component {
     }
     sortPriceDescending = (value) => {
         api.post('/items/sort', { "sortBy": "price", "sortType": "descending", "category": value }).then(res => {
-            console.log(res.data);
+            
             this.setState({ items: res.data });
         }).catch(error => {
             console.log(error.response.data);
@@ -113,9 +115,27 @@ class Products extends Component {
     }
     sortPriceAscending = (value) => {
         api.post('/items/sort', { "sortBy": "price", "sortType": "ascending", "category": value }).then(res => {
-            console.log(res.data);
+            
             this.setState({ items: res.data });
         }).catch(error => {
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            console.log(error.message);
+        })
+    }
+
+    getUserWishlist = () => {
+        api.post('/likes/users', {
+            "u_id": parseInt(localStorage.getItem("userID"))
+        }).then(res => {
+            console.log("wishlist:");
+            console.log(res.data);
+            this.setState({ wishlist: res.data });
+        }).catch(error => {
+            if (error.response.status == 405) {
+                this.setState({ wishlist: [] });
+            }
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
@@ -126,7 +146,7 @@ class Products extends Component {
     ProductCards = (props) => {
         console.log(props)
         return props.info.map(item => {
-            return <Card>
+            return <Card style = {{ wordWrap: "break-word" }}>
                 <Card.Content>
                     <Card.Header>{item["Item Name"]}</Card.Header>
                     <Card.Meta>{item["Price"]}</Card.Meta>
@@ -139,13 +159,46 @@ class Products extends Component {
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui two buttons'>
-                        <Button content='Add to Cart' color="green" onClick={() => { this.handleAddToCart(item) }} />
-                        <Button content='Add to Wishlist' color="blue" onClick={() => { this.handleAddToWishlist(item) }} />
+                        <Popup
+                            trigger={
+                                <Button content='Add to Cart' color="green" onClick={() => { this.handleAddToCart(item) }} />
+                            }
+                            content='Added to Cart!'
+                            position='bottom center'
+                            on='click'
+                        />
+                        { this.handleWishlistBtn(item) }
                     </div>
                 </Card.Content>
             </Card>
         });
     }
+
+    handleWishlistBtn = (item) => {
+        let isLiked = false
+        this.state.wishlist.map(itemLiked => {
+            if(itemLiked["Item ID"] === item["Item ID"]) {
+                isLiked = true
+            }
+        })
+        if(isLiked) {
+            return (<Button content='Remove from Wishlist' color="yellow" onClick={() => { this.handleRemoveFromWishlist(item) }} />);
+        }
+        return (<Button content='Add to Wishlist' color="blue" onClick={() => { this.handleAddToWishlist(item) }} />)
+    }
+
+    handleRemoveFromWishlist = (item) => {
+        api.delete('/likes', {
+            data: {
+                "item_id": item["Item ID"],
+                "u_id": parseInt(localStorage.getItem("userID"))
+            }
+        }).then(res => {
+            console.log(res.data);
+            this.getUserWishlist();
+        })
+    }
+
     handleAddToCart = (item) => {
         api.post('/cart/add', {
             "item_id": item["Item ID"],
@@ -156,17 +209,16 @@ class Products extends Component {
         }).catch(error => {
             console.log(error.response.data);
             console.log(error.response.status);
-            if (error.response.status == 400) {
-
-            }
         })
     }
+    
     handleAddToWishlist = (item) => {
         api.post('/likes', {
             "item_id": item["Item ID"],
             "u_id": parseInt(localStorage.getItem("userID"))
         }).then(res => {
             console.log(res.data);
+            this.getUserWishlist();
         }).catch(error => {
             console.log(error.response.data);
             console.log(error.response.status);

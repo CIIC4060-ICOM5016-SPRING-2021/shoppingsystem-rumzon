@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Input, Container, Divider, Button, Icon, Table, TableCell, Header } from "semantic-ui-react";
+import { Message, Card, Input, Container, Divider, Button, Icon, Table, TableCell, Header, Modal } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -14,7 +14,9 @@ class Cart extends Component {
         items: [],
         loggedIn: false,
         emptyCart: false,
-        cartTotal: ''
+        cartTotal: '',
+        notEnoughStock: false,
+        errorItems: []
     }
 
     constructor() {
@@ -38,6 +40,7 @@ class Cart extends Component {
                 </>
             }
             return <>
+                <this.ErrorModal />                
                 <Header as='h1'>Your Cart</Header>
                 <Container>
                     <Button color="green" animated='vertical' onClick={() => this.buyCart()}>
@@ -92,6 +95,12 @@ class Cart extends Component {
             console.log(res.data);
             this.getUserCart();
         }).catch(error => {
+            if (error.response.status === 403) {
+                this.setState({
+                    errorItems: error.response.data,
+                    notEnoughStock: true
+                })
+            }
             console.log(error.response.data);
             console.log(error.response.status);
         })
@@ -110,7 +119,7 @@ class Cart extends Component {
 
     CartCards = (props) => {
         return props.info.map(item => {
-            return <Card>
+            return <Card style={{ wordWrap: "break-word" }}>
                 <Card.Content>
                     <Card.Header>{item["Name"]}</Card.Header>
                     <Card.Meta>{item["Category"]}</Card.Meta>
@@ -196,6 +205,49 @@ class Cart extends Component {
             this.handleDeleteFromCart(item);
         }
     }
+
+    ErrorModal = () => {
+        return <Modal
+            open={this.state.notEnoughStock}
+        >
+            <Modal.Header>Not enough Stock</Modal.Header>
+            <Modal.Content>
+                <Modal.Description>
+                    <Header>The following items do not have enough stock:</Header>
+                </Modal.Description>
+                <Divider hidden />
+                <Card.Group>
+                    <this.ErrorCards />
+                </Card.Group>
+            </Modal.Content>
+            <Modal.Actions>
+                <Button color='black' onClick={() => this.setState({
+                    notEnoughStock: false
+                })}>
+                    I want more
+                </Button>
+            </Modal.Actions>
+        </Modal>
+    }
+    
+    ErrorCards = () => {
+        return this.state.errorItems.map(item => {
+            return <Card style={{width: '400px', wordWrap: "break-word"}}>
+                <Card.Content>
+                    <Card.Header>{item["Item Name"]}</Card.Header>
+                    <Card.Description>{item["Category"]}</Card.Description>
+                    <Header as='h3' textAlign="right">
+                        {"In Cart: " + item["Cart Ammount"]}
+                        <Header as='h3'>
+                            {"In Stock: " + item["Stock"]}
+                        </Header>
+                    </Header>
+                </Card.Content>
+            </Card>
+        });
+    }
+
+    
 }
 
 export default Cart;

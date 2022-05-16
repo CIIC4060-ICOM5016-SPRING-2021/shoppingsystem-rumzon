@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import { Message, Card, Button, Header } from "semantic-ui-react";
+import { Message, Card, Button, Header, Popup } from "semantic-ui-react";
 import axios from "axios";
 
 
@@ -73,7 +73,7 @@ class Wishlist extends Component {
     WishlistCards = (props) => {
         console.log(props)
         return props.info.map(item => {
-            return <Card>
+            return <Card style={{wordWrap: "break-word"}}>
                 <Card.Content>
                     <Card.Header>{item["Name"]}</Card.Header>
                     <Card.Meta>{item["Price"]}</Card.Meta>
@@ -83,7 +83,14 @@ class Wishlist extends Component {
                 </Card.Content>
                 <Card.Content extra>
                     <div className='ui two buttons'>
-                        <Button content='Add to Cart' color="green" onClick={() => { this.handleAddToCart(item) }} />
+                        <Popup
+                            trigger={
+                                <Button content='Add to Cart' color="green" onClick={() => { this.handleAddToCart(item) }} />
+                            }
+                            content='Added to Cart!'
+                            position='bottom center'
+                            on='click'
+                        />
                         <Button content='Remove From Wishlist' color="red" onClick={() => { this.handleDeleteFromWishlist(item) }} />
                     </div>
                 </Card.Content>

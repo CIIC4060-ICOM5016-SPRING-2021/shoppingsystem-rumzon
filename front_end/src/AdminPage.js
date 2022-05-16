@@ -156,7 +156,7 @@ class AdminPage extends Component {
     ProductCards = (props) => {
         console.log(props)
         return props.info.map(item => {
-            return <Card>
+            return <Card style={{ wordWrap: "break-word" }}>
                 <Card.Content>
                     <Card.Header>{item["Item Name"]}</Card.Header>
                     <Card.Meta>{item["Price"]}</Card.Meta>
@@ -253,23 +253,22 @@ class AdminPage extends Component {
                         onChange={this.handleCategoryEdit} />
                 </Form>
                 <Message
-                    hidden={this.state.error != 1}
+                    hidden={this.state.error !== 1}
                     color={'red'}
                     header={"'" + this.state.itemName + "'" + " in '" + this.state.itemCategory + "' already exists."}
                 />
-
                 <Message
-                    hidden={this.state.error != 2}
+                    hidden={this.state.error !== 2}
                     color={'red'}
                     header="Please enter a valid price. Do not use letters or symbols (including '$')."
                 />
                 <Message
-                    hidden={this.state.error != 3}
+                    hidden={this.state.error !== 3}
                     color={'red'}
                     header='Please enter a valid stock amount. Do not use letters or symbols.'
                 />
                 <Message
-                    hidden={this.state.error != 4}
+                    hidden={this.state.error !== 4}
                     color={'red'}
                     header='Please fill out the form.'
                 />
@@ -289,7 +288,7 @@ class AdminPage extends Component {
                     content="Save Changes"
                     labelPosition='right'
                     icon='checkmark'
-                    onClick={() => { { this.handleModifyAddItem() } }}
+                    onClick={() => { this.handleModifyAddItem() }}
                     positive
                 />
             </Modal.Actions>
@@ -301,7 +300,7 @@ class AdminPage extends Component {
     }
 
     handleModifyAddItem = () => {
-        if (this.state.itemName == '' || this.state.itemCategory == '' || this.state.itemPrice == '' || this.state.itemStock == '') {
+        if (this.state.itemName === '' || this.state.itemCategory === '' || this.state.itemPrice === '' || this.state.itemStock === '') {
             this.setState({
                 error: 4
             })

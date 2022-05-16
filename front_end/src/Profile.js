@@ -23,6 +23,7 @@ class Profile extends Component {
         deleteForm: '',
         enterUsername: false,
         usernameTaken: false,
+        usernameNoSpaces: false,
         enterEmail: false,
         emailTaken: false,
         invalidEmail: false,
@@ -57,7 +58,7 @@ class Profile extends Component {
     }
 
     deleteUser = () => {
-        if (this.state.deleteForm != 'delete') {
+        if (this.state.deleteForm != 'DELETE') {
             this.setState({ deleteFormWrong: true })
         } else {
             api.delete('/users', {
@@ -122,7 +123,7 @@ class Profile extends Component {
             <Modal.Header>DELETE ACCOUNT</Modal.Header>
             <Modal.Content>
                 <Modal.Description>
-                    <Header>Are you sure you want to delete your account?</Header>
+                    <Header>To remove your account write DELETE without spaces.</Header>
                 </Modal.Description>
                 <Divider hidden/>
                 <Form>
@@ -136,7 +137,7 @@ class Profile extends Component {
                 <Message
                     hidden={!this.state.deleteFormWrong}
                     color={'red'}
-                    header='Enter "delete" to confirm.'
+                    header='Enter "DELETE" to confirm.'
                 />
             </Modal.Content>
             <Modal.Actions>
@@ -184,6 +185,11 @@ class Profile extends Component {
                         hidden={!this.state.usernameTaken}
                         color={'red'}
                         header='Username already taken.'
+                    />
+                    <Message
+                        hidden={!this.state.usernameNoSpaces}
+                        color={'red'}
+                        header='Username must not have spaces.'
                     />
                 </Modal.Content>
                 <Modal.Actions>
@@ -319,7 +325,7 @@ class Profile extends Component {
 
     changeUsername = () => {
         if (this.state.newUser === "") {
-            this.setState({ enterUsername: true, usernameTaken: false })
+            this.setState({ enterUsername: true, usernameTaken: false, usernameNoSpaces: false  })
         } else {
             api.put('/users',
                 {
@@ -334,7 +340,10 @@ class Profile extends Component {
                     window.location.reload(false);
                 }).catch(error => {
                     if (error.response.data === "Username already taken") {
-                        this.setState({ enterUsername: false, usernameTaken: true })
+                        this.setState({ enterUsername: false, usernameTaken: true, usernameNoSpaces: false  })
+                    }
+                    else if (error.response.data === "Username must not have spaces") {
+                        this.setState({ enterUsername: false, usernameTaken: false, usernameNoSpaces: true })
                     }
                     console.log(error.response.data);
                     console.log(error.response.status);
