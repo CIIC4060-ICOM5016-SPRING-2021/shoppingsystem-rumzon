@@ -194,7 +194,7 @@ class AdminPage extends Component {
                     itemName: res.data["Item Name"],
                     itemCategory: res.data["Category"],
                     itemStock: res.data["Stock"],
-                    itemPrice: res.data["Price"].substring(1),
+                    itemPrice: res.data["Price"].substring(1).replaceAll(',', ''),
                     itemModal: true,
                     newItem: false
                 });
@@ -260,7 +260,7 @@ class AdminPage extends Component {
                 <Message
                     hidden={this.state.error !== 2}
                     color={'red'}
-                    header="Please enter a valid price. Do not use letters or symbols (including '$')."
+                    header="Please enter a valid price. Do not use letters or symbols (including '$' and ',')."
                 />
                 <Message
                     hidden={this.state.error !== 3}
