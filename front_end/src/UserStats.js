@@ -212,7 +212,7 @@ class UserStats extends Component {
                         dataKey="Purchase Count"
                         nameKey="Name"
                         label
-                        paddingAngle={1}
+                        paddingAngle={3}
                     >
                         {this.state.mostBoughtItems.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -239,7 +239,7 @@ class UserStats extends Component {
                         dataKey="Purchase Count"
                         nameKey="Category"
                         label
-                        paddingAngle={1}
+                        paddingAngle={2}
                     >
                         {this.state.mostBoughtCategories.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
