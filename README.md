@@ -11,7 +11,7 @@
 
 - [x] Phase 1
 - [x] Phase 2
-- [ ] Phase 3
+- [x] Phase 3
 
 ## Item Categories
     -Pets               -Kitchenware
@@ -19,6 +19,7 @@
     -Food               -Sports
     -Electronics        -Supplies
     -Furniture          -Toys
+    -Clothes
 
 ## Database Credentials
     Host: ec2-18-235-114-62.compute-1.amazonaws.com

@@ -104,7 +104,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"a\",\r\n    \"u_email\": \"\",\r\n    \"u_id\": 38,\r\n    \"u_password\": \"a\",\r\n    \"isAdmin\": true\r\n}",
+							"raw": "{\r\n    \"username\": \"\",\r\n    \"u_email\": \"\",\r\n    \"u_id\": 58,\r\n    \"u_password\": \"\",\r\n    \"isAdmin\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -168,7 +168,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user\": \"pretester\",\r\n    \"password\": \"tester\"\r\n}",
+							"raw": "{\r\n    \"user\": \"a\",\r\n    \"password\": \"a\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -287,7 +287,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sortBy\": \"price\",\r\n    \"sortType\": \"descending\"\r\n}",
+							"raw": "{\r\n    \"sortBy\": \"name\",\r\n    \"sortType\": \"descending\",\r\n    \"category\": \"all\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1234,7 +1234,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 4,\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 58,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1268,7 +1268,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"u_id\": 35,\r\n    \"onlyActive\": true\r\n}",
+							"raw": "{\r\n    \"u_id\": 58,\r\n    \"onlyActive\": true\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
